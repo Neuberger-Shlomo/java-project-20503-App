@@ -1,22 +1,35 @@
 package com.example.myapplication;
 
+import android.app.ActionBar;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelStoreOwner;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.example.myapplication.ViewModel.UserViewModel;
+import com.example.myapplication.api.UserApiCalls;
 import com.example.myapplication.databinding.MainActivityBinding;
 import com.example.myapplication.user.BasicUser;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ViewModelStoreOwner {
 
     private AppBarConfiguration appBarConfiguration;
     private MainActivityBinding binding;
+    private RequestQueue restQueue;
+
+    private UserViewModel userViewModel;
 
     @Override
     protected void onResume() {
@@ -32,8 +45,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userViewModel = new ViewModelProvider(this,null).get(UserViewModel.class);
+
         binding = MainActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        restQueue = Volley.newRequestQueue(this);
 
         setSupportActionBar(binding.toolbar);
 
@@ -57,5 +73,15 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+
+    public void hideAppBar(){
+        binding.appBar.setVisibility(View.GONE);}
+    public void showAppBar(){
+        binding.appBar.setVisibility(View.VISIBLE);
+    }
+
+    public RequestQueue getRestQueue() {
+        return restQueue;
+    }
 
 }
