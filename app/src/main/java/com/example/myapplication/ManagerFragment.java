@@ -50,6 +50,30 @@ public class ManagerFragment extends Fragment {
                         .navigate(R.id.WorkersConstrainsFragment);
             }
         });
+
+        binding.btnShiftsSchedulingStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(ManagerFragment.this)
+                        .navigate(R.id.ScheduleStatusFragment);
+            }
+        });
+
+        binding.btnScheduleWorkerIntoShift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(ManagerFragment.this)
+                        .navigate(R.id.ScheduleWorkerIntoShiftsFragment);
+            }
+        });
+
+        binding.btnDefineShiftRequirements.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(ManagerFragment.this)
+                        .navigate(R.id.DefineShiftRequirementsFragment);
+            }
+        });
     }
 
     @Override
