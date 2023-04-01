@@ -1,15 +1,13 @@
 package com.example.myapplication;
 
-import android.app.ActionBar;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelStoreOwner;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -19,9 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.ViewModel.UserViewModel;
-import com.example.myapplication.api.UserApiCalls;
 import com.example.myapplication.databinding.MainActivityBinding;
-import com.example.myapplication.user.BasicUser;
 
 public class MainActivity extends AppCompatActivity implements ViewModelStoreOwner {
 
@@ -45,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userViewModel = new ViewModelProvider(this,null).get(UserViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         binding = MainActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

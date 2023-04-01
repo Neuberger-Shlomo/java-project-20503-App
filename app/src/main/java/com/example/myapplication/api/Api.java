@@ -1,6 +1,6 @@
 package com.example.myapplication.api;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public class Api {
 
@@ -67,7 +67,6 @@ public class Api {
     }
 
     public interface PostCall<T>{
-        void onException(Throwable Error);
-        void onPostCall(@Nullable T t,@Nullable ResponseError error);
+        void onPostCall(@Nullable T t,@Nullable ResponseError responseError,@Nullable Throwable throwable);
     }
 }

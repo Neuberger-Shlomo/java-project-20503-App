@@ -2,10 +2,10 @@ package com.example.myapplication.user;
 
 
 public class BasicUser {
-    private  final String username;
-    private  final  String password;
-    private  final String authToken;
-    private  final  RoleLevel level;
+    private   String username;
+    private    String password;
+    private   String authToken;
+    private    RoleLevel level;
     public BasicUser() {
         this.username = "";
         this.password = "";
@@ -16,6 +16,38 @@ public class BasicUser {
         this.username = username;
         this.password = password;
         this.authToken = authToken;
+        this.level = level;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+
+    public RoleLevel getLevel() {
+        return level;
+    }
+
+    public void setLevel(RoleLevel level) {
         this.level = level;
     }
 }

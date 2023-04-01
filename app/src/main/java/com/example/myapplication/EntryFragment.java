@@ -5,14 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.databinding.FragmentEntryBinding;
-import com.example.myapplication.user.BasicUser;
-import com.example.myapplication.user.RoleLevel;
 
 public class EntryFragment extends Fragment {
 
@@ -29,12 +27,7 @@ public class EntryFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        if(BasicUser.getInstance().getLevel() != RoleLevel.MANAGER){
-//            // TODO: Alert of error and go to user view
-//        }
-//        binding.textviewSecond.setText(String.format("%s\n%s",
-//                BasicUser.getInstance().getUsername(),
-//                BasicUser.getInstance().getPassword()));
+
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
