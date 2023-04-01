@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ManagerFragment">
+
+    <Button
+        android:id="@+id/btnWorkersList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Workers List"
+        app:layout_constraintBottom_toTopOf="@+id/btnShiftsRequests"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.458"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hManagerMain"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/btnScheduleWorkerIntoShift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Schedule worker into Shift"
+        app:layout_constraintBottom_toTopOf="@+id/btnDefineShiftRequirements"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.433"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnShiftsSchedulingStatus"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/btnShiftsSchedulingStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shifts Scheduling Status"
+        app:layout_constraintBottom_toTopOf="@+id/btnScheduleWorkerIntoShift"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.441"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnWorkersConstrains"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/btnWorkersConstrains"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Workers Constrains"
+        app:layout_constraintBottom_toTopOf="@+id/btnShiftsSchedulingStatus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.448"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnShiftsRequests"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/btnShiftsRequests"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shifts Requests"
+        app:layout_constraintBottom_toTopOf="@+id/btnWorkersConstrains"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.456"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnWorkersList"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/btnDefineShiftRequirements"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="define Shift requirements"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddNewWorker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.436"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnScheduleWorkerIntoShift"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/hManagerMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Manager Main Page"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnWorkersList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.408"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/btnAddNewWorker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Add New Worker"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.458"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDefineShiftRequirements"
+        app:layout_constraintVertical_bias="0.5" />
+</androidx.constraintlayout.widget.ConstraintLayout>
