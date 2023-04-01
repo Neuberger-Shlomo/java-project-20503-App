@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/SecondFragment">
+    app:startDestination="@id/managerMainFragment">
 
     <fragment
         android:id="@+id/Login"
@@ -20,11 +20,47 @@
             android:id="@+id/action_to_login"
             app:destination="@id/Login" />
     </fragment>
-    <fragment android:id="@+id/thiredFregment"
+    <fragment
+        android:id="@+id/thiredFregment"
         android:name="com.example.myapplication.BlankFragment"
-        android:label="THired fragment"
-        tools:layout="@layout/fragment_blank"
-        >
+        android:label="Thired fragment"
+        tools:layout="@layout/fragment_blank">
 
     </fragment>
+
+    <fragment
+        android:id="@+id/managerMainFragment"
+        android:name="com.example.myapplication.ManagerFragment"
+        android:label="Manager fragment"
+        tools:layout="@layout/fragment_manager_main">
+        <action
+            android:id="@+id/action_managerMainFragment_to_workersListFragment"
+            app:destination="@id/WorkersListFragment" />
+        <action
+            android:id="@+id/action_managerMainFragment_to_WorkersConstrainsFragment"
+            app:destination="@id/WorkersConstrainsFragment" />
+        <action
+            android:id="@+id/action_managerMainFragment_to_ShiftsRequestsFragment"
+            app:destination="@id/ShiftsRequestsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/WorkersListFragment"
+        android:name="com.example.myapplication.WorkersListFragment"
+        android:label="WorkersList fragment"
+        tools:layout="@layout/fragment_workers_list"/>
+
+    <fragment
+        android:id="@+id/ShiftsRequestsFragment"
+        android:name="com.example.myapplication.ShiftsRequestsFragment"
+        android:label="ShiftsRequests fragment"
+        tools:layout="@layout/fragment_shifts_requests"/>
+
+    <fragment
+        android:id="@+id/WorkersConstrainsFragment"
+        android:name="com.example.myapplication.WorkersConstrainsFragment"
+        android:label="WorkersConstrains fragment"
+        tools:layout="@layout/fragment_workers_constrains"/>
+
+
 </navigation>
