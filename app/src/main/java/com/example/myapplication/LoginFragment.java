@@ -1,16 +1,13 @@
 package com.example.myapplication;
 
-import android.app.AlertDialog;
-
-import androidx.lifecycle.Observer;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
-
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,23 +17,30 @@ import androidx.fragment.app.Fragment;
 
 import android.widget.Button;
 
-import androidx.navigation.NavHost;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.example.myapplication.ViewModel.UserViewModel;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.databinding.FragmentLoginBinding;
-import com.example.myapplication.user.BasicUser;
-
-import org.json.JSONObject;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
-public class LoginFragment extends Fragment implements TextWatcher, Api.PreCall {
+public class LoginFragment extends Fragment implements TextWatcher {
+
+    private final String TAG = "LoginFragment";
 
     private FragmentLoginBinding binding;
-    private Button btn;
-    private UserViewModel userViewModel;
+    private UserViewModel        userViewModel;
+    private RequestQueue         queue;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        queue = Volley.newRequestQueue(requireContext());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,10 +50,19 @@ public class LoginFragment extends Fragment implements TextWatcher, Api.PreCall 
         binding.btnLogin.setEnabled(false);
         binding.etPassword.addTextChangedListener(this);
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-        binding.btnLogin.setOnClickListener(this::onLogin);
-        userViewModel.getUiState().observe(getViewLifecycleOwner(), (basicUser -> {
-            if (!Objects.equals(basicUser.getAuthToken(), ""))
+        binding.btnLogin.setOnClickListener(this::onLoginPressed);
+        binding.btnRegister.setOnClickListener(
+                v -> NavHostFragment
+                        .findNavController(LoginFragment.this)
+                        .navigate(R.id.action_Login_to_RegisterFragment)
+                                              );
+        userViewModel.getUserState().observe(getViewLifecycleOwner(), (basicUser -> {
+            if (!Objects.equals(basicUser.getAuthToken(), "")) {
                 NavHostFragment.findNavController(LoginFragment.this).popBackStack();
+            }
+            if (!basicUser.getUsername().isEmpty())
+                binding.etUsername.setText(basicUser.getUsername());
+
         }));
         return binding.getRoot();
 
@@ -61,13 +74,27 @@ public class LoginFragment extends Fragment implements TextWatcher, Api.PreCall 
 
     }
 
-    private void onLogin(View v) {
+    private void onLoginFiled(@Nullable Object obj, @Nullable Api.ResponseError responseError,
+                              @Nullable Throwable throwable) {
+
+        String message = responseError != null ? responseError.getMessage() : throwable != null ?
+                throwable.getMessage() : "Unknown error";
+        Log.d(TAG, "onLogin: Error occurred " + message);
+        Snackbar.make(requireView(), responseError != null ? message : "Unknown error",
+                      Snackbar.LENGTH_LONG).show();
+
+
+    }
+
+    private void onLoginPressed(View v) {
         String username = binding.etUsername.getText().toString(), password =
                 binding.etPassword.getText().toString();
         binding.progressBar.setVisibility(View.VISIBLE);
         binding.btnLogin.setEnabled(false);
         userViewModel.login(username, password, () -> {
         }, (jsonObject, responseError, throwable) -> {
+            if (jsonObject == null && (responseError != null || throwable != null))
+                this.onLoginFiled(null, responseError, throwable);
             binding.progressBar.setVisibility(View.INVISIBLE);
             binding.btnLogin.setEnabled(true);
         });
@@ -96,11 +123,6 @@ public class LoginFragment extends Fragment implements TextWatcher, Api.PreCall 
     @Override
     public void afterTextChanged(Editable s) {
 
-    }
-
-    @Override
-    public void onPreCall() {
-        binding.progressBar.setVisibility(View.VISIBLE);
     }
 
 

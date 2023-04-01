@@ -1,4 +1,4 @@
-package com.example.myapplication.user;
+package com.example.myapplication.Model;
 
 public enum RoleLevel {
     BASIC,

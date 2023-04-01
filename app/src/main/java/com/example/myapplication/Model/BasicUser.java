@@ -1,8 +1,9 @@
-package com.example.myapplication.user;
+package com.example.myapplication.Model;
 
 
 public class BasicUser {
     private   String username;
+    private   String id;
     private    String password;
     private   String authToken;
     private    RoleLevel level;
@@ -50,4 +51,13 @@ public class BasicUser {
     public void setLevel(RoleLevel level) {
         this.level = level;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }

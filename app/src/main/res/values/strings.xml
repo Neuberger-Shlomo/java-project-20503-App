@@ -14,4 +14,10 @@
     <string name="login">Login</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="firstName">First name</string>
+    <string name="lastName">Last name</string>
+    <string name="phone">Phone Number</string>
+    <string name="register">Register</string>
+    <string name="logout">logout</string>
 </resources>
