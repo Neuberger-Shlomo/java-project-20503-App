@@ -2,11 +2,9 @@ package com.example.myapplication.ViewModel;
 
 import android.app.Application;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -14,8 +12,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.api.Constants;
-import com.example.myapplication.user.BasicUser;
-import com.example.myapplication.user.RoleLevel;
+import com.example.myapplication.Model.BasicUser;
+import com.example.myapplication.Model.RoleLevel;
+import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,14 +22,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 public class UserViewModel extends AndroidViewModel {
 
-    private RequestQueue restQueue;
-    private final MutableLiveData<BasicUser> uiState =
+
+    private final MutableLiveData<BasicUser> userState =
             new MutableLiveData<BasicUser>(new BasicUser());
-    private RequestQueue queue;
+    private final RequestQueue               queue;
 
     final static private Gson gson = new Gson();
 
@@ -39,25 +37,31 @@ public class UserViewModel extends AndroidViewModel {
         queue = Volley.newRequestQueue(getApplication());
     }
 
-    public LiveData<BasicUser> getUiState() {
-        return uiState;
+    public LiveData<BasicUser> getUserState() {
+        return userState;
     }
 
     public void login(String username, String password, Api.PreCall preCall,
                       Api.PostCall<JSONObject> postCall) {
         this.queue.add(loginRequest(username, password, preCall, (jsonObject, responseError,
                                                                   throwable) -> {
-            BasicUser user = getUiState().getValue();
+            if (responseError != null || throwable != null) {
+                postCall.onPostCall(null, responseError, throwable);
+                return;
+            }
+            BasicUser user = getUserState().getValue();
             if (user == null) {
                 postCall.onPostCall(null, null, new Exception("No user error"));
                 return;
             }
-            String jwt = null;
-            int level = -1;
+            String jwt   = null;
+            String id    = null;
+            int    level = -1;
             try {
                 if (jsonObject != null) {
-                    jwt = jsonObject.getString("jwt");
+                    jwt   = jsonObject.getString("jwt");
                     level = jsonObject.getInt("role");
+                    id    = jsonObject.getString("id");
                 }
                 if (jwt == null || level == -1) {
                     throw new Exception("Invalid values");
@@ -65,15 +69,42 @@ public class UserViewModel extends AndroidViewModel {
             } catch (Exception e) {
                 postCall.onPostCall(null, null, e);
             }
-            uiState.setValue(new BasicUser(username, password, jwt, RoleLevel.values()[level]));
-
+            BasicUser u = new BasicUser(username, password, jwt, RoleLevel.values()[level]);
+            u.setId(id);
+            userState.setValue(u);
         }));
     }
 
+    public void register(Api.RegisterRequest registerRequest, Api.PreCall preCall,
+                         Api.PostCall<Boolean> postCall) {
 
-    private static JsonObjectRequest loginRequest(String username, String password,
-                                                  Api.PreCall preCall,
-                                                  Api.PostCall<JSONObject> postCall) {
+        preCall.onPreCall();
+        queue.add(registerRequest(registerRequest, preCall, (jsonObject, responseError,
+                                                             throwable) -> {
+            if (responseError != null || throwable != null) {
+                postCall.onPostCall(null, responseError, throwable);
+                return;
+            }
+            BasicUser user = getUserState().getValue();
+            if (user == null) {
+                postCall.onPostCall(null, null, new Exception("No user error"));
+                return;
+            }
+            user.setUsername(registerRequest.getUsername());
+            userState.setValue(user);
+            postCall.onPostCall(true, null, null);
+        }));
+
+    }
+
+    public void logout(Api.PreCall preCall, Api.PostCall<Boolean> postCall) {
+        queue.add(logoutRequest(userState.getValue().getId(), userState.getValue().getId(),
+                                preCall, postCall));
+
+    }
+
+    private JsonObjectRequest loginRequest(String username, String password, Api.PreCall preCall,
+                                           Api.PostCall<JSONObject> postCall) {
         preCall.onPreCall();
 
         JSONObject jsonObj = new JSONObject();
@@ -93,8 +124,61 @@ public class UserViewModel extends AndroidViewModel {
                 postCall.onPostCall(null, null, e);
             }
         }, err -> {
-            String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
-            postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class), null);
+            if (err.networkResponse != null && err.networkResponse.data != null) {
+                String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
+                postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class), null);
+            } else {
+                postCall.onPostCall(null, null, err);
+            }
+        });
+    }
+
+    private JsonObjectRequest registerRequest(Api.RegisterRequest registerRequest,
+                                              Api.PreCall preCall,
+                                              Api.PostCall<JSONObject> postCall) {
+        preCall.onPreCall();
+
+        JSONObject jsonObj;
+        try {
+            jsonObj = new JSONObject(gson.toJson(registerRequest).toString());
+        } catch (JSONException e) {
+            postCall.onPostCall(null, null, e);
+            return null;
+        }
+
+        return new JsonObjectRequest(Request.Method.POST, Constants.REGISTER_URL, jsonObj, res -> {
+            try {
+                postCall.onPostCall(res, null, null);
+            } catch (Exception e) {
+                postCall.onPostCall(null, null, e);
+            }
+        }, err -> {
+            if (err.networkResponse != null && err.networkResponse.data != null) {
+                String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
+                postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class), null);
+            } else {
+                postCall.onPostCall(null, null, err);
+            }
+        });
+    }
+
+    private AuthedJsonObjectRequest logoutRequest(String userId, String jwt, Api.PreCall preCall,
+                                                  Api.PostCall<Boolean> postCall) {
+        preCall.onPreCall();
+
+        JSONObject jsonObj;
+
+
+        return new AuthedJsonObjectRequest(Constants.LOGOUT_URL, userId, jwt,
+                                           response -> {
+                                               postCall.onPostCall(true, null, null);
+                                           }, err -> {
+            if (err.networkResponse != null && err.networkResponse.data != null) {
+                String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
+                postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class), null);
+            } else {
+                postCall.onPostCall(null, null, err);
+            }
         });
     }
 }
