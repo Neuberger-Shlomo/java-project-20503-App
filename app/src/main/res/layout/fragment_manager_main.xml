@@ -5,76 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ManagerFragment"
-    tools:layout_editor_absoluteX="-6dp"
-    tools:layout_editor_absoluteY="271dp">
+>
 
-    <Button
-        android:id="@+id/btnWorkersList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Workers List"
-        app:layout_constraintBottom_toTopOf="@+id/btnShiftsRequests"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hManagerMain"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <Button
-        android:id="@+id/btnScheduleWorkerIntoShift"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Schedule worker into Shift"
-        app:layout_constraintBottom_toTopOf="@+id/btnDefineShiftRequirements"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnShiftsSchedulingStatus"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <Button
-        android:id="@+id/btnShiftsSchedulingStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Shifts Scheduling Status"
-        app:layout_constraintBottom_toTopOf="@+id/btnScheduleWorkerIntoShift"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnWorkersConstrains"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <Button
-        android:id="@+id/btnWorkersConstrains"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Workers Constrains"
-        app:layout_constraintBottom_toTopOf="@+id/btnShiftsSchedulingStatus"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnShiftsRequests"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <Button
-        android:id="@+id/btnShiftsRequests"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Shifts Requests"
-        app:layout_constraintBottom_toTopOf="@+id/btnWorkersConstrains"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnWorkersList"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <Button
-        android:id="@+id/btnDefineShiftRequirements"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="define Shift requirements"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnScheduleWorkerIntoShift"
-        app:layout_constraintVertical_bias="0.5" />
 
     <TextView
         android:id="@+id/hManagerMain"
@@ -82,10 +14,20 @@
         android:layout_height="wrap_content"
         android:text="Manager Main Page"
         android:textSize="32sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnWorkersList"
+        app:layout_constraintBottom_toTopOf="@+id/rvManagerMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvManagerMain"
+        android:layout_width="406dp"
+        android:layout_height="418dp"
+        android:layout_marginBottom="212dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
