@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import com.example.myapplication.Model.Shift;
+import com.example.myapplication.Model.Profile;
 import com.example.myapplication.databinding.FragmentBlankBinding;
 
 import java.util.ArrayList;
@@ -45,32 +44,10 @@ public class BlankFragment extends Fragment {
         }
     }
 
-    ArrayList<Shift> shifts = new ArrayList<Shift>() {{
-        add(new Shift("1"));
-        add(new Shift("2"));
-        add(new Shift("3"));
-        add(new Shift("4"));
-        add(new Shift("3"));
-        add(new Shift("4"));
-        add(new Shift("3"));
-        add(new Shift("4"));
-        add(new Shift("3"));
-        add(new Shift("4"));
-        add(new Shift("3"));
-        add(new Shift("4"));
-        add(new Shift("3"));
-        add(new Shift("4"));
-        add(new Shift("3"));
-        add(new Shift("4"));
-        add(new Shift("3"));
-        add(new Shift("4"));
-        add(new Shift("3"));
-        add(new Shift("4"));
-        add(new Shift("3"));
-        add(new Shift("4"));
-        add(new Shift("3"));
-        add(new Shift("4"));
-
+    ArrayList<Profile> profileArrayList= new ArrayList<Profile>() {{
+        add(new Profile("tal","tal","tal@gmail.com","050-1234567"));
+        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567"));
+        add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567"));
     }};
 
     public BlankFragment() {
@@ -91,20 +68,22 @@ public class BlankFragment extends Fragment {
             public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                  int viewType) {
                 View view =
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.some,
+                        LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_one_line,
                                                                          parent, false);
                 return new ViewHolder(view);
             }
 
             @Override
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-                (holder).getTextView().setText(shifts.get(position).getName());
+                (holder).getTextView().setText(profileArrayList.get(position).getFirstName()+" | "+
+                        profileArrayList.get(position).getLastName()+" | "+
+                        profileArrayList.get(position).getPhoneNumber());
                 holder.getTextView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         new AlertDialog.Builder(requireContext())
                                 .setTitle(((TextView) v).getText().toString())
-                                .setMessage("Some Message woth us")
+                                .setMessage(profileArrayList.get(position).getEmail())
                                 .setPositiveButton("Yay", (dialog, which) -> {
 
                                 }).setNegativeButton("Nay",(d,w)->{})
@@ -118,7 +97,7 @@ public class BlankFragment extends Fragment {
 
             @Override
             public int getItemCount() {
-                return shifts.size();
+                return profileArrayList.size();
             }
         });
         binding.content.setLayoutManager(new LinearLayoutManager(requireContext()));
