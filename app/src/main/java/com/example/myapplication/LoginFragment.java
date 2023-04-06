@@ -34,19 +34,20 @@ public class LoginFragment extends Fragment implements TextWatcher {
 
     private FragmentLoginBinding binding;
     private UserViewModel        userViewModel;
-    private RequestQueue         queue;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        queue = Volley.newRequestQueue(requireContext());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: Login view loaded");
         binding = FragmentLoginBinding.inflate(inflater, container, false);
-        binding.progressBar.setVisibility(View.INVISIBLE);
+        binding.progressBar.setVisibility(View.GONE);
         binding.btnLogin.setEnabled(false);
         binding.etPassword.addTextChangedListener(this);
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
@@ -57,7 +58,7 @@ public class LoginFragment extends Fragment implements TextWatcher {
                         .navigate(R.id.action_Login_to_RegisterFragment)
                                               );
         userViewModel.getUserState().observe(getViewLifecycleOwner(), (basicUser -> {
-            if (!Objects.equals(basicUser.getAuthToken(), "")) {
+            if (!Objects.equals(basicUser.getAuthToken(), null) && !Objects.equals(basicUser.getAuthToken(), "")) {
                 NavHostFragment.findNavController(LoginFragment.this).popBackStack();
             }
             if (!basicUser.getUsername().isEmpty())
@@ -74,7 +75,7 @@ public class LoginFragment extends Fragment implements TextWatcher {
 
     }
 
-    private void onLoginFiled(@Nullable Object obj, @Nullable Api.ResponseError responseError,
+    private void onLoginFiled(@Nullable Api.ResponseError responseError,
                               @Nullable Throwable throwable) {
 
         String message = responseError != null ? responseError.getMessage() : throwable != null ?
@@ -94,8 +95,8 @@ public class LoginFragment extends Fragment implements TextWatcher {
         userViewModel.login(username, password, () -> {
         }, (jsonObject, responseError, throwable) -> {
             if (jsonObject == null && (responseError != null || throwable != null))
-                this.onLoginFiled(null, responseError, throwable);
-            binding.progressBar.setVisibility(View.INVISIBLE);
+                this.onLoginFiled(responseError, throwable);
+            binding.progressBar.setVisibility(View.GONE);
             binding.btnLogin.setEnabled(true);
         });
     }

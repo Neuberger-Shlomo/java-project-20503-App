@@ -21,7 +21,7 @@ public class EntryFragment extends Fragment {
 
     @Override
     public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
+            @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
                             ) {
         binding       = FragmentEntryBinding.inflate(inflater, container, false);
@@ -35,7 +35,7 @@ public class EntryFragment extends Fragment {
         userViewModel.getUserState().observe(
                 getViewLifecycleOwner(),
                 (user) -> {
-                    if (!user.getAuthToken().isEmpty()) {
+                    if (user.getAuthToken() != null && !user.getAuthToken().isEmpty()) {
                         binding.buttonSecond.setText(R.string.logout);
                         binding.buttonSecond.setOnClickListener(this::onLogout);
                     } else {
@@ -54,11 +54,7 @@ public class EntryFragment extends Fragment {
 
     void onLogout(View v) {
         userViewModel.logout(
-                () -> {
-                },
-                (aBoolean, responseError, throwable) -> {
-
-                });
+                () -> {},(aBoolean, responseError, throwable) -> {});
     }
 
     @Override
