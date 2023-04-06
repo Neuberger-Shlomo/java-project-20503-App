@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/thiredFregment">
+    app:startDestination="@id/SecondFragment">
 
     <fragment
         android:id="@+id/Login"
@@ -32,11 +32,5 @@
         android:name="com.example.myapplication.RegisterFragment"
         >
     </fragment>
-    <fragment android:id="@+id/thiredFregment"
-        android:name="com.example.myapplication.BlankFragment"
-        android:label="THired fragment"
-        tools:layout="@layout/fragment_blank"
-        >
-
-    </fragment>
+    
 </navigation>
