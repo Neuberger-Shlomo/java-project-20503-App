@@ -9,6 +9,7 @@ public class BasicUser {
     private RoleLevel level;
 
     public BasicUser() {
+        this.id        = "";
         this.username  = "";
         this.password  = "";
         this.authToken = "";
@@ -23,7 +24,7 @@ public class BasicUser {
     }
 
     public BasicUser(BasicUser u) {
-        this.id = u.id;
+        this.id        = u.id;
         this.username  = u.getUsername();
         this.password  = u.getPassword();
         this.authToken = u.getAuthToken();

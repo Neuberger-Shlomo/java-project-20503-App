@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.example.myapplication.databinding.FragmentEntryBinding;
 
 public class EntryFragment extends Fragment {
 
+    private static final String TAG = "EntryFragment";
     private FragmentEntryBinding binding;
     private UserViewModel        userViewModel;
 
@@ -53,8 +55,13 @@ public class EntryFragment extends Fragment {
     }
 
     void onLogout(View v) {
-        userViewModel.logout(
-                () -> {},(aBoolean, responseError, throwable) -> {});
+        try {
+
+            userViewModel.logout(
+                    () -> {},(aBoolean, responseError, throwable) -> {});
+        }catch (Exception e){
+            Log.e(TAG, "onLogout: Error occured", e);
+        }
     }
 
     @Override
