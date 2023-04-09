@@ -27,7 +27,7 @@ public class WorkersListFragment extends Fragment {
             super(view);
             // Define click listener for the ViewHolder's View
 
-            textView = (TextView) view.findViewById(R.id.date);
+            textView = (TextView) view.findViewById(R.id.line1);
         }
 
         public TextView getTextView() {
@@ -36,21 +36,17 @@ public class WorkersListFragment extends Fragment {
     }
 
     ArrayList<Profile> profileArrayList= new ArrayList<Profile>() {{
-        add(new Profile("tal","tal","tal@gmail.com","050-1234567"));
-        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567"));
-        add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567"));
-        add(new Profile("tal","tal","tal@gmail.com","050-1234567"));
-        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567"));
-        add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567"));
-        add(new Profile("tal","tal","tal@gmail.com","050-1234567"));
-        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567"));
-        add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567"));
-        add(new Profile("tal","tal","tal@gmail.com","050-1234567"));
-        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567"));
-        add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567"));
-        add(new Profile("tal","tal","tal@gmail.com","050-1234567"));
-        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567"));
-        add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567"));
+        add(new Profile("tal","tal","tal@gmail.com","050-1234567",0));
+        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",1));
+        add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",2));
+        add(new Profile("tal","tal","tal@gmail.com","050-1234567",3));
+        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",4));
+        add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",5));
+        add(new Profile("tal","tal","tal@gmail.com","050-1234567",6));
+        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",7));
+        add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",8));
+        add(new Profile("tal","tal","tal@gmail.com","050-1234567",9));
+        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",10));
     }};
 
     public WorkersListFragment() {
@@ -71,17 +67,17 @@ public class WorkersListFragment extends Fragment {
             public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                                int viewType) {
                 View view =
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_one_line,
+                        LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_one_line_dis1,
                                 parent, false);
                 return new ViewHolder(view);
             }
 
             @Override
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-                (holder).getTextView().setText(profileArrayList.get(position).getFirstName()+"\t\t\t"+
-                        profileArrayList.get(position).getLastName()+"\t\t\t"+
+                (holder).getTextView().setText("Full Name: "+profileArrayList.get(position).getFirstName()+"\t\t"+
+                        profileArrayList.get(position).getLastName()+"\nPhone Number: "+
                         profileArrayList.get(position).getPhoneNumber());
-                holder.getTextView().setOnClickListener(new View.OnClickListener() {
+                (holder).getTextView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         new AlertDialog.Builder(requireContext())

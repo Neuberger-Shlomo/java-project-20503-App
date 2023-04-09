@@ -1,34 +1,64 @@
 package com.example.myapplication.Model;
 
+import java.util.ArrayList;
+
 public class Shift {
-    private String name;
-    private Integer count;
+    private String shiftDate;
+    private int numOfRequiredWorkers;
+    private int numOfScheduledWorkers;
 
-    public Shift() {
+    private ArrayList<Profile> scheduledWorkers;
+
+    public Shift(String shiftDate, int numOfRequiredWorkers) {
+        this.shiftDate = shiftDate;
+        this.numOfRequiredWorkers = numOfRequiredWorkers;
+        this.numOfScheduledWorkers = 0;
+        this.scheduledWorkers = new ArrayList<>(numOfRequiredWorkers);
     }
 
-    public Shift(String name) {
-        this.name = name;
+    /*
+    * this second constructor is for testing use only*/
+    public Shift(String shiftDate, int numOfRequiredWorkers, ArrayList<Profile> workersList) {
+        this.shiftDate = shiftDate;
+        this.numOfRequiredWorkers = numOfRequiredWorkers;
+        this.numOfScheduledWorkers = 0;
+        this.scheduledWorkers = new ArrayList<>(numOfRequiredWorkers);
+
+        for(Profile worker:workersList){
+            setScheduledWorker(worker);
+        }
     }
 
-    public Shift(String name, Integer count) {
-        this.name  = name;
-        this.count = count;
+    public String getShiftDate() {
+        return shiftDate;
     }
 
-    public String getName() {
-        return name;
+    public void setShiftDate(String shiftDate) {
+        this.shiftDate = shiftDate;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getNumOfRequiredWorkers() {
+        return numOfRequiredWorkers;
     }
 
-    public Integer getCount() {
-        return count;
+    public void setNumOfRequiredWorkers(int numOfRequiredWorkers) {
+        this.numOfRequiredWorkers = numOfRequiredWorkers;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
+    public int getNumOfScheduledWorkers() {
+        return numOfScheduledWorkers;
+    }
+
+    public void setNumOfScheduledWorkers(int numOfScheduledWorkers) {
+        this.numOfScheduledWorkers = numOfScheduledWorkers;
+    }
+
+    public void setScheduledWorker(Profile scheduledWorker) {
+        this.scheduledWorkers.add(scheduledWorker);
+        setNumOfScheduledWorkers(scheduledWorkers.size());
+    }
+
+    public ArrayList<Profile> getScheduledWorkers(){
+        return scheduledWorkers;
     }
 }

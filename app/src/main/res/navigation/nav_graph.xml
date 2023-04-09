@@ -97,9 +97,9 @@
 
     <fragment
         android:id="@+id/DefineShiftRequirementsFragment"
-        android:name="com.example.myapplication.DefineShiftRequirementsFragment"
+        android:name="com.example.myapplication.DefineShiftFragment"
         android:label="DefineShiftRequirements fragment"
-        tools:layout="@layout/fragment_define_shift_requirements"/>
+        tools:layout="@layout/fragment_define_shift"/>
 
 
 </navigation>

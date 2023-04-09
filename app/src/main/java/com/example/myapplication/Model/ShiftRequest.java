@@ -1,18 +1,17 @@
 package com.example.myapplication.Model;
 
-public class Constrains {
+public class ShiftRequest {
+
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String constrain;
-    private String constrainDate;
+    private String shiftDate;
 
-    public Constrains(String firstName, String lastName, String phoneNumber, String constrain, String constrainDate) {
+    public ShiftRequest(String firstName, String lastName, String phoneNumber, String shiftDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.constrain = constrain;
-        this.constrainDate = constrainDate;
+        this.shiftDate = shiftDate;
     }
 
     public String getFirstName() {
@@ -39,19 +38,11 @@ public class Constrains {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getConstrain() {
-        return constrain;
+    public String getshiftDate() {
+        return shiftDate;
     }
 
-    public void setConstrain(String constrain) {
-        this.constrain = constrain;
-    }
-
-    public String getConstrainDate() {
-        return constrainDate;
-    }
-
-    public void setConstrainDate(String constrainDate) {
-        this.constrainDate = constrainDate;
+    public void setshiftDate(String shiftDate) {
+        this.shiftDate = shiftDate;
     }
 }

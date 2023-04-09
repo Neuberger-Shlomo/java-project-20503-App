@@ -1,10 +1,13 @@
 package com.example.myapplication.Model;
 
+import androidx.annotation.Nullable;
+
 public class Profile {
     private   String firstName;
     private   String lastName;
     private   String email;
     private   String phoneNumber;
+    private int id;
 
     public Profile() {
         this.firstName = "";
@@ -13,11 +16,13 @@ public class Profile {
         this.phoneNumber = "";
     }
 
-    public Profile(String firstName, String lastName, String email, String phoneNumber) {
+
+    public Profile(String firstName, String lastName, String email, String phoneNumber, int id) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -50,5 +55,16 @@ public class Profile {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean equals(Profile profile) {
+        return this.firstName.equals(profile.firstName) &&
+                this.lastName.equals(profile.lastName)&&
+                this.phoneNumber.equals(profile.phoneNumber) &&
+                this.email.equals(profile.email);
     }
 }
