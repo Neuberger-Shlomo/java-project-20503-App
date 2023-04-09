@@ -27,7 +27,7 @@ public class ManagerFragment extends Fragment {
         add(new ManagerButton("Workers Constrains",R.id.WorkersConstrainsFragment));
         add(new ManagerButton("Shift Scheduling Status",R.id.ScheduleStatusFragment));
         add(new ManagerButton("Schedule Worker Into Shift",R.id.ScheduleWorkerIntoShiftsFragment));
-        add(new ManagerButton("Define Shift Requirements",R.id.DefineShiftRequirementsFragment));
+        add(new ManagerButton("Define Shifts",R.id.DefineShiftRequirementsFragment));
     }};
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -10,4 +10,6 @@
 
     <color name="blueBlack">#111f28</color>
     <color name="Azure">#F0FFFF</color>
+    <color name="Lavender">#E6E6FA</color>
+    <color name="DarkSlateGray">#2F4F4F</color>
 </resources>
