@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class ScheduleWorkerIntoShiftsFragment extends Fragment {
 
     private FragmentScheduleWorkerIntoShiftBinding binding;
     private Shift globalShift = null;
+    private UserViewModel userViewModel;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
@@ -80,7 +82,15 @@ public class ScheduleWorkerIntoShiftsFragment extends Fragment {
 
         binding = FragmentScheduleWorkerIntoShiftBinding.inflate(inflater, container, false);
         shiftViewModel = new ViewModelProvider(requireActivity()).get(ShiftsViewModel.class);
-        shiftViewModel.getData();
+        userViewModel  = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+
+        shiftViewModel.getData(
+                userViewModel.getUserState().getValue().getId(),
+                userViewModel.getUserState().getValue().getAuthToken(),
+                ((shifts, responseError, throwable) -> {
+                    Log.d("Testings", "onCreateView: Finish loading");
+                })
+                              );
         RecyclerView.Adapter<ScheduleWorkerIntoShiftsFragment.ViewHolder> adapter = new RecyclerView.Adapter<ScheduleWorkerIntoShiftsFragment.ViewHolder>() {
 
             @NonNull

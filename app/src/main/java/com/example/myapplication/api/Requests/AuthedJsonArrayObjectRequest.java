@@ -8,6 +8,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class AuthedJsonArrayObjectRequest extends JsonArrayRequest {
@@ -33,7 +34,7 @@ public class AuthedJsonArrayObjectRequest extends JsonArrayRequest {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        Map<String, String> hashMap = super.getHeaders();
+        HashMap<String, String> hashMap = new HashMap<>(super.getHeaders());
         hashMap.put("Auth", String.format("%s:%s", this.userId, this.token));
         return hashMap;
     }
