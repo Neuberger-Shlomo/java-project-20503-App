@@ -16,19 +16,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/tvUsernameView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/username" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -36,21 +29,15 @@
                 android:hint="@string/username"
                 android:inputType="textPersonName"
                 android:autofillHints="username"/>
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:passwordToggleEnabled="true"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/password" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +46,7 @@
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:autofillHints="password"/>
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
