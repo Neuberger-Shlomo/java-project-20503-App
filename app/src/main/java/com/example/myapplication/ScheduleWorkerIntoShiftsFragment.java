@@ -12,13 +12,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
+import com.example.myapplication.ViewModel.ShiftsViewModel;
+import com.example.myapplication.ViewModel.UserViewModel;
 import com.example.myapplication.databinding.FragmentScheduleStatusBinding;
 import com.example.myapplication.databinding.FragmentScheduleWorkerIntoShiftBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -26,6 +30,7 @@ import java.util.ArrayList;
 public class ScheduleWorkerIntoShiftsFragment extends Fragment {
 
     private FragmentScheduleWorkerIntoShiftBinding binding;
+    private Shift globalShift = null;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
@@ -56,26 +61,8 @@ public class ScheduleWorkerIntoShiftsFragment extends Fragment {
             add(new Profile("tal", "tal", "tal@gmail.com", "050-1234567",0));
             add(new Profile("Gal", "Gal", "Gal@gmail.com", "050-1234567",1));
             add(new Profile("Yuval", "Yuval", "Yuval@gmail.com", "050-1234567",2));
-        }};
-        ArrayList<Shift> shiftsArrayList= new ArrayList<Shift>() {{
-            add(new Shift("6-4-2023",4,new ArrayList<Profile>() {{
-                add(new Profile("tal","tal","tal@gmail.com","050-1234567",0));
-                add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",1));
-                //add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",2));
-                add(new Profile("tal","tal","tal@gmail.com","050-1234567",3));}}));
-            add(new Shift("6-4-2023",6,new ArrayList<Profile>() {{
-                add(new Profile("tal","tal","tal@gmail.com","050-1234567",0));
-                add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",1));
-                add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",2));
-                add(new Profile("tal","tal","tal@gmail.com","050-1234567",3));}}));
-            add(new Shift("8-4-2023",4,new ArrayList<Profile>() {{
-                add(new Profile("tal","tal","tal@gmail.com","050-1234567",0));
-                }}));
-            add(new Shift("9-4-2023",4,new ArrayList<Profile>() {{
-                add(new Profile("tal","tal","tal@gmail.com","050-1234567",0));
-                add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",1));
-                add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",2));
-                add(new Profile("tal","tal","tal@gmail.com","050-1234567",3));}}));
+            add(new Profile("Moshe", "Moshe", "Moshe@gmail.com", "050-1234567",3));
+            add(new Profile("Dani", "Dani", "Dani@gmail.com", "050-1234567",4));
         }};
 
     public ScheduleWorkerIntoShiftsFragment() {
@@ -83,6 +70,7 @@ public class ScheduleWorkerIntoShiftsFragment extends Fragment {
     }
 
 
+    ShiftsViewModel shiftViewModel;
 
     @Override
     public View onCreateView(
@@ -91,6 +79,8 @@ public class ScheduleWorkerIntoShiftsFragment extends Fragment {
     ) {
 
         binding = FragmentScheduleWorkerIntoShiftBinding.inflate(inflater, container, false);
+        shiftViewModel = new ViewModelProvider(requireActivity()).get(ShiftsViewModel.class);
+        shiftViewModel.getData();
         RecyclerView.Adapter<ScheduleWorkerIntoShiftsFragment.ViewHolder> adapter = new RecyclerView.Adapter<ScheduleWorkerIntoShiftsFragment.ViewHolder>() {
 
             @NonNull
@@ -105,10 +95,10 @@ public class ScheduleWorkerIntoShiftsFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull ScheduleWorkerIntoShiftsFragment.ViewHolder holder, int position) {
-                (holder).getTextView().setText("Shift Date: "+ visibleShiftsArrayList.get(position).getShiftDate()
-                        + "\nNumber Of Required Workers: " + visibleShiftsArrayList.get(position).getNumOfRequiredWorkers()
-                        + "\nNumber Of Scheduled Workers: " + visibleShiftsArrayList.get(position).getNumOfScheduledWorkers());
-                if(visibleShiftsArrayList.get(position).getNumOfScheduledWorkers() == visibleShiftsArrayList.get(position).getNumOfRequiredWorkers()){
+                (holder).getTextView().setText("Shift Date: "+ visibleShiftsArrayList.get(holder.getAdapterPosition()).getShiftDate()
+                        + "\nNumber Of Required Workers: " + visibleShiftsArrayList.get(holder.getAdapterPosition()).getNumOfRequiredWorkers()
+                        + "\nNumber Of Scheduled Workers: " + visibleShiftsArrayList.get(holder.getAdapterPosition()).getNumOfScheduledWorkers());
+                if(visibleShiftsArrayList.get(holder.getAdapterPosition()).getNumOfScheduledWorkers() == visibleShiftsArrayList.get(holder.getAdapterPosition()).getNumOfRequiredWorkers()){
                     (holder).getCardView().setVisibility(View.GONE);
                 }
                 else{
@@ -124,18 +114,17 @@ public class ScheduleWorkerIntoShiftsFragment extends Fragment {
                         binding.cardView7.setVisibility(view.VISIBLE);
                         binding.rvWorkersToSchedule.setVisibility(view.VISIBLE);
 
-                        currentShift = visibleShiftsArrayList.get(position);
+                        currentShift = visibleShiftsArrayList.get(holder.getAdapterPosition());
                         ArrayList<Profile> workersInShift =new ArrayList<>();
                         workersInShift.addAll(currentShift.getScheduledWorkers());
                         visibleWorkersArrayList = new ArrayList<>();
-                        //visibleWorkersArrayList.addAll(profileArrayList);
+                        visibleWorkersArrayList.addAll(profileArrayList);
 
                         for(Profile profile:profileArrayList){
                             for(Profile p:workersInShift){
                                 if(profile.getId() == p.getId()){
-                                    continue;
+                                    visibleWorkersArrayList.remove(profile);
                                 }
-                                visibleWorkersArrayList.add(profile);
                             }
                         }
                     }
@@ -160,7 +149,7 @@ public class ScheduleWorkerIntoShiftsFragment extends Fragment {
                         (binding.dpScheduleWorkerIntoShifts.getMonth()+1) +"-"+
                         binding.dpScheduleWorkerIntoShifts.getYear();
 
-                for (Shift shift:shiftsArrayList) {
+                for (Shift shift:shiftViewModel.getShiftstate().getValue()) {
                     if(shift.getShiftDate().equals(pickedDate)){
                         visibleShiftsArrayList.add(shift);
                     }
@@ -189,17 +178,29 @@ public class ScheduleWorkerIntoShiftsFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull ScheduleWorkerIntoShiftsFragment.ViewHolder holder, int position) {
-                (holder).getTextView().setText("Full Name: "+ visibleWorkersArrayList.get(position).getFirstName()
-                        +"\t\t"+ visibleWorkersArrayList.get(position).getLastName()
-                        + "\nPhone Number: " + visibleWorkersArrayList.get(position).getPhoneNumber());
+                (holder).getTextView().setText("Full Name: "+ visibleWorkersArrayList.get(holder.getAdapterPosition()).getFirstName()
+                        +"\t\t"+ visibleWorkersArrayList.get(holder.getAdapterPosition()).getLastName()
+                        + "\nPhone Number: " + visibleWorkersArrayList.get(holder.getAdapterPosition()).getPhoneNumber());
 
                 (holder).getTextView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        visibleShiftsArrayList.get(position).setScheduledWorker(visibleWorkersArrayList.get(position));
-                        visibleWorkersArrayList.remove(visibleWorkersArrayList.get(position));
-                        shiftsArrayList.get(position);
-                        notifyDataSetChanged();
+
+                        if(globalShift == null) {
+                            globalShift = visibleShiftsArrayList.get(holder.getAdapterPosition());
+                        }
+                        /* add loop that scans the viewModel arraylist and finds the parallel shift*/
+                        Profile profile = visibleWorkersArrayList.get(holder.getAdapterPosition());
+                        if(globalShift.getNumOfScheduledWorkers() < globalShift.getNumOfRequiredWorkers()) {
+                            globalShift.setScheduledWorker(profile);
+                            visibleWorkersArrayList.remove(visibleWorkersArrayList.get(holder.getAdapterPosition()));
+                            shiftViewModel.getShiftstate().getValue().get(holder.getAdapterPosition());
+                            notifyDataSetChanged();
+                        }
+                        else{
+                            Snackbar.make(view, "This shift is full", Snackbar.LENGTH_LONG)
+                                    .setAction("Ok", null).show();
+                        }
                     }
                 });
             }
@@ -211,9 +212,29 @@ public class ScheduleWorkerIntoShiftsFragment extends Fragment {
         };
         binding.rvWorkersToSchedule.setAdapter(adapter2);
 
+        binding.btn2ScheduleWorkerIntoShifts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(globalShift != null){
+                    for(Shift s:shiftViewModel.getShiftstate().getValue()){
+                        if(globalShift.getId() == s.getId() && s.getShiftDate().equals(globalShift.getShiftDate())){
+//                            shiftViewModel.addEntry(globalShift);
+                            shiftViewModel.updateEntry(shiftViewModel.getShiftstate().getValue().indexOf(s), globalShift);
+                        }
+                    }
+                    globalShift = null;
+                }
+                binding.rvShiftsToBeScheduled.setVisibility(view.VISIBLE);
+                binding.dpScheduleWorkerIntoShifts.setVisibility(view.VISIBLE);
+                binding.btnScheduleWorkerIntoShifts.setVisibility(view.VISIBLE);
+                binding.cardView7.setVisibility(view.GONE);
+                binding.rvWorkersToSchedule.setVisibility(view.GONE);
+            }
+        });
 
         binding.rvWorkersToSchedule.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        shiftViewModel.getShiftstate().observe(getViewLifecycleOwner(),(observer)->adapter.notifyDataSetChanged());
 
 
         return binding.getRoot();
