@@ -81,10 +81,10 @@ public class ScheduleStatusFragment extends Fragment {
                         + "\nNumber Of Required Workers: " + visibleShiftsArrayList.get(position).getNumOfRequiredWorkers()
                         + "\nNumber Of Scheduled Workers: " + visibleShiftsArrayList.get(position).getNumOfScheduledWorkers());
                 if(visibleShiftsArrayList.get(position).getNumOfScheduledWorkers() == visibleShiftsArrayList.get(position).getNumOfRequiredWorkers()){
-                    (holder).getCardView().setBackgroundColor(Color.parseColor("#00FA9A"));
+                    (holder).getCardView().setCardBackgroundColor(Color.parseColor("#00FA9A"));
                 }
                 else{
-                    (holder).getCardView().setBackgroundColor(Color.parseColor("#FFB6C1"));
+                    (holder).getCardView().setCardBackgroundColor(Color.parseColor("#FFB6C1"));
                 }
             }
 
