@@ -121,6 +121,16 @@ public class UserViewModel extends AndroidViewModel {
 
     }
 
+
+    public boolean isManger(){
+        // TODO: Ask server if the user is manager
+        BasicUser user = new BasicUser(userState.getValue());
+        user.setLevel(RoleLevel.MANAGER);
+        userState.setValue(user);
+        return true;
+    }
+
+
     private JsonObjectRequest loginRequest(String username, String password, Api.PreCall preCall,
                                            Api.PostCall<JSONObject> postCall) {
         preCall.onPreCall();
