@@ -2,22 +2,33 @@ package com.example.myapplication.Model;
 
 
 public class BasicUser {
-    private   String username;
-    private   String id;
-    private    String password;
-    private   String authToken;
-    private    RoleLevel level;
+    private String    username;
+    private String    id;
+    private String    password;
+    private String    authToken;
+    private RoleLevel level;
+
     public BasicUser() {
-        this.username = "";
-        this.password = "";
+        this.id        = "";
+        this.username  = "";
+        this.password  = "";
         this.authToken = "";
-        this.level = null;
+        this.level     = null;
     }
+
     public BasicUser(String username, String password, String authToken, RoleLevel level) {
-        this.username = username;
-        this.password = password;
+        this.username  = username;
+        this.password  = password;
         this.authToken = authToken;
-        this.level = level;
+        this.level     = level;
+    }
+
+    public BasicUser(BasicUser u) {
+        this.id        = u.id;
+        this.username  = u.getUsername();
+        this.password  = u.getPassword();
+        this.authToken = u.getAuthToken();
+        this.level     = u.getLevel();
     }
 
     public String getUsername() {

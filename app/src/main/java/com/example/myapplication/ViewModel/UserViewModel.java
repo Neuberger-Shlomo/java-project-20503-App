@@ -1,7 +1,9 @@
 package com.example.myapplication.ViewModel;
 
+import android.app.AlertDialog;
 import android.app.Application;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -22,12 +24,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class UserViewModel extends AndroidViewModel {
 
 
     private final MutableLiveData<BasicUser> userState =
-            new MutableLiveData<BasicUser>(new BasicUser());
+            new MutableLiveData<>(new BasicUser());
     private final RequestQueue               queue;
 
     final static private Gson gson = new Gson();
@@ -97,9 +100,24 @@ public class UserViewModel extends AndroidViewModel {
 
     }
 
-    public void logout(Api.PreCall preCall, Api.PostCall<Boolean> postCall) {
-        queue.add(logoutRequest(userState.getValue().getId(), userState.getValue().getId(),
-                                preCall, postCall));
+    public void logout(@Nullable Api.PreCall preCall, @Nullable Api.PostCall<Boolean> postCall) throws Exception {
+        if(userState.getValue() == null) {
+            if(postCall != null) postCall.onPostCall(null,null, new Exception("No user"));
+            else throw new Exception("No user");
+        }
+        queue.add(logoutRequest(userState.getValue().getId(), userState.getValue().getAuthToken()
+                , preCall, (aBoolean, responseError, throwable) -> {
+
+                    if (Boolean.TRUE.equals(aBoolean) || (responseError != null && responseError.getStatus() != 200) || throwable != null) {
+                        BasicUser u =
+                                new BasicUser(Objects.requireNonNull(getUserState().getValue()));
+                        u.setAuthToken(null);
+                        userState.setValue(u);
+                    }
+                    if (postCall != null) {
+                        postCall.onPostCall(aBoolean, responseError, throwable);
+                    }
+                }));
 
     }
 
@@ -140,7 +158,7 @@ public class UserViewModel extends AndroidViewModel {
 
         JSONObject jsonObj;
         try {
-            jsonObj = new JSONObject(gson.toJson(registerRequest).toString());
+            jsonObj = new JSONObject(gson.toJson(registerRequest));
         } catch (JSONException e) {
             postCall.onPostCall(null, null, e);
             return null;
@@ -162,22 +180,31 @@ public class UserViewModel extends AndroidViewModel {
         });
     }
 
-    private AuthedJsonObjectRequest logoutRequest(String userId, String jwt, Api.PreCall preCall,
-                                                  Api.PostCall<Boolean> postCall) {
-        preCall.onPreCall();
+    private AuthedJsonObjectRequest logoutRequest(String userId, String jwt,
+                                                  @Nullable Api.PreCall preCall,
+                                                  @Nullable Api.PostCall<Boolean> postCall) {
+        if (preCall != null) {
+            preCall.onPreCall();
+        }
 
         JSONObject jsonObj;
 
 
-        return new AuthedJsonObjectRequest(Constants.LOGOUT_URL, userId, jwt,
-                                           response -> {
-                                               postCall.onPostCall(true, null, null);
-                                           }, err -> {
+        return new AuthedJsonObjectRequest(Constants.LOGOUT_URL, userId, jwt, response -> {
+            if (postCall != null) {
+                postCall.onPostCall(true, null, null);
+            }
+        }, err -> {
             if (err.networkResponse != null && err.networkResponse.data != null) {
                 String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
-                postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class), null);
+                if (postCall != null) {
+                    postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class),
+                                        null);
+                }
             } else {
-                postCall.onPostCall(null, null, err);
+                if (postCall != null) {
+                    postCall.onPostCall(null, null, err);
+                }
             }
         });
     }
