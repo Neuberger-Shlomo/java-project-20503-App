@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,19 +10,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Model.Constrains;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
+import com.example.myapplication.ViewModel.ShiftsViewModel;
 import com.example.myapplication.databinding.FragmentScheduleStatusBinding;
-import com.example.myapplication.databinding.FragmentWorkersConstrainsBinding;
 
 import java.util.ArrayList;
 
 public class ScheduleStatusFragment extends Fragment {
     private FragmentScheduleStatusBinding binding;
+
+    ShiftsViewModel shiftViewModel;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
@@ -47,28 +48,6 @@ public class ScheduleStatusFragment extends Fragment {
     }
 
     ArrayList<Shift> visibleShiftsArrayList = null;
-    ArrayList<Shift> shiftsArrayList= new ArrayList<Shift>() {{
-        add(new Shift("6-4-2023",4,new ArrayList<Profile>() {{
-            add(new Profile("tal","tal","tal@gmail.com","050-1234567",0));
-            add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",1));
-            add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",2));
-            add(new Profile("tal","tal","tal@gmail.com","050-1234567",3));}}));
-        add(new Shift("7-4-2023",6,new ArrayList<Profile>() {{
-            add(new Profile("tal","tal","tal@gmail.com","050-1234567",0));
-            add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",1));
-            add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",2));
-            add(new Profile("tal","tal","tal@gmail.com","050-1234567",3));}}));
-        add(new Shift("8-4-2023",4,new ArrayList<Profile>() {{
-            add(new Profile("tal","tal","tal@gmail.com","050-1234567",0));
-            add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",1));
-            add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",2));
-            add(new Profile("tal","tal","tal@gmail.com","050-1234567",3));}}));
-        add(new Shift("9-4-2023",4,new ArrayList<Profile>() {{
-            add(new Profile("tal","tal","tal@gmail.com","050-1234567",0));
-            add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",2));
-            add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",2));
-            add(new Profile("tal","tal","tal@gmail.com","050-1234567",3));}}));
-    }};
 
     public ScheduleStatusFragment() {
         // Required empty public constructor
@@ -81,6 +60,9 @@ public class ScheduleStatusFragment extends Fragment {
     ) {
 
         binding = FragmentScheduleStatusBinding.inflate(inflater, container, false);
+
+        shiftViewModel = new ViewModelProvider(requireActivity()).get(ShiftsViewModel.class);
+        shiftViewModel.getData();
         RecyclerView.Adapter<ScheduleStatusFragment.ViewHolder> adapter = new RecyclerView.Adapter<ScheduleStatusFragment.ViewHolder>() {
 
             @NonNull
@@ -124,18 +106,9 @@ public class ScheduleStatusFragment extends Fragment {
                         (binding.dpScheduleStatus.getMonth()+1) +"-"+
                         binding.dpScheduleStatus.getYear();
 
-                for (Shift shift:shiftsArrayList) {
+                for (Shift shift:shiftViewModel.getShiftstate().getValue()) {
                     if(shift.getShiftDate().equals(pickedDate)){
                         visibleShiftsArrayList.add(shift);
-                        if(shift.getNumOfScheduledWorkers() == shift.getNumOfRequiredWorkers()){
-                            binding.tvScheduleStatus.setText("Shift Is Full");
-                            binding.tvScheduleStatus.setTextColor(Color.parseColor("#00FA9A"));
-
-                        }
-                        else{
-                            binding.tvScheduleStatus.setText("Shift Is Not Full!");
-                            binding.tvScheduleStatus.setTextColor(Color.parseColor("#FFB6C1"));
-                        }
                     }
                 }
 

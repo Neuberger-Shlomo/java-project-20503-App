@@ -6,21 +6,33 @@ public class Shift {
     private String shiftDate;
     private int numOfRequiredWorkers;
     private int numOfScheduledWorkers;
+    private int id;
+    private int startHour;
+    private int duration;
+
+
 
     private ArrayList<Profile> scheduledWorkers;
 
-    public Shift(String shiftDate, int numOfRequiredWorkers) {
+    public Shift(String shiftDate, int numOfRequiredWorkers, int id, int startHour, int duration) {
         this.shiftDate = shiftDate;
         this.numOfRequiredWorkers = numOfRequiredWorkers;
+        this.id = id;
+        this.startHour = startHour;
+        this.duration = duration;
         this.numOfScheduledWorkers = 0;
         this.scheduledWorkers = new ArrayList<>(numOfRequiredWorkers);
     }
 
+
     /*
     * this second constructor is for testing use only*/
-    public Shift(String shiftDate, int numOfRequiredWorkers, ArrayList<Profile> workersList) {
+    public Shift(String shiftDate, int numOfRequiredWorkers, ArrayList<Profile> workersList, int id, int startHour, int duration) {
         this.shiftDate = shiftDate;
         this.numOfRequiredWorkers = numOfRequiredWorkers;
+        this.id = id;
+        this.startHour = startHour;
+        this.duration = duration;
         this.numOfScheduledWorkers = 0;
         this.scheduledWorkers = new ArrayList<>(numOfRequiredWorkers);
 
@@ -54,11 +66,33 @@ public class Shift {
     }
 
     public void setScheduledWorker(Profile scheduledWorker) {
-        this.scheduledWorkers.add(scheduledWorker);
+        if(scheduledWorkers.size() < numOfRequiredWorkers) {
+            this.scheduledWorkers.add(scheduledWorker);
+        }
         setNumOfScheduledWorkers(scheduledWorkers.size());
     }
 
     public ArrayList<Profile> getScheduledWorkers(){
         return scheduledWorkers;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getStartHour() {
+        return startHour;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setStartHour(int startHour) {
+        this.startHour = startHour;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }
