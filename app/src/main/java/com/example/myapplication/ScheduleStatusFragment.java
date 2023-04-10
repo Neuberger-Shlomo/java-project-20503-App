@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.ViewModel.ShiftsViewModel;
+import com.example.myapplication.ViewModel.UserViewModel;
 import com.example.myapplication.databinding.FragmentScheduleStatusBinding;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class ScheduleStatusFragment extends Fragment {
     private FragmentScheduleStatusBinding binding;
 
     ShiftsViewModel shiftViewModel;
+    private UserViewModel userViewModel;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
@@ -62,7 +65,15 @@ public class ScheduleStatusFragment extends Fragment {
         binding = FragmentScheduleStatusBinding.inflate(inflater, container, false);
 
         shiftViewModel = new ViewModelProvider(requireActivity()).get(ShiftsViewModel.class);
-        shiftViewModel.getData();
+        userViewModel  = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+
+        shiftViewModel.getData(
+                userViewModel.getUserState().getValue().getId(),
+                userViewModel.getUserState().getValue().getAuthToken(),
+                ((shifts, responseError, throwable) -> {
+                    Log.d("Testings", "onCreateView: Finish loading");
+                })
+                              );
         RecyclerView.Adapter<ScheduleStatusFragment.ViewHolder> adapter = new RecyclerView.Adapter<ScheduleStatusFragment.ViewHolder>() {
 
             @NonNull
