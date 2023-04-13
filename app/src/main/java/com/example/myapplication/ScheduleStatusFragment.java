@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -88,15 +89,31 @@ public class ScheduleStatusFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull ScheduleStatusFragment.ViewHolder holder, int position) {
-                (holder).getTextView().setText("Shift Date: "+ visibleShiftsArrayList.get(position).getShiftDate()
-                        + "\nNumber Of Required Workers: " + visibleShiftsArrayList.get(position).getNumOfRequiredWorkers()
-                        + "\nNumber Of Scheduled Workers: " + visibleShiftsArrayList.get(position).getNumOfScheduledWorkers());
-                if(visibleShiftsArrayList.get(position).getNumOfScheduledWorkers() == visibleShiftsArrayList.get(position).getNumOfRequiredWorkers()){
+                (holder).getTextView().setText("Shift Date: "+ visibleShiftsArrayList.get(holder.getAdapterPosition()).getDate()
+                        + "\nNumber Of Required Workers: " + visibleShiftsArrayList.get(holder.getAdapterPosition()).getNumOfRequiredWorkers()
+                        + "\nNumber Of Scheduled Workers: " + visibleShiftsArrayList.get(holder.getAdapterPosition()).getNumOfScheduledWorkers());
+                if(visibleShiftsArrayList.get(holder.getAdapterPosition()).getNumOfScheduledWorkers() == visibleShiftsArrayList.get(holder.getAdapterPosition()).getNumOfRequiredWorkers()){
                     (holder).getCardView().setCardBackgroundColor(Color.parseColor("#00FA9A"));
                 }
                 else{
                     (holder).getCardView().setCardBackgroundColor(Color.parseColor("#FFB6C1"));
                 }
+
+                (holder).getTextView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO: Check if it do display the workers list scheduled to each shift on click
+                        String scheduledWorkersList ="";
+                        scheduledWorkersList = visibleShiftsArrayList.get(holder.getAdapterPosition()).getScheduledWorkersStr();
+                        new AlertDialog.Builder(requireContext())
+                                .setTitle("Workers in Shift:")
+                                .setMessage(scheduledWorkersList)
+                                .setPositiveButton("Ok", (dialog, which) -> {})
+                                .setOnDismissListener(dialog -> {})
+                                .create().show();
+                    }
+                });
+
             }
 
             @Override
@@ -118,7 +135,7 @@ public class ScheduleStatusFragment extends Fragment {
                         binding.dpScheduleStatus.getYear();
 
                 for (Shift shift:shiftViewModel.getShiftstate().getValue()) {
-                    if(shift.getShiftDate().equals(pickedDate)){
+                    if(shift.getDate().equals(pickedDate)){
                         visibleShiftsArrayList.add(shift);
                     }
                 }

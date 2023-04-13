@@ -75,8 +75,7 @@ public class DefineShiftFragment extends Fragment {
                     int      duration     =
                             Integer.parseInt(binding.tfDefineShift3.getText().toString());
                     int      hour         = binding.tpDefineShift.getHour();
-                    int      id           =
-                            (int) Math.random() * (100) + shiftViewModel.getShiftstate().getValue().size();
+                    int      id           = (int) Math.random() * (100) + shiftViewModel.getShiftstate().getValue().size();
                     boolean  flag         = false;
                     Calendar c            = Calendar.getInstance();
 
@@ -92,7 +91,8 @@ public class DefineShiftFragment extends Fragment {
 
                     if (flag == false) {
                         shiftViewModel.addEntry(new Shift(pickedDate, numOfWorkers, id, hour,
-                                                          duration));
+                                                          duration,1/*dummy*/,1/*dummy*/,1/*dummy*/));
+                        //TODO: what ti do with the weeknumber argument
                     } else {
                         if (hour <= c.get(Calendar.HOUR_OF_DAY)) {
                             Snackbar.make(view, "Can't Set Shift To This Hour!",

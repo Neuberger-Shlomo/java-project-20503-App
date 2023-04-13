@@ -1,5 +1,7 @@
 package com.example.myapplication.Model;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,38 +19,33 @@ public class Shift {
 
 
     private ArrayList<Profile> scheduledWorkers;
-    private int weekNumber, year, dayNumber;
+    private int weekNumber, year = 123, dayNumber;
 
 
 
 
-    public Shift(String shiftDate, int numOfRequiredWorkers, int id, int startHour, int duration) {
+    public Shift(String shiftDate, int numOfRequiredWorkers, int id,
+                 int startHour, int duration, int weekNumber, int dayNumber, int numOfScheduledWorkers) {
         this.shiftDate             = shiftDate;
         this.numOfRequiredWorkers  = numOfRequiredWorkers;
         this.id                    = id;
         this.startHour             = startHour;
         this.duration              = duration;
-        this.numOfScheduledWorkers = 0;
+        this.numOfScheduledWorkers = numOfScheduledWorkers;
         this.scheduledWorkers      = new ArrayList<>(numOfRequiredWorkers);
+        this.weekNumber = weekNumber;
+        this.dayNumber = dayNumber;
     }
 
 
     public String getDate(){
-        Calendar calendar             = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.WEEK_OF_YEAR, weekNumber);
-        calendar.set(Calendar.DAY_OF_WEEK, dayNumber);
-
-        // Get the date from the calendar object
-        Date   date      = calendar.getTime();
-        String shiftDate = String.format("%d-%d-%d",date.getDate(),date.getMonth()+1,
-                                         date.getYear()+1900 );
         return shiftDate;
     }
 
     public static Shift fromJSON(JSONObject object) throws JSONException {
 
         int      numOfRequiredWorkers = object.getInt("employeeCount");
+        int      numOfScheduledWorkers = object.getInt("numOfScheduledWorkers");
         int      id                   = object.getInt("id");
         int      weekNumber           = object.getInt("weekNumber");
         int      dayNumber            = object.getInt("dayNumber");
@@ -63,8 +60,9 @@ public class Shift {
         String shiftDate = String.format("%d-%d-%d",date.getDate(),date.getMonth()+1,
                                          date.getYear()+1900 );
 
+        Log.d("mymsg", "fromJSON: "+shiftDate);
 
-        return new Shift(shiftDate, numOfRequiredWorkers, id, startHour, duration, weekNumber);
+        return new Shift(shiftDate, numOfRequiredWorkers,id, startHour, duration, weekNumber, dayNumber, numOfScheduledWorkers);
     }
 
 
@@ -118,6 +116,13 @@ public class Shift {
 
     public ArrayList<Profile> getScheduledWorkers() {
         return scheduledWorkers;
+    }
+    public String getScheduledWorkersStr(){
+        String output = "";
+        for(Profile p:scheduledWorkers){
+            output += p.toString();
+        }
+        return output;
     }
 
     public int getId() {

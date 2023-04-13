@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +10,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Model.Profile;
+import com.example.myapplication.ViewModel.UserViewModel;
+import com.example.myapplication.ViewModel.WorkersViewModel;
 import com.example.myapplication.databinding.FragmentWorkersListBinding;
 
 import java.util.ArrayList;
 
-public class WorkersListFragment extends Fragment {
+public class WorkersListFragment extends Fragment implements ViewModelStoreOwner {
     private FragmentWorkersListBinding binding;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -34,6 +39,7 @@ public class WorkersListFragment extends Fragment {
             return textView;
         }
     }
+
 
     ArrayList<Profile> profileArrayList= new ArrayList<Profile>() {{
         add(new Profile("tal","tal","tal@gmail.com","050-1234567",0));
@@ -59,6 +65,17 @@ public class WorkersListFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
+        WorkersViewModel workersViewModel = new ViewModelProvider(this).get(WorkersViewModel.class);
+        UserViewModel userViewModel  = new ViewModelProvider(this).get(UserViewModel.class);
+
+//        WorkersViewModel.getData(
+//                userViewModel.getUserState().getValue().getId(),
+//                userViewModel.getUserState().getValue().getAuthToken(),
+//                ((shifts, responseError, throwable) -> {
+//                    Log.d("Testings", "onCreateView: Finish loading");
+//                })
+//        );
+
         binding = FragmentWorkersListBinding.inflate(inflater, container, false);
         binding.rvWorkersList.setAdapter(new RecyclerView.Adapter<ViewHolder>() {
 
@@ -74,21 +91,17 @@ public class WorkersListFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-                (holder).getTextView().setText("Full Name: "+profileArrayList.get(position).getFirstName()+"\t\t"+
-                        profileArrayList.get(position).getLastName()+"\nPhone Number: "+
-                        profileArrayList.get(position).getPhoneNumber());
+                (holder).getTextView().setText("Full Name: "+profileArrayList.get(position).getFirst_Name()+"\t\t"+
+                        profileArrayList.get(position).getLast_Name()+"\nPhone Number: "+
+                        profileArrayList.get(position).getPhone_Number());
                 (holder).getTextView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         new AlertDialog.Builder(requireContext())
                                 .setTitle(((TextView) v).getText().toString())
-                                .setMessage(profileArrayList.get(position).getEmail())
-                                .setPositiveButton("Yay", (dialog, which) -> {
-
-                                }).setNegativeButton("Nay",(d,w)->{})
-                                .setOnDismissListener(dialog -> {
-
-                                })
+                                .setMessage(profileArrayList.get(holder.getAdapterPosition()).getEmail())
+                                .setPositiveButton("Ok", (dialog, which) -> {})
+                                .setOnDismissListener(dialog -> {})
                                 .create().show();
                     }
                 });

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.myapplication.Model.ShiftRequest;
+import com.example.myapplication.databinding.FragmentDatePickingBinding;
 import com.example.myapplication.databinding.FragmentShiftsRequestsBinding;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 
 public class ShiftsRequestsFragment extends Fragment {
 
-    private FragmentShiftsRequestsBinding binding;
+    private FragmentDatePickingBinding binding;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
@@ -57,7 +58,7 @@ public class ShiftsRequestsFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentShiftsRequestsBinding.inflate(inflater, container, false);
+        binding = FragmentDatePickingBinding.inflate(inflater, container, false);
         RecyclerView.Adapter<ViewHolder> adapter = new RecyclerView.Adapter<ViewHolder>() {
 
             @NonNull
@@ -84,17 +85,18 @@ public class ShiftsRequestsFragment extends Fragment {
             }
         };
 
-        binding.rvShiftRequests.setAdapter(adapter);
+        binding.rvDatePicker.setAdapter(adapter);
+        binding.headerDatePicker.setText("Shifts Requests");
 
-        binding.btnShiftsRequests.setOnClickListener(new View.OnClickListener() {
+        binding.btnDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 visibleShiftArrayList = new ArrayList<>();
 
-                String pickedDate = binding.dpShiftsRequests.getDayOfMonth() + "-" +
-                        (binding.dpShiftsRequests.getMonth()+1) +"-"+
-                        binding.dpShiftsRequests.getYear();
+                String pickedDate = binding.dpDatePicker.getDayOfMonth() + "-" +
+                        (binding.dpDatePicker.getMonth()+1) +"-"+
+                        binding.dpDatePicker.getYear();
 
                 for (ShiftRequest request:shiftRequestArrayList) {
                     if(request.getshiftDate().equals(pickedDate)){
@@ -105,7 +107,7 @@ public class ShiftsRequestsFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-        binding.rvShiftRequests.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvDatePicker.setLayoutManager(new LinearLayoutManager(requireContext()));
         return binding.getRoot();
     }
 

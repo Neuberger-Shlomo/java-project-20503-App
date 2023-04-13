@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ public class ManagerFragment extends Fragment {
         add(new ManagerButton("Schedule Worker Into Shift",R.id.ScheduleWorkerIntoShiftsFragment));
         add(new ManagerButton("Define Shifts",R.id.DefineShiftRequirementsFragment));
     }};
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
@@ -70,12 +72,12 @@ public class ManagerFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-                (holder).getTextView().setText(buttonsArrayList.get(position).getButtonName());
+                (holder).getTextView().setText(buttonsArrayList.get(holder.getAdapterPosition()).getButtonName());
                 holder.getTextView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         NavHostFragment.findNavController(ManagerFragment.this)
-                                .navigate(buttonsArrayList.get(position).getFragment());
+                                .navigate(buttonsArrayList.get(holder.getAdapterPosition()).getFragment());
                     }
                 });
             }
@@ -89,68 +91,7 @@ public class ManagerFragment extends Fragment {
         return binding.getRoot();
 
     }
-    /*
-    @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-        binding = FragmentManagerMainBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        binding.btnWorkersList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(ManagerFragment.this)
-                        .navigate(R.id.WorkersListFragment);
-            }
-        });
-
-        binding.btnShiftsRequests.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(ManagerFragment.this)
-                        .navigate(R.id.ShiftsRequestsFragment);
-            }
-        });
-
-        binding.btnWorkersConstrains.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(ManagerFragment.this)
-                        .navigate(R.id.WorkersConstrainsFragment);
-            }
-        });
-
-        binding.btnShiftsSchedulingStatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(ManagerFragment.this)
-                        .navigate(R.id.ScheduleStatusFragment);
-            }
-        });
-
-        binding.btnScheduleWorkerIntoShift.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(ManagerFragment.this)
-                        .navigate(R.id.ScheduleWorkerIntoShiftsFragment);
-            }
-        });
-
-        binding.btnDefineShiftRequirements.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(ManagerFragment.this)
-                        .navigate(R.id.DefineShiftRequirementsFragment);
-            }
-        });
-    }
-*/
     @Override
     public void onDestroyView() {
         super.onDestroyView();

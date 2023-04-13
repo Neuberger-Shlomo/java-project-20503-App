@@ -12,13 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Model.Constrains;
+import com.example.myapplication.databinding.FragmentDatePickingBinding;
 import com.example.myapplication.databinding.FragmentWorkersConstrainsBinding;
 
 import java.util.ArrayList;
 
 public class WorkersConstrainsFragment extends Fragment {
 
-    private FragmentWorkersConstrainsBinding binding;
+    private FragmentDatePickingBinding binding;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
@@ -59,7 +60,7 @@ public class WorkersConstrainsFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentWorkersConstrainsBinding.inflate(inflater, container, false);
+        binding = FragmentDatePickingBinding.inflate(inflater, container, false);
         RecyclerView.Adapter<WorkersConstrainsFragment.ViewHolder> adapter = new RecyclerView.Adapter<WorkersConstrainsFragment.ViewHolder>() {
 
             @NonNull
@@ -87,17 +88,18 @@ public class WorkersConstrainsFragment extends Fragment {
             }
         };
 
-        binding.rvWorkersConstrains.setAdapter(adapter);
+        binding.rvDatePicker.setAdapter(adapter);
+        binding.headerDatePicker.setText("Workers Constrains");
 
-        binding.btnWorkersConstrains.setOnClickListener(new View.OnClickListener() {
+        binding.btnDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 visibleConstrainsArrayList = new ArrayList<>();
 
-                String pickedDate = binding.dpWorkersConstrains.getDayOfMonth() + "-" +
-                        (binding.dpWorkersConstrains.getMonth()+1) +"-"+
-                        binding.dpWorkersConstrains.getYear();
+                String pickedDate = binding.dpDatePicker.getDayOfMonth() + "-" +
+                        (binding.dpDatePicker.getMonth()+1) +"-"+
+                        binding.dpDatePicker.getYear();
 
                 for (Constrains constrain:constrainsArrayList) {
                     if(constrain.getConstrainDate().equals(pickedDate)){
@@ -108,7 +110,7 @@ public class WorkersConstrainsFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-        binding.rvWorkersConstrains.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvDatePicker.setLayoutManager(new LinearLayoutManager(requireContext()));
         return binding.getRoot();
     }
 

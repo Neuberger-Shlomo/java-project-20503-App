@@ -1,6 +1,7 @@
 package com.example.myapplication.ViewModel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -67,8 +68,7 @@ public class ShiftsViewModel extends AndroidViewModel {
                                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                                             // This only work if the the class has the same
                                             // attribute as the DATABASE
-                                            arrayList.add(gson.fromJson(jsonObject.toString(),
-                                                                        Shift.class));
+                                            arrayList.add(Shift.fromJSON(jsonObject));
 
                                         }
                                         shiftsState.setValue(arrayList);

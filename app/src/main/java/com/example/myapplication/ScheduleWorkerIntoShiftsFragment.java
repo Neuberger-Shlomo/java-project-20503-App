@@ -1,13 +1,10 @@
 package com.example.myapplication;
 
-import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,7 +18,6 @@ import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.ViewModel.ShiftsViewModel;
 import com.example.myapplication.ViewModel.UserViewModel;
-import com.example.myapplication.databinding.FragmentScheduleStatusBinding;
 import com.example.myapplication.databinding.FragmentScheduleWorkerIntoShiftBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -188,9 +184,9 @@ public class ScheduleWorkerIntoShiftsFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull ScheduleWorkerIntoShiftsFragment.ViewHolder holder, int position) {
-                (holder).getTextView().setText("Full Name: "+ visibleWorkersArrayList.get(holder.getAdapterPosition()).getFirstName()
-                        +"\t\t"+ visibleWorkersArrayList.get(holder.getAdapterPosition()).getLastName()
-                        + "\nPhone Number: " + visibleWorkersArrayList.get(holder.getAdapterPosition()).getPhoneNumber());
+                (holder).getTextView().setText("Full Name: "+ visibleWorkersArrayList.get(holder.getAdapterPosition()).getFirst_Name()
+                        +"\t\t"+ visibleWorkersArrayList.get(holder.getAdapterPosition()).getLast_Name()
+                        + "\nPhone Number: " + visibleWorkersArrayList.get(holder.getAdapterPosition()).getPhone_Number());
 
                 (holder).getTextView().setOnClickListener(new View.OnClickListener() {
                     @Override

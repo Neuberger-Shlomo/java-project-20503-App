@@ -1,44 +1,52 @@
 package com.example.myapplication.Model;
 
-import androidx.annotation.Nullable;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class Profile {
-    private   String firstName;
-    private   String lastName;
+    private   String first_Name;
+    private   String last_Name;
     private   String email;
-    private   String phoneNumber;
+    private   String phone_Number;
     private int id;
 
     public Profile() {
-        this.firstName = "";
-        this.lastName = "";
+        this.first_Name = "";
+        this.last_Name = "";
         this.email = "";
-        this.phoneNumber = "";
+        this.phone_Number = "";
     }
 
 
-    public Profile(String firstName, String lastName, String email, String phoneNumber, int id) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Profile(String first_Name, String last_Name, String email, String phone_Number, int id) {
+        this.first_Name = first_Name;
+        this.last_Name = last_Name;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.phone_Number = phone_Number;
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+
+
+    public String getFirst_Name() {
+        return first_Name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirst_Name(String first_Name) {
+        this.first_Name = first_Name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLast_Name() {
+        return last_Name;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLast_Name(String last_Name) {
+        this.last_Name = last_Name;
     }
 
     public String getEmail() {
@@ -49,12 +57,12 @@ public class Profile {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone_Number() {
+        return phone_Number;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone_Number(String phone_Number) {
+        this.phone_Number = phone_Number;
     }
 
     public int getId() {
@@ -62,9 +70,9 @@ public class Profile {
     }
 
     public boolean equals(Profile profile) {
-        return this.firstName.equals(profile.firstName) &&
-                this.lastName.equals(profile.lastName)&&
-                this.phoneNumber.equals(profile.phoneNumber) &&
+        return this.first_Name.equals(profile.first_Name) &&
+                this.last_Name.equals(profile.last_Name)&&
+                this.phone_Number.equals(profile.phone_Number) &&
                 this.email.equals(profile.email);
     }
 }
