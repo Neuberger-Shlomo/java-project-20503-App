@@ -88,7 +88,7 @@
 
     <fragment
         android:id="@+id/ScheduleStatusFragment"
-        android:name="com.example.myapplication.ScheduleStatusFragment"
+        android:name="com.example.myapplication.ScheduleStatus.ScheduleStatusFragment"
         android:label="ScheduleStatus fragment"
         tools:layout="@layout/fragment_schedule_status"/>
 
