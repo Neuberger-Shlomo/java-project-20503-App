@@ -2,6 +2,7 @@ package com.example.myapplication.Model;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,6 +52,7 @@ public class Shift {
         int      dayNumber            = object.getInt("dayNumber");
         int      startHour            = object.getInt("startHour");
         int      duration             = object.getInt("duration");
+        ArrayList<Profile> scheduledWorkers = new ArrayList<>();
         Calendar calendar             = Calendar.getInstance();
         calendar.set(Calendar.WEEK_OF_YEAR, weekNumber);
         calendar.set(Calendar.DAY_OF_WEEK, dayNumber);
@@ -62,7 +64,8 @@ public class Shift {
 
         Log.d("mymsg", "fromJSON: "+shiftDate);
 
-        return new Shift(shiftDate, numOfRequiredWorkers,id, startHour, duration, weekNumber, dayNumber, numOfScheduledWorkers);
+        return new Shift(shiftDate, numOfRequiredWorkers,id, startHour,
+                duration, weekNumber, dayNumber, numOfScheduledWorkers);
     }
 
 

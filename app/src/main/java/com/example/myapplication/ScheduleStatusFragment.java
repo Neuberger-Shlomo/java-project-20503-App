@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,6 +21,7 @@ import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.ViewModel.ShiftsViewModel;
 import com.example.myapplication.ViewModel.UserViewModel;
+import com.example.myapplication.api.Api;
 import com.example.myapplication.databinding.FragmentScheduleStatusBinding;
 
 import java.util.ArrayList;
@@ -34,6 +36,8 @@ public class ScheduleStatusFragment extends Fragment {
         private final TextView textView;
         private final CardView cardView;
 
+        private Shift shift;
+
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
@@ -41,6 +45,17 @@ public class ScheduleStatusFragment extends Fragment {
             textView = (TextView) view.findViewById(R.id.line1);
             cardView = (CardView) view.findViewById(R.id.cardView0);
 
+        }
+
+        public Shift getShift() {
+            return shift;
+        }
+
+        public void setShift(Shift shift) {
+            this.shift = shift;
+            getTextView().setText("Shift Date: "+ shift.getDate()
+                    + "\nNumber Of Required Workers: " + shift.getNumOfRequiredWorkers()
+                    + "\nNumber Of Scheduled Workers: " + shift.getNumOfScheduledWorkers());
         }
 
         public TextView getTextView() {
@@ -89,10 +104,10 @@ public class ScheduleStatusFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull ScheduleStatusFragment.ViewHolder holder, int position) {
-                (holder).getTextView().setText("Shift Date: "+ visibleShiftsArrayList.get(holder.getAdapterPosition()).getDate()
-                        + "\nNumber Of Required Workers: " + visibleShiftsArrayList.get(holder.getAdapterPosition()).getNumOfRequiredWorkers()
-                        + "\nNumber Of Scheduled Workers: " + visibleShiftsArrayList.get(holder.getAdapterPosition()).getNumOfScheduledWorkers());
-                if(visibleShiftsArrayList.get(holder.getAdapterPosition()).getNumOfScheduledWorkers() == visibleShiftsArrayList.get(holder.getAdapterPosition()).getNumOfRequiredWorkers()){
+
+                holder.setShift(visibleShiftsArrayList.get(holder.getAdapterPosition()));
+
+                if(holder.getShift().getNumOfScheduledWorkers() == holder.getShift().getNumOfRequiredWorkers()){
                     (holder).getCardView().setCardBackgroundColor(Color.parseColor("#00FA9A"));
                 }
                 else{
@@ -102,15 +117,26 @@ public class ScheduleStatusFragment extends Fragment {
                 (holder).getTextView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //TODO: Check if it do display the workers list scheduled to each shift on click
-                        String scheduledWorkersList ="";
-                        scheduledWorkersList = visibleShiftsArrayList.get(holder.getAdapterPosition()).getScheduledWorkersStr();
-                        new AlertDialog.Builder(requireContext())
-                                .setTitle("Workers in Shift:")
-                                .setMessage(scheduledWorkersList)
-                                .setPositiveButton("Ok", (dialog, which) -> {})
-                                .setOnDismissListener(dialog -> {})
-                                .create().show();
+                        shiftViewModel.getProfileFromSchedule(userViewModel.getUserState().getValue().getId(),
+                                userViewModel.getUserState().getValue().getAuthToken(),
+                                holder.getShift().getId(),
+                                new Api.PostCall<ArrayList<Profile>>() {
+                                    @Override
+                                    public void onPostCall(@Nullable ArrayList<Profile> profiles, @Nullable Api.ResponseError responseError, @Nullable Throwable throwable) {
+                                        if(profiles == null)
+                                            return;
+                                        StringBuilder stringBuilder = new StringBuilder();
+                                        for(Profile p:profiles){
+                                            stringBuilder.append(p);
+                                        }
+                                        new AlertDialog.Builder(requireContext())
+                                                .setTitle("Workers in Shift:")
+                                                .setMessage(stringBuilder.toString())
+                                                .setPositiveButton("Ok", (dialog, which) -> {})
+                                                .setOnDismissListener(dialog -> {})
+                                                .create().show();
+                                    }
+                                });
                     }
                 });
 

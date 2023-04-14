@@ -49,6 +49,7 @@ public class ShiftsViewModel extends AndroidViewModel {
         shiftsState.setValue(shiftsState.getValue());
     }
 
+
     public void addEntry(Shift shift) {
         shiftsState.getValue().add(shift);
         shiftsState.setValue(shiftsState.getValue());
@@ -107,6 +108,60 @@ public class ShiftsViewModel extends AndroidViewModel {
                                                         postCall.onPostCall(null, null, err);
                                                     }
                                                 });
+    }
+
+
+    public void getProfileFromSchedule(String userId,
+                        String token, int scheduleId,
+                        @NotNull Api.PostCall<ArrayList<Profile>> postCall) {
+
+        queue.add(getProfileFromSchedule(userId, token,scheduleId, () -> {
+                },
+                (jsonArray, responseError, throwable) -> {
+                    try {
+                        if (jsonArray != null) {
+                            ArrayList<Profile> arrayList = new ArrayList<>();
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                // This only work if the the class has the same
+                                // attribute as the DATABASE
+                                arrayList.add(Profile.fromJSON(jsonObject));
+
+                            }
+                            postCall.onPostCall(arrayList, null, null);
+                        } else {
+                            postCall.onPostCall(null, responseError, throwable);
+                        }
+                    } catch (JSONException e) {
+                        postCall.onPostCall(null, null, e);
+                    }
+                }));
+    }
+
+    private static AuthedJsonArrayObjectRequest getProfileFromSchedule(String userId, String token, int scheduleId,
+                                                          @NotNull Api.PreCall preCall,
+                                                          @NotNull Api.PostCall<JSONArray> postCall) {
+        preCall.onPreCall();
+        return new AuthedJsonArrayObjectRequest(Constants.SHIFTS_FROM_SCHEDULE_URL +"?id="+ scheduleId,
+                userId,
+                token,
+                res -> {
+                    try {
+                        postCall.onPostCall(res, null, null);
+                    } catch (Exception e) {
+                        postCall.onPostCall(null, null, e);
+                    }
+                },
+                err -> {
+                    if (err.networkResponse != null && err.networkResponse.data != null) {
+                        String resString =
+                                new String(err.networkResponse.data, StandardCharsets.UTF_8);
+                        postCall.onPostCall(null,
+                                gson.fromJson(resString, Api.ResponseError.class), null);
+                    } else {
+                        postCall.onPostCall(null, null, err);
+                    }
+                });
     }
 
 
