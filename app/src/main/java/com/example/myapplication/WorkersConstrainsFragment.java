@@ -1,19 +1,27 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Model.Constrains;
+import com.example.myapplication.Model.Constraints;
+import com.example.myapplication.Model.Profile;
+import com.example.myapplication.ViewModel.ShiftsViewModel;
+import com.example.myapplication.ViewModel.UserViewModel;
+import com.example.myapplication.ViewModel.WorkersConstrainsViewModel;
+import com.example.myapplication.api.Api;
 import com.example.myapplication.databinding.FragmentDatePickingBinding;
-import com.example.myapplication.databinding.FragmentWorkersConstrainsBinding;
 
 import java.util.ArrayList;
 
@@ -21,8 +29,12 @@ public class WorkersConstrainsFragment extends Fragment {
 
     private FragmentDatePickingBinding binding;
 
+    private WorkersConstrainsViewModel workersConstrainsViewModel;
+    private UserViewModel userViewModel;
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
+        private Constraints constraints;
 
         public ViewHolder(View view) {
             super(view);
@@ -32,22 +44,24 @@ public class WorkersConstrainsFragment extends Fragment {
 
         }
 
+        public Constraints getConstraints() {
+            return constraints;
+        }
+
+        public void setConstraints(Constraints constraints) {
+            this.constraints = constraints;
+            getTextView().setText("Full Name: "+ constraints.getFirstName() + "\t\t" +
+                    constraints.getLastName()
+                    + "\nPhone Number: " + constraints.getPhoneNumber()
+                    + "\nConstrain start Date: " + constraints.getStartDate());
+        }
+
         public TextView getTextView() {
             return textView;
         }
     }
 
-        ArrayList<Constrains> visibleConstrainsArrayList = null;
-        ArrayList<Constrains> constrainsArrayList= new ArrayList<Constrains>() {{
-            add(new Constrains("tal","tal","050-1234567","Can't Work", "6-4-2023"));
-            add(new Constrains("Gal","Gal","050-1234567","Sick", "6-4-2023"));
-            add(new Constrains("Yuval","Yuval","050-1234567","Holiday", "8-4-2023"));
-            add(new Constrains("tal","tal","050-1234567","Vacation", "8-4-2023"));
-            add(new Constrains("tal","tal","050-1234567","Can't Work", "8-4-2023"));
-            add(new Constrains("Gal","Gal","050-1234567","Sick", "7-4-2023"));
-            add(new Constrains("Yuval","Yuval","050-1234567","Holiday", "7-4-2023"));
-            add(new Constrains("tal","tal","050-1234567","Vacation", "9-4-2023"));
-        }};
+        ArrayList<Constraints> visibleConstrainsArrayList = null;
 
     public WorkersConstrainsFragment() {
         // Required empty public constructor
@@ -61,6 +75,17 @@ public class WorkersConstrainsFragment extends Fragment {
     ) {
 
         binding = FragmentDatePickingBinding.inflate(inflater, container, false);
+
+        workersConstrainsViewModel = new ViewModelProvider(requireActivity()).get(WorkersConstrainsViewModel.class);
+        userViewModel  = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+
+        workersConstrainsViewModel.getData(
+                userViewModel.getUserState().getValue().getId(),
+                userViewModel.getUserState().getValue().getAuthToken(),
+                ((shifts, responseError, throwable) -> {
+                    Log.d("Testings", "onCreateView: Finish loading");
+                })
+        );
         RecyclerView.Adapter<WorkersConstrainsFragment.ViewHolder> adapter = new RecyclerView.Adapter<WorkersConstrainsFragment.ViewHolder>() {
 
             @NonNull
@@ -75,11 +100,24 @@ public class WorkersConstrainsFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull WorkersConstrainsFragment.ViewHolder holder, int position) {
-                (holder).getTextView().setText("Full Name: "+ visibleConstrainsArrayList.get(position).getFirstName() + "\t\t" +
-                        visibleConstrainsArrayList.get(position).getLastName() + "\nPhone Number: " +
-                        visibleConstrainsArrayList.get(position).getPhoneNumber() + "\nConstrain Date: " +
-                        visibleConstrainsArrayList.get(position).getConstrainDate()+ "\nConstrain: " +
-                        visibleConstrainsArrayList.get(position).getConstrain());
+                holder.setConstraints(visibleConstrainsArrayList.get(holder.getAdapterPosition()));
+
+                (holder).getTextView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String ConstMessage = "Type: " + visibleConstrainsArrayList.get(holder.getAdapterPosition()).getConstType()+
+                                "\nConstrain: " + visibleConstrainsArrayList.get(holder.getAdapterPosition()).getData()+
+                                "\nis permanent: " + visibleConstrainsArrayList.get(holder.getAdapterPosition()).isPermanent()+
+                                "\nEnd Date: " + visibleConstrainsArrayList.get(holder.getAdapterPosition()).getEndDate();
+
+                        new AlertDialog.Builder(requireContext())
+                                .setTitle("Worker details:")
+                                .setMessage(ConstMessage)
+                                .setPositiveButton("Ok", (dialog, which) -> {})
+                                .setOnDismissListener(dialog -> {})
+                                .create().show();
+                    }
+                });
             }
 
             @Override
@@ -97,13 +135,13 @@ public class WorkersConstrainsFragment extends Fragment {
 
                 visibleConstrainsArrayList = new ArrayList<>();
 
-                String pickedDate = binding.dpDatePicker.getDayOfMonth() + "-" +
-                        (binding.dpDatePicker.getMonth()+1) +"-"+
-                        binding.dpDatePicker.getYear();
+                String pickedDate = binding.dpDatePicker.getYear() + "-" +
+                        +0+(binding.dpDatePicker.getMonth()+1) +"-"+
+                        binding.dpDatePicker.getDayOfMonth();
 
-                for (Constrains constrain:constrainsArrayList) {
-                    if(constrain.getConstrainDate().equals(pickedDate)){
-                        visibleConstrainsArrayList.add(constrain);
+                for (Constraints constraint:workersConstrainsViewModel.getWorkersConstraintsstate().getValue()) {
+                    if(constraint.getStartDate().equals(pickedDate)){
+                        visibleConstrainsArrayList.add(constraint);
                     }
                 }
 
