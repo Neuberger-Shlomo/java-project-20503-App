@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/shift_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="2023-04-10"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/shift_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="9:00 - 17:00"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/scheduled_workers"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Scheduled Workers: 0/2"
+        android:textSize="16sp" />
+
+</LinearLayout>
