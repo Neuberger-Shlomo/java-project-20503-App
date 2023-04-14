@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.RequestQueue;
@@ -32,7 +33,7 @@ public class WorkersViewModel extends AndroidViewModel {
     private final MutableLiveData<ArrayList<Profile>> workersState =
             new MutableLiveData<ArrayList<Profile>>(new ArrayList<Profile>());
 
-    public MutableLiveData<ArrayList<Profile>> getWorkersState() {
+    public LiveData<ArrayList<Profile>> getWorkersState() {
         return workersState;
     }
 
@@ -41,33 +42,33 @@ public class WorkersViewModel extends AndroidViewModel {
         queue = Volley.newRequestQueue(getApplication());
     }
 
-//    public void getData(String userId,
-//                        String token,
-//                        @NotNull Api.PostCall<ArrayList<Profile>> postCall) {
-//
-//        queue.add(getProfiles(userId, token, () -> {
-//                },
-//                (jsonArray, responseError, throwable) -> {
-//                    try {
-//                        if (jsonArray != null) {
-//                            ArrayList<Profile> arrayList = new ArrayList<>();
-//                            for (int i = 0; i < jsonArray.length(); i++) {
-//                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                                // This only work if the the class has the same
-//                                // attribute as the DATABASE
-//                                arrayList.add(Profile.fromJSON(jsonObject));
-//
-//                            }
-//                            workersState.setValue(arrayList);
-//                            postCall.onPostCall(arrayList, null, null);
-//                        } else {
-//                            postCall.onPostCall(null, responseError, throwable);
-//                        }
-//                    } catch (JSONException e) {
-//                        postCall.onPostCall(null, null, e);
-//                    }
-//                }));
-//    }
+    public void getData(String userId,
+                        String token,
+                        @NotNull Api.PostCall<ArrayList<Profile>> postCall) {
+
+        queue.add(getProfiles(userId, token, () -> {
+                },
+                (jsonArray, responseError, throwable) -> {
+                    try {
+                        if (jsonArray != null) {
+                            ArrayList<Profile> arrayList = new ArrayList<>();
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                // This only work if the the class has the same
+                                // attribute as the DATABASE
+                                arrayList.add(Profile.fromJSON(jsonObject));
+
+                            }
+                            workersState.setValue(arrayList);
+                            postCall.onPostCall(arrayList, null, null);
+                        } else {
+                            postCall.onPostCall(null, responseError, throwable);
+                        }
+                    } catch (JSONException e) {
+                        postCall.onPostCall(null, null, e);
+                    }
+                }));
+    }
 
 
     private static AuthedJsonArrayObjectRequest getProfiles(String userId, String token,

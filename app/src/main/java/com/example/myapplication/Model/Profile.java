@@ -35,7 +35,7 @@ public class Profile {
         this.phoneNumber = phone_Number;
         this.id = id;
     }
-    // TODO: implement fromJSON
+
     public static Profile fromJSON(JSONObject object) throws JSONException{
         Gson g = new Gson();
         return g.fromJson(object.toString(), Profile.class);
