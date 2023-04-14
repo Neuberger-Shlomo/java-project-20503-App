@@ -184,9 +184,9 @@ public class ScheduleWorkerIntoShiftsFragment extends Fragment {
 
             @Override
             public void onBindViewHolder(@NonNull ScheduleWorkerIntoShiftsFragment.ViewHolder holder, int position) {
-                (holder).getTextView().setText("Full Name: "+ visibleWorkersArrayList.get(holder.getAdapterPosition()).getFirst_Name()
-                        +"\t\t"+ visibleWorkersArrayList.get(holder.getAdapterPosition()).getLast_Name()
-                        + "\nPhone Number: " + visibleWorkersArrayList.get(holder.getAdapterPosition()).getPhone_Number());
+                (holder).getTextView().setText("Full Name: "+ visibleWorkersArrayList.get(holder.getAdapterPosition()).getFirstName()
+                        +"\t\t"+ visibleWorkersArrayList.get(holder.getAdapterPosition()).getLastName()
+                        + "\nPhone Number: " + visibleWorkersArrayList.get(holder.getAdapterPosition()).getPhoneNumber());
 
                 (holder).getTextView().setOnClickListener(new View.OnClickListener() {
                     @Override

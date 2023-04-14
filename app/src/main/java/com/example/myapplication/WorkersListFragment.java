@@ -41,18 +41,18 @@ public class WorkersListFragment extends Fragment implements ViewModelStoreOwner
     }
 
 
-    ArrayList<Profile> profileArrayList= new ArrayList<Profile>() {{
-        add(new Profile("tal","tal","tal@gmail.com","050-1234567",0));
-        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",1));
-        add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",2));
-        add(new Profile("tal","tal","tal@gmail.com","050-1234567",3));
-        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",4));
-        add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",5));
-        add(new Profile("tal","tal","tal@gmail.com","050-1234567",6));
-        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",7));
-        add(new Profile("Yuval","Yuval","Yuval@gmail.com","050-1234567",8));
-        add(new Profile("tal","tal","tal@gmail.com","050-1234567",9));
-        add(new Profile("Gal","Gal","Gal@gmail.com","050-1234567",10));
+    ArrayList<Profile> profileArrayList = new ArrayList<Profile>() {{
+        add(new Profile("tal", "tal", "tal@gmail.com", "050-1234567", 0));
+        add(new Profile("Gal", "Gal", "Gal@gmail.com", "050-1234567", 1));
+        add(new Profile("Yuval", "Yuval", "Yuval@gmail.com", "050-1234567", 2));
+        add(new Profile("tal", "tal", "tal@gmail.com", "050-1234567", 3));
+        add(new Profile("Gal", "Gal", "Gal@gmail.com", "050-1234567", 4));
+        add(new Profile("Yuval", "Yuval", "Yuval@gmail.com", "050-1234567", 5));
+        add(new Profile("tal", "tal", "tal@gmail.com", "050-1234567", 6));
+        add(new Profile("Gal", "Gal", "Gal@gmail.com", "050-1234567", 7));
+        add(new Profile("Yuval", "Yuval", "Yuval@gmail.com", "050-1234567", 8));
+        add(new Profile("tal", "tal", "tal@gmail.com", "050-1234567", 9));
+        add(new Profile("Gal", "Gal", "Gal@gmail.com", "050-1234567", 10));
     }};
 
     public WorkersListFragment() {
@@ -63,18 +63,18 @@ public class WorkersListFragment extends Fragment implements ViewModelStoreOwner
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
-    ) {
+                            ) {
 
         WorkersViewModel workersViewModel = new ViewModelProvider(this).get(WorkersViewModel.class);
-        UserViewModel userViewModel  = new ViewModelProvider(this).get(UserViewModel.class);
+        UserViewModel    userViewModel    = new ViewModelProvider(this).get(UserViewModel.class);
 
-//        WorkersViewModel.getData(
-//                userViewModel.getUserState().getValue().getId(),
-//                userViewModel.getUserState().getValue().getAuthToken(),
-//                ((shifts, responseError, throwable) -> {
-//                    Log.d("Testings", "onCreateView: Finish loading");
-//                })
-//        );
+        //        WorkersViewModel.getData(
+        //                userViewModel.getUserState().getValue().getId(),
+        //                userViewModel.getUserState().getValue().getAuthToken(),
+        //                ((shifts, responseError, throwable) -> {
+        //                    Log.d("Testings", "onCreateView: Finish loading");
+        //                })
+        //        );
 
         binding = FragmentWorkersListBinding.inflate(inflater, container, false);
         binding.rvWorkersList.setAdapter(new RecyclerView.Adapter<ViewHolder>() {
@@ -82,26 +82,30 @@ public class WorkersListFragment extends Fragment implements ViewModelStoreOwner
             @NonNull
             @Override
             public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
-                                                               int viewType) {
+                                                 int viewType) {
                 View view =
                         LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_one_line_dis1,
-                                parent, false);
+                                                                         parent, false);
                 return new ViewHolder(view);
             }
 
             @Override
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-                (holder).getTextView().setText("Full Name: "+profileArrayList.get(position).getFirst_Name()+"\t\t"+
-                        profileArrayList.get(position).getLast_Name()+"\nPhone Number: "+
-                        profileArrayList.get(position).getPhone_Number());
+                (holder).getTextView().setText("Full Name: " + profileArrayList.get(position).getFirstName() +
+                                               "\t\t" +
+                                               profileArrayList.get(position).getLastName() +
+                                               "\nPhone Number: " +
+                                               profileArrayList.get(position).getPhoneNumber());
                 (holder).getTextView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         new AlertDialog.Builder(requireContext())
                                 .setTitle(((TextView) v).getText().toString())
                                 .setMessage(profileArrayList.get(holder.getAdapterPosition()).getEmail())
-                                .setPositiveButton("Ok", (dialog, which) -> {})
-                                .setOnDismissListener(dialog -> {})
+                                .setPositiveButton("Ok", (dialog, which) -> {
+                                })
+                                .setOnDismissListener(dialog -> {
+                                })
                                 .create().show();
                     }
                 });
