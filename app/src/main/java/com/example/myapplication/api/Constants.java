@@ -10,6 +10,8 @@ final public class Constants {
     public final static String USER_ROUTE     = "users";
     public final static String PROFILE_ROUTE     = "profiles";
 
+    public final static String CONSTRAINTS_ROUTE     = "constraints";
+
     public final static String SCHEDULE_ROUTE = "schedules";
     public final static String LOGIN_ROUTE    = USER_ROUTE + "/login";
     public final static String REGISTER_ROUTE = USER_ROUTE + "/signup";
@@ -20,7 +22,10 @@ final public class Constants {
 
     public final static String GET_ALL_PROFILES = PROFILE_ROUTE + "/";
 
+    public final static String GET_ALL_CONSTRAINTS = CONSTRAINTS_ROUTE + "/";
+
     public static final String GET_SHIFTS_FROM_SCHEDULE = SCHEDULE_ROUTE + "/shifts_from_schedule";
+
 
     public final static String LOGIN_URL    = String.format("%s/%s", BASE_URL, LOGIN_ROUTE);
     public final static String REGISTER_URL = String.format("%s/%s", BASE_URL, REGISTER_ROUTE);
@@ -28,6 +33,9 @@ final public class Constants {
     public final static String ALL_SHIFTS_URL   = String.format("%s/%s", BASE_URL, GET_ALL_SHIFTS);
     public final static String ALL_PROFILES_URL   = String.format("%s/%s", BASE_URL, GET_ALL_PROFILES);
     public final static String SHIFTS_FROM_SCHEDULE_URL   = String.format("%s/%s", BASE_URL, GET_SHIFTS_FROM_SCHEDULE);
+    public final static String ALL_CONSTRAINTS_URL   = String.format("%s/%s", BASE_URL, GET_ALL_CONSTRAINTS);
+
+
 
 
 }
