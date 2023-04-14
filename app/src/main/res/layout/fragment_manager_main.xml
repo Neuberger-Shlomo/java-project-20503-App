@@ -4,28 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EntryFragment">
+    tools:context=".ManagerFragment"
+>
 
-    <Button
-        android:id="@+id/button_second"
-        style="?android:attr/buttonBarButtonStyle"
+
+    <TextView
+        android:id="@+id/hManagerMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login"
+        android:text="Manager Main Page"
+        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.044" />
 
-    <Button
-        android:id="@+id/btnMan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="menager"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvManagerMain"
+        android:layout_width="410dp"
+        android:layout_height="620dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_second"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.855" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
