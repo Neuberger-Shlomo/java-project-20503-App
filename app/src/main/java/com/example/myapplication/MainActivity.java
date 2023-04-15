@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
     private MainActivityBinding binding;
     private RequestQueue restQueue;
 
-    private UserViewModel userViewModel;
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -41,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         binding = MainActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -53,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+        binding.fab.setVisibility(View.GONE);
 
     }
-
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -63,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
 
     public void hideAppBar(){
         binding.appBar.setVisibility(View.GONE);}
