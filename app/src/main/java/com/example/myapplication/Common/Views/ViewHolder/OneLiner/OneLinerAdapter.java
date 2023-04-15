@@ -20,7 +20,7 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
 
     private RecyclerView recyclerView;
 
-    private interfaces.onBindViewHolderListener<T, OneLineViewHolder<T>> bindListener = null;
+    private interfaces.OnBindViewHolderListener<T, OneLineViewHolder<T>> bindListener = null;
 
     public OneLinerAdapter() {
         rawItems    = new ArrayList<>();
@@ -113,7 +113,7 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
         }
     }
 
-    public <Query> void setFilter(Query query, interfaces.filterMethod<T, Query> filter) {
+    public <Query> void setFilter(Query query, interfaces.FilterMethod<T, Query> filter) {
         int size = visibleList.size();
         visibleList.clear();
         notifyItemRangeRemoved(0, size);
@@ -128,8 +128,8 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
 
     }
 
-    public void setBindViewHolderListener(interfaces.onBindViewHolderListener<T,
-            OneLineViewHolder<T>> bindViewHolderListener) {
+    public void setBindViewHolderListener(interfaces.OnBindViewHolderListener<T,
+                OneLineViewHolder<T>> bindViewHolderListener) {
         this.bindListener = bindViewHolderListener;
     }
 }
