@@ -2,6 +2,8 @@ package com.example.myapplication.Model;
 
 import android.util.Log;
 
+import com.example.myapplication.Common.Views.Fragments.IModel;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Shift {
+public class Shift implements IModel {
     private String shiftDate;
     private int    numOfRequiredWorkers;
     private int    numOfScheduledWorkers;
@@ -146,5 +148,12 @@ public class Shift {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    @Override
+    public String toPrettyString() {
+        return "Shift Date: " + this.getDate()
+               + "\nNumber Of Required Workers: " + this.getNumOfRequiredWorkers()
+               + "\nNumber Of Scheduled Workers: " + this.getNumOfScheduledWorkers();
     }
 }

@@ -76,7 +76,7 @@
 
     <fragment
         android:id="@+id/ShiftsRequestsFragment"
-        android:name="com.example.myapplication.ShiftsRequestsFragment"
+        android:name="com.example.myapplication.ShiftsRequests.ShiftsRequestsFragment"
         android:label="ShiftsRequests fragment"
         tools:layout="@layout/fragment_shifts_requests"/>
 
