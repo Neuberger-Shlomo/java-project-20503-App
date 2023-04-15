@@ -6,7 +6,7 @@ public class BasicUser {
     private String    id;
     private String    password;
     private String    authToken;
-    private RoleLevel level;
+    private RoleLevel level = RoleLevel.BASIC;
 
     public BasicUser() {
         this.id        = "";
