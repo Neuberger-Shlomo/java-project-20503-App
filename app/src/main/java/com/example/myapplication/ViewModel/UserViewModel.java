@@ -96,7 +96,13 @@ public class UserViewModel extends AndroidViewModel {
                         }));
 
     }
-
+public boolean isManger(){
+        // TODO: Ask server if the user is manager
+        BasicUser user = new BasicUser(userState.getValue());
+        user.setLevel(RoleLevel.MANAGER);
+        userState.setValue(user);
+        return true;
+    }
     private void onRegisterResponse(Api.RegisterRequest registerRequest) {
         BasicUser user = getUserState().getValue();
         if (user == null) {
