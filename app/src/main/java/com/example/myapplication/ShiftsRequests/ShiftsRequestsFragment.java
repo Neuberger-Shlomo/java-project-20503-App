@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLineViewHolder;
 import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLinerAdapter;
 import com.example.myapplication.Model.ShiftRequest;
@@ -29,25 +30,19 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 
-public class ShiftsRequestsFragment extends Fragment {
-
-    private FragmentDatePickingBinding binding;
+public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
 
     private ShiftRequestViewModel shiftRequestViewModel;
     private UserViewModel         userViewModel;
 
-    private OneLinerAdapter<ShiftRequest> adapter = new OneLinerAdapter<>();
-
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        binding = FragmentDatePickingBinding.inflate(inflater, container, false);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         binding.headerDatePicker.setText("Shifts Requests");
 
-        shiftRequestViewModel =
-                new ViewModelProvider(requireActivity()).get(ShiftRequestViewModel.class);
+        shiftRequestViewModel = new ViewModelProvider(this).get(ShiftRequestViewModel.class);
         userViewModel         = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
 
@@ -55,33 +50,12 @@ public class ShiftsRequestsFragment extends Fragment {
                                       userViewModel.getUserState().getValue().getAuthToken(),
                                       this::onDataArrived);
 
-        adapter.setBindViewHolderListener(this::onViewBind);
-        binding.rvDatePicker.setAdapter(adapter);
-        binding.rvDatePicker.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        binding.btnDatePicker.setOnClickListener(this::onPickerDate);
-
-        return binding.getRoot();
+        return view;
     }
 
-    private void onDataArrived(ArrayList<ShiftRequest> shiftRequests, Api.ResponseError error,
-                               Throwable t) {
-        StringBuilder builder = new StringBuilder();
-        if (shiftRequests != null) {
-            for (ShiftRequest request : shiftRequests) {
-                adapter.addEntry(request, false);
-            }
-        } else if (error != null) {
-            builder.append(error.getMessage());
-        } else if (t != null) {
-            builder.append(t.getMessage());
-        } else {
-            builder.append("Unknown Error");
-        }
-        Snackbar.make(requireView(), builder.toString(), BaseTransientBottomBar.LENGTH_SHORT).show();
-    }
-
-    private void onPickerDate(View view) {
+    @Override
+    protected void onPickClicked(View view, String pickerValue) {
         String pickedDate =
                 new StringBuilder()
                         .append(binding.dpDatePicker.getDayOfMonth())
@@ -91,22 +65,14 @@ public class ShiftsRequestsFragment extends Fragment {
                         .append(binding.dpDatePicker.getYear())
                         .toString();
         adapter.setFilter(pickedDate, ((item, s) -> item.getShiftDate().equals(s)));
-
-
     }
 
-    private void onViewBind(ShiftRequest shiftRequest, OneLineViewHolder<ShiftRequest> holder,
-                            int position) {
-        holder.setItem(shiftRequest);
-        holder.setText(shiftRequest.toPrettyString());
-        holder.setOnClickListener(this::onItemClicked);
-    }
-
-    private void onItemClicked(ShiftRequest request, View view) {
+    @Override
+    protected void onItemClicked(ShiftRequest model, View view) {
         String requestMessage =
-                "Request Timestamp: " + request.getTimestamp() + "\nShift Start Hour: " +
-                request.getStartHour() + "\nShift Duration: " +
-                request.getDuration();
+                "Request Timestamp: " + model.getTimestamp() + "\nShift Start Hour: " +
+                model.getStartHour() + "\nShift Duration: " +
+                model.getDuration();
 
         new AlertDialog.Builder(requireContext())
                 .setTitle("More Info:")
@@ -115,10 +81,6 @@ public class ShiftsRequestsFragment extends Fragment {
                 .create().show();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
+
 
 }

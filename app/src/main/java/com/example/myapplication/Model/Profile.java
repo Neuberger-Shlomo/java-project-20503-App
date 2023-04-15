@@ -1,11 +1,12 @@
 package com.example.myapplication.Model;
 
+import com.example.myapplication.Common.Views.Fragments.IModel;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Profile {
+public class Profile implements IModel {
     private String firstName;
     private String lastName;
     private String email;

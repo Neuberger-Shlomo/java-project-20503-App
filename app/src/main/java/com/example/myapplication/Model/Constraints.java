@@ -1,11 +1,13 @@
 package com.example.myapplication.Model;
 
 
+import com.example.myapplication.Common.Views.Fragments.IModel;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 
-public class Constraints {
+public class Constraints implements IModel {
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -119,6 +121,7 @@ public class Constraints {
                "\nConstrain: " + getData() +
                "\nis permanent: " + isPermanent() +
                "\nEnd Date: " + getEndDate();
+
     }
 
 }

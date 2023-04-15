@@ -1,5 +1,6 @@
 package com.example.myapplication.Model;
 
+import com.example.myapplication.Common.Views.Fragments.IModel;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -8,7 +9,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ShiftRequest {
+public class ShiftRequest implements IModel {
 
     private String firstName;
     private String lastName;

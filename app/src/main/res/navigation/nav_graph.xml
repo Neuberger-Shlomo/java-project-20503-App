@@ -70,7 +70,7 @@
 
     <fragment
         android:id="@+id/WorkersListFragment"
-        android:name="com.example.myapplication.WorkersListFragment"
+        android:name="com.example.myapplication.WorkersList.WorkersListFragment"
         android:label="WorkersList fragment"
         tools:layout="@layout/fragment_workers_list"/>
 

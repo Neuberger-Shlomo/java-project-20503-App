@@ -9,6 +9,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,24 +23,25 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-public abstract class DateListFragment<Model extends IModel> extends Fragment {
+public abstract class DateListFragment<Model extends IModel> extends Fragment implements ViewModelStoreOwner {
 
     protected FragmentDatePickingBinding binding;
-    protected OneLinerAdapter<Model> adapter;
+    protected OneLinerAdapter<Model>     adapter;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         binding = FragmentDatePickingBinding.inflate(inflater, container, false);
         adapter = new OneLinerAdapter<>();
         adapter.setBindViewHolderListener(this::onModelBind);
         binding.rvDatePicker.setAdapter(adapter);
         binding.rvDatePicker.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.btnDatePicker.setOnClickListener((v)-> {
+        binding.btnDatePicker.setOnClickListener((v) -> {
             String pickedDate = binding.dpDatePicker.getDayOfMonth() + "-" +
                                 (binding.dpDatePicker.getMonth() + 1) + "-" +
                                 binding.dpDatePicker.getYear();
-            this.onPickClicked(v,pickedDate);
+            this.onPickClicked(v, pickedDate);
         });
 
         return binding.getRoot();
@@ -51,7 +53,7 @@ public abstract class DateListFragment<Model extends IModel> extends Fragment {
      *
      * @param view of the clicked the button
      */
-    abstract protected void onPickClicked(View view,String pickerValue);
+    abstract protected void onPickClicked(View view, String pickerValue);
 
     /**
      * Handles the binding of a shift to the holder
@@ -62,6 +64,7 @@ public abstract class DateListFragment<Model extends IModel> extends Fragment {
      */
     protected void onModelBind(Model model, OneLineViewHolder<Model> holder, int position) {
         holder.setText(model.toPrettyString());
+        holder.setItem(model);
         holder.setOnClickListener(this::onItemClicked);
     }
 
