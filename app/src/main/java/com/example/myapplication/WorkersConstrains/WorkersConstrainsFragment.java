@@ -28,7 +28,7 @@ public class WorkersConstrainsFragment extends Fragment {
     private FragmentDatePickingBinding binding;
 
     private final OneLinerAdapter<Constraints> adapter = new OneLinerAdapter<>();
-    ;
+
 
 
     @Override

@@ -54,37 +54,40 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toStartOf="@+id/progressBar"
+        app:layout_constraintEnd_toEndOf="@+id/linerLogin"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/linerLogin"
-        app:layout_constraintTop_toBottomOf="@+id/linerLogin">
+        app:layout_constraintTop_toBottomOf="@+id/progressBar">
 
         <Button
             android:id="@+id/btnLogin"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:layout_weight="1"
-            android:text="@string/login"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:text="@string/login" />
 
         <Button
             android:id="@+id/btnRegister"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:layout_weight="1"
-            android:text="@string/register"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:text="@string/register" />
 
     </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="visible"
+        android:indeterminate="true"
         app:layout_constraintEnd_toEndOf="@+id/linerLogin"
+        app:layout_constraintStart_toStartOf="@+id/linerLogin"
         app:layout_constraintTop_toBottomOf="@+id/linerLogin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
