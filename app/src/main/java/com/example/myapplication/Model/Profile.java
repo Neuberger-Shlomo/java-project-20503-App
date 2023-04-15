@@ -6,16 +6,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Profile {
-    private   String firstName;
-    private   String lastName;
-    private   String email;
-    private   String phoneNumber;
-    private int id;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
+    private int    id;
 
     public Profile() {
-        this.firstName = "";
-        this.lastName = "";
-        this.email = "";
+        this.firstName   = "";
+        this.lastName    = "";
+        this.email       = "";
         this.phoneNumber = "";
     }
 
@@ -23,20 +23,20 @@ public class Profile {
     @Override
     public String toString() {
         return "Profile{" +
-                "first_Name='" + firstName + '\'' +
-                ", last_Name='" + lastName + '\'' +
-                '}';
+               "first_Name='" + firstName + '\'' +
+               ", last_Name='" + lastName + '\'' +
+               '}';
     }
 
     public Profile(String first_Name, String last_Name, String email, String phone_Number, int id) {
-        this.firstName = first_Name;
-        this.lastName = last_Name;
-        this.email = email;
+        this.firstName   = first_Name;
+        this.lastName    = last_Name;
+        this.email       = email;
         this.phoneNumber = phone_Number;
-        this.id = id;
+        this.id          = id;
     }
 
-    public static Profile fromJSON(JSONObject object) throws JSONException{
+    public static Profile fromJSON(JSONObject object) throws JSONException {
         Gson g = new Gson();
         return g.fromJson(object.toString(), Profile.class);
     }
@@ -80,8 +80,12 @@ public class Profile {
 
     public boolean equals(Profile profile) {
         return this.firstName.equals(profile.firstName) &&
-                this.lastName.equals(profile.lastName)&&
-                this.phoneNumber.equals(profile.phoneNumber) &&
-                this.email.equals(profile.email);
+               this.lastName.equals(profile.lastName) &&
+               this.phoneNumber.equals(profile.phoneNumber) &&
+               this.email.equals(profile.email);
+    }
+
+    public String toPrettyString() {
+        return this.firstName + " " + this.lastName + " (" + this.email + ")";
     }
 }

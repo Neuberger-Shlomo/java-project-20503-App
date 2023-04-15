@@ -34,4 +34,9 @@ public class OneLineViewHolder<Item> extends RecyclerView.ViewHolder {
     public void setText(String text){
         textView.setText(text);
     }
+
+    public void setOnClickListener(interfaces.OnItemClickListener<Item> l){
+        cardView.setOnClickListener(v -> l.onClick(item, v));
+    }
+
 }

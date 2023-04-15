@@ -113,4 +113,12 @@ public class Constraints {
     public String getConstType() {
         return constType;
     }
+
+    public String toPrettyString(){
+        return "Type: " + getConstType() +
+               "\nConstrain: " + getData() +
+               "\nis permanent: " + isPermanent() +
+               "\nEnd Date: " + getEndDate();
+    }
+
 }
