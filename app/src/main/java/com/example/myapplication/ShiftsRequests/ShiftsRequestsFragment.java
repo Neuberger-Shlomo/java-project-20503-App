@@ -2,32 +2,17 @@ package com.example.myapplication.ShiftsRequests;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
-import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLineViewHolder;
-import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLinerAdapter;
 import com.example.myapplication.Model.ShiftRequest;
-import com.example.myapplication.R;
 import com.example.myapplication.ViewModel.ShiftRequestViewModel;
-import com.example.myapplication.ViewModel.UserViewModel;
-import com.example.myapplication.api.Api;
-import com.example.myapplication.databinding.FragmentDatePickingBinding;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.ArrayList;
+import com.example.myapplication.User.Model.UserViewModel;
 
 
 public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {

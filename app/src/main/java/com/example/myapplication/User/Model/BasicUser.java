@@ -1,5 +1,7 @@
-package com.example.myapplication.Model;
+package com.example.myapplication.User.Model;
 
+
+import com.example.myapplication.Model.RoleLevel;
 
 public class BasicUser {
     private String    username;

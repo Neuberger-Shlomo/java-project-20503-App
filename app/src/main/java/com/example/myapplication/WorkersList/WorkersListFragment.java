@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Model.Profile;
-import com.example.myapplication.ViewModel.UserViewModel;
+import com.example.myapplication.User.Model.UserViewModel;
 import com.example.myapplication.ViewModel.WorkersViewModel;
 import com.example.myapplication.api.Api;
 

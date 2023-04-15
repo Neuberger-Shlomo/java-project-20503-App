@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -16,7 +15,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.example.myapplication.ViewModel.UserViewModel;
+import com.example.myapplication.User.Model.UserViewModel;
 import com.example.myapplication.databinding.MainActivityBinding;
 
 public class MainActivity extends AppCompatActivity implements ViewModelStoreOwner {

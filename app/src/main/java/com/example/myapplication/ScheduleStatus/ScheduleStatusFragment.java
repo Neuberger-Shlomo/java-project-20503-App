@@ -4,26 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
-import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLineViewHolder;
-import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLinerAdapter;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.ViewModel.ShiftsViewModel;
-import com.example.myapplication.ViewModel.UserViewModel;
+import com.example.myapplication.User.Model.UserViewModel;
 import com.example.myapplication.api.Api;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-import com.example.myapplication.databinding.FragmentDatePickingBinding;
 
 import java.util.ArrayList;
 

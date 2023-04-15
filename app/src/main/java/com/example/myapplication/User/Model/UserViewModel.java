@@ -1,6 +1,5 @@
-package com.example.myapplication.ViewModel;
+package com.example.myapplication.User.Model;
 
-import android.app.AlertDialog;
 import android.app.Application;
 
 import androidx.annotation.Nullable;
@@ -8,15 +7,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.api.Api;
-import com.example.myapplication.api.Constants;
-import com.example.myapplication.Model.BasicUser;
 import com.example.myapplication.Model.RoleLevel;
-import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
 import com.example.myapplication.api.UsersApi;
 import com.google.gson.Gson;
 
@@ -24,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class UserViewModel extends AndroidViewModel {
