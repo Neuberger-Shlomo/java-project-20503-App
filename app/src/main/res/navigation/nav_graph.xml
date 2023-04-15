@@ -82,7 +82,7 @@
 
     <fragment
         android:id="@+id/WorkersConstrainsFragment"
-        android:name="com.example.myapplication.WorkersConstrainsFragment"
+        android:name="com.example.myapplication.WorkersConstrains.WorkersConstrainsFragment"
         android:label="WorkersConstrains fragment"
         tools:layout="@layout/fragment_workers_constrains"/>
 
