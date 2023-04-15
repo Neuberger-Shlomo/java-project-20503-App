@@ -2,24 +2,32 @@ package com.example.myapplication.api;
 
 import androidx.annotation.Nullable;
 
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.nio.charset.StandardCharsets;
+
 public class Api {
 
-    public static class ResponseError{
-        String timestamp;
+    public static class ResponseError {
+        String  timestamp;
         Integer status;
-        String error;
-        String message;
-        String path;
+        String  error;
+        String  message;
+        String  path;
 
         public ResponseError() {
         }
 
-        public ResponseError(String timestamp, Integer status, String error, String message, String path) {
+        public ResponseError(String timestamp, Integer status, String error, String message,
+                             String path) {
             this.timestamp = timestamp;
-            this.status = status;
-            this.error = error;
-            this.message = message;
-            this.path = path;
+            this.status    = status;
+            this.error     = error;
+            this.message   = message;
+            this.path      = path;
         }
 
         public String getTimestamp() {
@@ -63,7 +71,7 @@ public class Api {
         }
     }
 
-    public static class RegisterRequest{
+    public static class RegisterRequest {
         String firstName;
         String lastName;
         String email;
@@ -133,11 +141,16 @@ public class Api {
         }
     }
 
-    public interface PreCall{
+    public interface PreCall {
         void onPreCall();
     }
 
-    public interface PostCall<T>{
-        void onPostCall(@Nullable T t,@Nullable ResponseError responseError,@Nullable Throwable throwable);
+    public interface PostCall<T> {
+        void onPostCall(@Nullable T t, @Nullable ResponseError responseError,
+                        @Nullable Throwable throwable);
+
+
     }
+
+
 }

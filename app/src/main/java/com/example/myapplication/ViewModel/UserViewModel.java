@@ -17,6 +17,7 @@ import com.example.myapplication.api.Constants;
 import com.example.myapplication.Model.BasicUser;
 import com.example.myapplication.Model.RoleLevel;
 import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
+import com.example.myapplication.api.UsersApi;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,168 +45,106 @@ public class UserViewModel extends AndroidViewModel {
         return userState;
     }
 
-    public void login(String username, String password, Api.PreCall preCall,
-                      Api.PostCall<JSONObject> postCall) {
-        this.queue.add(loginRequest(username, password, preCall, (jsonObject, responseError,
-                                                                  throwable) -> {
-            if (responseError != null || throwable != null) {
-                postCall.onPostCall(null, responseError, throwable);
-                return;
-            }
-            BasicUser user = getUserState().getValue();
-            if (user == null) {
-                postCall.onPostCall(null, null, new Exception("No user error"));
-                return;
-            }
-            String jwt   = null;
-            String id    = null;
-            int    level = -1;
-            try {
-                if (jsonObject != null) {
-                    jwt   = jsonObject.getString("jwt");
-                    level = jsonObject.getInt("role");
-                    id    = jsonObject.getString("id");
-                }
-                if (jwt == null || level == -1) {
-                    throw new Exception("Invalid values");
-                }
-            } catch (Exception e) {
-                postCall.onPostCall(null, null, e);
-            }
-            BasicUser u = new BasicUser(username, password, jwt, RoleLevel.values()[level]);
-            u.setId(id);
-            userState.setValue(u);
-        }));
+    public void login(
+            @NotNull String username,
+            @NotNull String password,
+            @Nullable Api.PreCall preCall,
+            @NotNull Api.PostCall<JSONObject> postCall) {
+        this.queue.add(
+                UsersApi.loginRequest(
+                        username, password, preCall,
+                        ((object, responseError, throwable) -> {
+                            try {
+                                this.onLoginResponse(object, responseError, throwable);
+                            } catch (Exception e) {
+                                postCall.onPostCall(null, null, e);
+                            }
+                            postCall.onPostCall(object, responseError, throwable);
+                        })));
+
     }
 
     public void register(Api.RegisterRequest registerRequest, Api.PreCall preCall,
                          Api.PostCall<Boolean> postCall) {
 
         preCall.onPreCall();
-        queue.add(registerRequest(registerRequest, preCall, (jsonObject, responseError,
-                                                             throwable) -> {
-            if (responseError != null || throwable != null) {
-                postCall.onPostCall(null, responseError, throwable);
-                return;
-            }
-            BasicUser user = getUserState().getValue();
-            if (user == null) {
-                postCall.onPostCall(null, null, new Exception("No user error"));
-                return;
-            }
-            user.setUsername(registerRequest.getUsername());
-            userState.setValue(user);
-            postCall.onPostCall(true, null, null);
+        queue.add(UsersApi.registerRequest(registerRequest, preCall, (jsonObject, responseError,
+                                                                      throwable) -> {
+            if (jsonObject != null)
+                this.onRegisterResponse(registerRequest);
+            postCall.onPostCall(jsonObject != null, responseError, throwable);
         }));
 
     }
 
-    public void logout(@Nullable Api.PreCall preCall, @Nullable Api.PostCall<Boolean> postCall) throws Exception {
-        if(userState.getValue() == null) {
-            if(postCall != null) postCall.onPostCall(null,null, new Exception("No user"));
-            else throw new Exception("No user");
-        }
-        queue.add(logoutRequest(userState.getValue().getId(), userState.getValue().getAuthToken()
-                , preCall, (aBoolean, responseError, throwable) -> {
 
-                    if (Boolean.TRUE.equals(aBoolean) || (responseError != null && responseError.getStatus() != 200) || throwable != null) {
-                        BasicUser u =
-                                new BasicUser(Objects.requireNonNull(getUserState().getValue()));
-                        u.setAuthToken(null);
-                        userState.setValue(u);
-                    }
-                    if (postCall != null) {
-                        postCall.onPostCall(aBoolean, responseError, throwable);
-                    }
-                }));
+    public void logout(@Nullable Api.PreCall preCall, @NotNull Api.PostCall<Boolean> postCall) {
+        if (userState.getValue() == null) {
+            postCall.onPostCall(null, null, new Exception("No user"));
+
+        }
+        queue.add(
+                UsersApi.logoutRequest(
+                        userState.getValue().getId(), userState.getValue().getAuthToken(), preCall,
+                        (aBoolean, responseError, throwable) -> {
+                            this.onLogoutResponse(aBoolean != null ? aBoolean : false,
+                                                  responseError,
+                                                  throwable);
+
+                            postCall.onPostCall(aBoolean, responseError, throwable);
+
+                        }));
+
+    }
+public boolean isManger(){
+        // TODO: Ask server if the user is manager
+        BasicUser user = new BasicUser(userState.getValue());
+        user.setLevel(RoleLevel.MANAGER);
+        userState.setValue(user);
+        return true;
+    }
+    private void onRegisterResponse(Api.RegisterRequest registerRequest) {
+        BasicUser user = getUserState().getValue();
+        if (user == null) {
+            user = new BasicUser();
+        }
+        user.setUsername(registerRequest.getUsername());
+        userState.setValue(user);
+    }
+
+    private void onLogoutResponse(boolean result, Api.ResponseError error, Throwable throwable) {
+        if (Boolean.TRUE.equals(result) || (error != null && error.getStatus() != 200) || throwable != null) {
+            BasicUser u =
+                    new BasicUser(Objects.requireNonNull(getUserState().getValue()));
+            u.setAuthToken(null);
+            userState.setValue(u);
+        }
 
     }
 
-    private JsonObjectRequest loginRequest(String username, String password, Api.PreCall preCall,
-                                           Api.PostCall<JSONObject> postCall) {
-        preCall.onPreCall();
-
-        JSONObject jsonObj = new JSONObject();
-
-        try {
-            jsonObj.put("username", username);
-            jsonObj.put("password", password);
-        } catch (JSONException e) {
-            postCall.onPostCall(null, null, e);
-            return null;
+    private void onLoginResponse(JSONObject jsonObject, Api.ResponseError error,
+                                 Throwable throwable) throws JSONException, Exception {
+        BasicUser user = userState.getValue();
+        if (user == null) {
+            throw new Exception("No user data");
+        }
+        String jwt   = null;
+        String id    = null;
+        int    level = -1;
+        if (jsonObject != null) {
+            jwt   = jsonObject.getString("jwt");
+            level = jsonObject.getInt("role");
+            id    = jsonObject.getString("id");
+        }
+        if (jwt == null || level == -1) {
+            throw new Exception("Invalid values");
         }
 
-        return new JsonObjectRequest(Request.Method.POST, Constants.LOGIN_URL, jsonObj, res -> {
-            try {
-                postCall.onPostCall(res, null, null);
-            } catch (Exception e) {
-                postCall.onPostCall(null, null, e);
-            }
-        }, err -> {
-            if (err.networkResponse != null && err.networkResponse.data != null) {
-                String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
-                postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class), null);
-            } else {
-                postCall.onPostCall(null, null, err);
-            }
-        });
+        BasicUser u = new BasicUser(user.getUsername(), user.getPassword(), jwt,
+                                    RoleLevel.values()[level]);
+        u.setId(id);
+        userState.setValue(u);
     }
 
-    private JsonObjectRequest registerRequest(Api.RegisterRequest registerRequest,
-                                              Api.PreCall preCall,
-                                              Api.PostCall<JSONObject> postCall) {
-        preCall.onPreCall();
 
-        JSONObject jsonObj;
-        try {
-            jsonObj = new JSONObject(gson.toJson(registerRequest));
-        } catch (JSONException e) {
-            postCall.onPostCall(null, null, e);
-            return null;
-        }
-
-        return new JsonObjectRequest(Request.Method.POST, Constants.REGISTER_URL, jsonObj, res -> {
-            try {
-                postCall.onPostCall(res, null, null);
-            } catch (Exception e) {
-                postCall.onPostCall(null, null, e);
-            }
-        }, err -> {
-            if (err.networkResponse != null && err.networkResponse.data != null) {
-                String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
-                postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class), null);
-            } else {
-                postCall.onPostCall(null, null, err);
-            }
-        });
-    }
-
-    private AuthedJsonObjectRequest logoutRequest(String userId, String jwt,
-                                                  @Nullable Api.PreCall preCall,
-                                                  @Nullable Api.PostCall<Boolean> postCall) {
-        if (preCall != null) {
-            preCall.onPreCall();
-        }
-
-        JSONObject jsonObj;
-
-
-        return new AuthedJsonObjectRequest(Constants.LOGOUT_URL, userId, jwt, response -> {
-            if (postCall != null) {
-                postCall.onPostCall(true, null, null);
-            }
-        }, err -> {
-            if (err.networkResponse != null && err.networkResponse.data != null) {
-                String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
-                if (postCall != null) {
-                    postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class),
-                                        null);
-                }
-            } else {
-                if (postCall != null) {
-                    postCall.onPostCall(null, null, err);
-                }
-            }
-        });
-    }
 }
