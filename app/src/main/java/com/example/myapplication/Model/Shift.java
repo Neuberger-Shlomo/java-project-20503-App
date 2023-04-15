@@ -20,12 +20,9 @@ public class Shift implements IModel {
     private int    startHour;
     private int    duration;
 
-
     private ArrayList<Profile> scheduledWorkers;
-    private int weekNumber, year = 123, dayNumber;
-
-
-
+    private int weekNumber, year = 2023, dayNumber;
+//TODO: implement year getting according to database
 
     public Shift(String shiftDate, int numOfRequiredWorkers, int id,
                  int startHour, int duration, int weekNumber, int dayNumber, int numOfScheduledWorkers) {
@@ -39,7 +36,6 @@ public class Shift implements IModel {
         this.weekNumber = weekNumber;
         this.dayNumber = dayNumber;
     }
-
 
     public String getDate(){
         return shiftDate;
@@ -155,5 +151,29 @@ public class Shift implements IModel {
         return "Shift Date: " + this.getDate()
                + "\nNumber Of Required Workers: " + this.getNumOfRequiredWorkers()
                + "\nNumber Of Scheduled Workers: " + this.getNumOfScheduledWorkers();
+    }
+
+    public int getWeekNumber() {
+        return weekNumber;
+    }
+
+    public void setWeekNumber(int weekNumber) {
+        this.weekNumber = weekNumber;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getDayNumber() {
+        return dayNumber;
+    }
+
+    public void setDayNumber(int dayNumber) {
+        this.dayNumber = dayNumber;
     }
 }

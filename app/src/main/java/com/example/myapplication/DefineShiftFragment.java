@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.ViewModel.ShiftsViewModel;
@@ -15,8 +16,11 @@ import com.example.myapplication.ViewModel.UserViewModel;
 import com.example.myapplication.databinding.FragmentDefineShiftBinding;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class DefineShiftFragment extends Fragment {
@@ -70,14 +74,27 @@ public class DefineShiftFragment extends Fragment {
 
                 if (!binding.tfDefineShift3.getText().toString().matches("") &&
                     !binding.tfDefineShift.getText().toString().matches("")) {
-                    int      numOfWorkers =
+                    int      numOfRequiredWorkers =
                             Integer.parseInt(binding.tfDefineShift.getText().toString());
                     int      duration     =
                             Integer.parseInt(binding.tfDefineShift3.getText().toString());
                     int      hour         = binding.tpDefineShift.getHour();
-                    int      id           = (int) Math.random() * (100) + shiftViewModel.getShiftstate().getValue().size();
+                    int      id           = (int) Math.random();
                     boolean  flag         = false;
+
+
                     Calendar c            = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                    Date date = null;
+                    try {
+                        date = df.parse(pickedDate);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    c.setTime(date);
+                    int weekNumber = c.get(Calendar.WEEK_OF_YEAR);
+                    int dayNumber = c.get(Calendar.DAY_OF_WEEK);
+                    int numOfScheduledWorkers = 0;
 
                     for (Shift s : shiftViewModel.getShiftstate().getValue()) {
                         if (s.getShiftDate() == pickedDate
@@ -90,9 +107,13 @@ public class DefineShiftFragment extends Fragment {
                     }
 
                     if (flag == false) {
-                        shiftViewModel.addEntry(new Shift(pickedDate, numOfWorkers, id, hour,
-                                                          duration,1/*dummy*/,1/*dummy*/,1/*dummy*/));
-                        //TODO: what ti do with the weeknumber argument
+                        shiftViewModel.addShift(new Shift(pickedDate, numOfRequiredWorkers, id, hour,
+                                                          duration,weekNumber,dayNumber,numOfScheduledWorkers),() -> {
+                        }, (valid, responseError, throwable) -> {
+                            if (Boolean.TRUE.equals(valid))
+                                NavHostFragment.findNavController(DefineShiftFragment.this).popBackStack();
+                        });
+
                     } else {
                         if (hour <= c.get(Calendar.HOUR_OF_DAY)) {
                             Snackbar.make(view, "Can't Set Shift To This Hour!",
@@ -113,6 +134,7 @@ public class DefineShiftFragment extends Fragment {
 
 
     @Override
+
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
