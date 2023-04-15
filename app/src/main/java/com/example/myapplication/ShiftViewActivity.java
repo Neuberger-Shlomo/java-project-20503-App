@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ShiftViewActivity extends AppCompatActivity {
     private TableLayout shiftsTable;
-    private int maxShiftsPerDay = 4; // Change this value as needed
+    private int maxShiftsPerDay = 4; // mac shift per day for num of table rows
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
