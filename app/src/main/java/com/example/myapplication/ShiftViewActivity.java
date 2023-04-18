@@ -25,24 +25,8 @@ import java.util.List;
 
 public class ShiftViewActivity extends Fragment {
     private TableLayout shiftsTable;
-    private int maxShiftsPerDay = 4; // mac shift per day for num of table rows
-/*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shift_view);
+    private int maxShiftsPerDay = 4; // MAXIMUN shifts per day in the week (to know number of table rows)
 
-        shiftsTable = findViewById(R.id.shift_table);
-
-        // Populate dummy data for demonstration
-        List<Shift> shifts = new ArrayList<>();
-        for (int i = 0; i < 7 * maxShiftsPerDay; i++) {
-            shifts.add(new Shift("2023-04-15",2,2,2,2,2));
-        }
-
-        populateShiftsTable(shifts);
-    }
-*/
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +39,8 @@ public class ShiftViewActivity extends Fragment {
        View v=inflater.inflate(R.layout.activity_shift_view,container,false);
         shiftsTable = v.findViewById(R.id.shift_table);
 
-        // Populate dummy data for demonstration
+        // for demo of db of available shifts for a spesific week
+        // later to replace with list of available shifts from that week
         List<Shift> shifts = new ArrayList<>();
         for (int i = 0; i < 7 * maxShiftsPerDay; i++) {
             shifts.add(new Shift("2023-04-15",2,new ArrayList<>(),2,2,2));
@@ -64,7 +49,7 @@ public class ShiftViewActivity extends Fragment {
         populateShiftsTable(shifts);
         return v;
     }
-
+// here we should populate the table with the shifts from available shifts table
     private void populateShiftsTable(List<Shift> shifts) {
         // Set table header
         TableRow headerRow = new TableRow(requireContext());
@@ -81,7 +66,7 @@ public class ShiftViewActivity extends Fragment {
 
         shiftsTable.addView(headerRow);
 
-        // Set shift buttons
+        // Set table buttons
         for (int i = 0; i < maxShiftsPerDay; i++) {
             TableRow row = new TableRow(requireContext());
 
@@ -113,4 +98,10 @@ public class ShiftViewActivity extends Fragment {
             }
         }
     };
+
+    // here we should add the shifts that are marked as available by the user to list named: shifts_requests that
+    // represents the table: shifts_requests with the following fields in the list:
+    // user_id, shift_date,start_hour, shift_duration (in hours)
+    //whe array list will be sent when the user clicks on the send button
+
 }
