@@ -1,9 +1,11 @@
 package com.example.myapplication;
 
 // Import necessary classes for the activity
-
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,16 +14,13 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.example.myapplication.Model.Constraints;
 import com.example.myapplication.Model.ConstraintType;
-
 import java.util.ArrayList;
 import java.util.List;
 
-// The ConstraintSubmissionActivity class extends AppCompatActivity, making it an Android activity
-public class ConstraintSubmissionActivity extends AppCompatActivity {
+// The ConstraintSubmissionActivity class now extends Fragment
+public class ConstraintSubmissionActivity extends Fragment {
 
     // Declare UI elements as private members
     private DatePicker startDatePicker, endDatePicker;
@@ -43,23 +42,23 @@ public class ConstraintSubmissionActivity extends AppCompatActivity {
         return constraintTypes;
     }
 
-    // The onCreate method is called when the activity is created
+    // Override onCreateView to inflate the layout for this fragment
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_constraint_submission);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment using the inflater
+        View view = inflater.inflate(R.layout.activity_constraint_submission, container, false);
 
-        // Initialize UI elements
-        startDatePicker = findViewById(R.id.start_date_picker);
-        endDatePicker = findViewById(R.id.end_date_picker);
-        permanentCheckbox = findViewById(R.id.permanent_checkbox);
-        selfDescription = findViewById(R.id.self_description);
-        constraintTypeSpinner = findViewById(R.id.constraint_type_spinner);
-        addConstraintButton = findViewById(R.id.add_constraint_button);
+        // Initialize UI elements with the view
+        startDatePicker = view.findViewById(R.id.start_date_picker);
+        endDatePicker = view.findViewById(R.id.end_date_picker);
+        permanentCheckbox = view.findViewById(R.id.permanent_checkbox);
+        selfDescription = view.findViewById(R.id.self_description);
+        constraintTypeSpinner = view.findViewById(R.id.constraint_type_spinner);
+        addConstraintButton = view.findViewById(R.id.add_constraint_button);
 
         // Create the list of ConstraintType objects and set up an ArrayAdapter for the spinner
         List<ConstraintType> constraintTypes = createDummyConstraintTypes();
-        ArrayAdapter<ConstraintType> constraintTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, constraintTypes);
+        ArrayAdapter<ConstraintType> constraintTypeAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, constraintTypes);
         constraintTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         constraintTypeSpinner.setAdapter(constraintTypeAdapter);
 
@@ -72,8 +71,7 @@ public class ConstraintSubmissionActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(ConstraintSubmissionActivity.this, "Please choose the constraint type", Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(requireContext(), "Please choose the constraint type", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -90,24 +88,25 @@ public class ConstraintSubmissionActivity extends AppCompatActivity {
                 int endDay = endDatePicker.getDayOfMonth();
                 int endMonth = endDatePicker.getMonth();
                 int endYear = endDatePicker.getYear();
-                String endDate = endYear + "-" + (endMonth + 1) + "-" + endDay;
-
+                String endDate = endYear + "-" + (endMonth +1)+"-" + endDay;
                 // Get the other input values
                 boolean isPermanent = permanentCheckbox.isChecked();
                 String description = selfDescription.getText().toString();
 
                 // Check if the description field is empty, and if so, show message and return (without creating constraint)
                 if (description.isEmpty()) {
-                    Toast.makeText(ConstraintSubmissionActivity.this, "Please enter a self description", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Please enter a self description", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                //later to add ----here i need to create constraint object (row) and add it to the database
-                //ater to add ---- addConstraintToDatabase(startDate, endDate, isPermanent, description, selectedConstraintType, userId);
+                // Later to add: Create constraint object (row) and add it to the database
+                // addConstraintToDatabase(startDate, endDate, isPermanent, description, selectedConstraintType, userId);
 
-                // show that the constraint was add
-                Toast.makeText(ConstraintSubmissionActivity.this, "Constraint added successfully", Toast.LENGTH_SHORT).show();
+                // Show that the constraint was added
+                Toast.makeText(requireContext(), "Constraint added successfully", Toast.LENGTH_SHORT).show();
             }
         });
+
+        return view;
     }
 }
