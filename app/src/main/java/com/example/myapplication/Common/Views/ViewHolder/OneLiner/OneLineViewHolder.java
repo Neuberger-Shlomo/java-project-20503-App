@@ -16,8 +16,6 @@ public class OneLineViewHolder<Item> extends RecyclerView.ViewHolder {
 
     public OneLineViewHolder(View view) {
         super(view);
-        // Define click listener for the ViewHolder's View
-
         textView = (TextView) view.findViewById(R.id.line1);
         cardView = (CardView) view.findViewById(R.id.cardView0);
 
@@ -29,8 +27,8 @@ public class OneLineViewHolder<Item> extends RecyclerView.ViewHolder {
 
     public void setItem(Item item) {
         this.item = item;
-
     }
+
     public void setText(String text){
         textView.setText(text);
     }

@@ -55,6 +55,7 @@ public class ScheduleStatusFragment extends DateListFragment<Shift> {
                                               userViewModel.getUserState().getValue().getAuthToken(),
                                               model.getId(),
                                               this::onPostProfileCall);
+
     }
 
     /**

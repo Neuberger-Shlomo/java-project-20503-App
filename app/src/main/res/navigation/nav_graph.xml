@@ -94,7 +94,16 @@
 
     <fragment
         android:id="@+id/ScheduleWorkerIntoShiftsFragment"
-        android:name="com.example.myapplication.ScheduleWorkerIntoShiftsFragment"
+        android:name="com.example.myapplication.ScheduleWorkerIntoShifts.ScheduleWorkerIntoShiftsFragment"
+        android:label="ScheduleWorkerIntoShifts fragment"
+        tools:layout="@layout/fragment_date_picking">
+        <action
+            android:id="@+id/action_ScheduleWorkerIntoShiftsFragment_to_ProfileListFragment"
+            app:destination="@id/ProfileListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ProfileListFragment"
+        android:name="com.example.myapplication.ScheduleWorkerIntoShifts.ScheduleWorkerIntoShiftsFragment"
         android:label="ScheduleWorkerIntoShifts fragment"
         tools:layout="@layout/fragment_date_picking"/>
 
