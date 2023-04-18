@@ -76,6 +76,8 @@ public abstract class DateListFragment<Model extends IModel> extends Fragment im
      */
     abstract protected void onItemClicked(Model model, View view);
 
+
+
     /**
      * Handles the getData call default implementation
      *
