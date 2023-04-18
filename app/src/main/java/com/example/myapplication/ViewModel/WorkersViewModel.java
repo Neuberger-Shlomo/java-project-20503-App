@@ -154,45 +154,38 @@ public class WorkersViewModel extends AndroidViewModel {
                                                 });
     }
 
-    public void addWorkerToShift(Profile profile, Api.PreCall preCall,
+    public void addWorkerToShift(int pId, int sId, Api.PreCall preCall,
                          Api.PostCall<Boolean> postCall) {
 
         preCall.onPreCall();
-        queue.add(addWorkerRequest(profile, preCall, (jsonObject, responseError,
+        queue.add(addWorkerRequest(pId,sId, preCall, (result, responseError,
                                                    throwable) -> {
             if (responseError != null || throwable != null) {
                 postCall.onPostCall(null, responseError, throwable);
                 return;
             }
-            ArrayList<Profile> p = getWorkersState().getValue();
-            if (p == null) {
-                postCall.onPostCall(null, null, new Exception("No user error"));
-                return;
-            }
-            p.add(profile);
-            workersState.setValue(p);
-            postCall.onPostCall(true, null, null);
+            postCall.onPostCall(result, null, null);
         }));
-
     }
 
 
-    private JsonObjectRequest addWorkerRequest(Profile profile,
+    private JsonObjectRequest addWorkerRequest(int pId, int sId,
                                               Api.PreCall preCall,
-                                              Api.PostCall<JSONObject> postCall) {
+                                              Api.PostCall<Boolean> postCall) {
         preCall.onPreCall();
 
-        JSONObject jsonObj;
+        JSONObject jsonObj = new JSONObject();
         try {
-            jsonObj = new JSONObject(gson.toJson(profile));
+            jsonObj.put("pId",pId);
+            jsonObj.put("sId",sId);
         } catch (JSONException e) {
             postCall.onPostCall(null, null, e);
             return null;
         }
 
-        return new JsonObjectRequest(Request.Method.POST, Constants.ADD_WORKER_TO_SHIFT_ROUTE, jsonObj, res -> {
+        return new JsonObjectRequest(Request.Method.POST, Constants.ADD_WORKER_TO_SHIFT_URL, jsonObj, res -> {
             try {
-                postCall.onPostCall(res, null, null);
+                postCall.onPostCall(res.getBoolean("result"), null, null);
             } catch (Exception e) {
                 postCall.onPostCall(null, null, e);
             }

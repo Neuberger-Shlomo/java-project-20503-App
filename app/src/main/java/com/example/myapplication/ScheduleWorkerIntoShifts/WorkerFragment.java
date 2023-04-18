@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
+import com.example.myapplication.DefineShiftFragment;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.User.Model.BasicUser;
@@ -66,5 +67,10 @@ public class WorkerFragment extends DateListFragment<Profile> {
     @Override
     protected void onItemClicked(Profile model, View view) {
         adapter.removeEntry(model);
+        workersViewModel.addWorkerToShift(model.getId(), shiftId, () -> {
+        }, (valid, responseError, throwable) -> {
+            if (Boolean.TRUE.equals(valid))
+                NavHostFragment.findNavController(WorkerFragment.this).popBackStack();
+        });
     }
 }
