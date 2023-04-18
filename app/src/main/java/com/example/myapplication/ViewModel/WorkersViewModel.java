@@ -8,7 +8,9 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
@@ -150,6 +152,58 @@ public class WorkersViewModel extends AndroidViewModel {
                                                         postCall.onPostCall(null, null, err);
                                                     }
                                                 });
+    }
+
+    public void addWorkerToShift(Profile profile, Api.PreCall preCall,
+                         Api.PostCall<Boolean> postCall) {
+
+        preCall.onPreCall();
+        queue.add(addWorkerRequest(profile, preCall, (jsonObject, responseError,
+                                                   throwable) -> {
+            if (responseError != null || throwable != null) {
+                postCall.onPostCall(null, responseError, throwable);
+                return;
+            }
+            ArrayList<Profile> p = getWorkersState().getValue();
+            if (p == null) {
+                postCall.onPostCall(null, null, new Exception("No user error"));
+                return;
+            }
+            p.add(profile);
+            workersState.setValue(p);
+            postCall.onPostCall(true, null, null);
+        }));
+
+    }
+
+
+    private JsonObjectRequest addWorkerRequest(Profile profile,
+                                              Api.PreCall preCall,
+                                              Api.PostCall<JSONObject> postCall) {
+        preCall.onPreCall();
+
+        JSONObject jsonObj;
+        try {
+            jsonObj = new JSONObject(gson.toJson(profile));
+        } catch (JSONException e) {
+            postCall.onPostCall(null, null, e);
+            return null;
+        }
+
+        return new JsonObjectRequest(Request.Method.POST, Constants.ADD_WORKER_TO_SHIFT_ROUTE, jsonObj, res -> {
+            try {
+                postCall.onPostCall(res, null, null);
+            } catch (Exception e) {
+                postCall.onPostCall(null, null, e);
+            }
+        }, err -> {
+            if (err.networkResponse != null && err.networkResponse.data != null) {
+                String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
+                postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class), null);
+            } else {
+                postCall.onPostCall(null, null, err);
+            }
+        });
     }
 
 }

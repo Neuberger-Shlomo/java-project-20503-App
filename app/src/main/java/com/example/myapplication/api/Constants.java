@@ -17,6 +17,8 @@ final public class Constants {
     public final static String LOGIN_ROUTE    = USER_ROUTE + "/login";
     public final static String REGISTER_ROUTE = USER_ROUTE + "/signup";
     public final static String ADD_SHIFT_ROUTE = SHIFT_ROUTE + "/addShift";
+    public final static String ADD_WORKER_TO_SHIFT_ROUTE = SCHEDULE_ROUTE + "/addWorker";
+
 
     public final static String LOGOUT_ROUTE = USER_ROUTE + "/logout";
 
