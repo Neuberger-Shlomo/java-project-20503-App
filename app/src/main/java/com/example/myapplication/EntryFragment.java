@@ -42,7 +42,7 @@ public class EntryFragment extends Fragment {
                     if (user.getAuthToken() != null && !user.getAuthToken().isEmpty()) {
                         binding.buttonSecond.setText(R.string.logout);
                         binding.buttonSecond.setOnClickListener(this::onLogout);
-                        if(user.getLevel().equals(RoleLevel.MANAGER) || userViewModel.isManger()) {
+                        if (user.getLevel().equals(RoleLevel.MANAGER)) {
                             binding.btnMan.setVisibility(View.VISIBLE);
                         }
                     } else {
