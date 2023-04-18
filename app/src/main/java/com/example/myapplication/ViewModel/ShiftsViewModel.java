@@ -13,7 +13,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.myapplication.Model.BasicUser;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.api.Api;

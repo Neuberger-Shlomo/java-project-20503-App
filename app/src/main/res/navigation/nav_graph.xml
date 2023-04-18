@@ -103,8 +103,8 @@
     </fragment>
     <fragment
         android:id="@+id/ProfileListFragment"
-        android:name="com.example.myapplication.ScheduleWorkerIntoShifts.ScheduleWorkerIntoShiftsFragment"
-        android:label="ScheduleWorkerIntoShifts fragment"
+        android:name="com.example.myapplication.ScheduleWorkerIntoShifts.WorkerFragment"
+        android:label="Workers fragment"
         tools:layout="@layout/fragment_date_picking"/>
 
     <fragment

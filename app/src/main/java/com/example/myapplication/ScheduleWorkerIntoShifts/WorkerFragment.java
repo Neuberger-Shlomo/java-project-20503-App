@@ -20,8 +20,9 @@ public class WorkerFragment extends DateListFragment<Profile> {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View v =  super.onCreateView(inflater, container, savedInstanceState);
-        binding.headerDatePicker.setText("");
+        binding.headerDatePicker.setText("Free Workers List");
         binding.dpDatePicker.setVisibility(View.GONE);
+        binding.btnDatePicker.setText("Save Changes");
 
 
         return v;
