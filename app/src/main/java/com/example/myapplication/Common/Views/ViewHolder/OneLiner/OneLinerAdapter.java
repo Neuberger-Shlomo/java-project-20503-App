@@ -78,14 +78,25 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
         return item;
     }
 
-    public void addEntry(T item){
-        addEntry(item,true);
+
+    public T removeEntry(T model) {
+        int     visiblePosition = visibleList.indexOf(model);
+        boolean removed         = visibleList.remove(model);
+        rawItems.remove(model);
+        if (removed)
+            notifyItemRemoved(visiblePosition);
+        return removed ? model : null;
     }
 
-    public void addEntry(T item,boolean update) {
+    public void addEntry(T item) {
+        addEntry(item, true);
+    }
+
+    public void addEntry(T item, boolean update) {
         getItems().add(item);
         rawItems.add(item);
-        if(update) notifyItemInserted(getItems().size() - 1);
+        if (update)
+            notifyItemInserted(getItems().size() - 1);
     }
 
     public void clearList() {
@@ -122,17 +133,15 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
                 visibleList.add(item);
             }
         }
-        notifyItemRangeRemoved(0,visibleList.size());
+        notifyItemRangeRemoved(0, visibleList.size());
 
 
     }
 
     public void setBindViewHolderListener(interfaces.OnBindViewHolderListener<T,
-                OneLineViewHolder<T>> bindViewHolderListener) {
+            OneLineViewHolder<T>> bindViewHolderListener) {
         this.bindListener = bindViewHolderListener;
     }
-
-
 
 
 }

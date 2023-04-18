@@ -30,7 +30,7 @@ final public class Constants {
     public final static String GET_ALL_SHIFT_REQUESTS = SHIFT_REQUESTS_ROUTE + "/";
 
     public static final String GET_SHIFTS_FROM_SCHEDULE = SCHEDULE_ROUTE + "/shifts_from_schedule";
-    public static final String GET_FREE_WORKERS = SCHEDULE_ROUTE + "/free-workers";
+    public static final String GET_FREE_WORKERS = "/free-workers";
 
 
     public final static String LOGIN_URL    = String.format("%s/%s", BASE_URL, LOGIN_ROUTE);

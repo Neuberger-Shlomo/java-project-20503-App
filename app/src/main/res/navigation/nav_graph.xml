@@ -35,13 +35,7 @@
         android:name="com.example.myapplication.User.Controller.RegisterFragment"
         >
     </fragment>
-    <fragment android:id="@+id/thiredFregment"
-        android:name="com.example.myapplication.BlankFragment"
-        android:label="THired fragment"
-        tools:layout="@layout/fragment_blank"
-        >
 
-    </fragment>
 
     <fragment
         android:id="@+id/managerMainFragment"
@@ -97,9 +91,7 @@
         android:name="com.example.myapplication.ScheduleWorkerIntoShifts.ScheduleWorkerIntoShiftsFragment"
         android:label="ScheduleWorkerIntoShifts fragment"
         tools:layout="@layout/fragment_date_picking">
-        <action
-            android:id="@+id/action_ScheduleWorkerIntoShiftsFragment_to_ProfileListFragment"
-            app:destination="@id/ProfileListFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/ProfileListFragment"
