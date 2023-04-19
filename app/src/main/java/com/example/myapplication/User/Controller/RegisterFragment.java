@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.User.Model.UserViewModel;
 import com.example.myapplication.api.Api;
+import com.example.myapplication.api.UsersApi;
 import com.example.myapplication.databinding.FragmentRegisterBinding;
 
 
@@ -89,8 +90,8 @@ public class RegisterFragment extends Fragment {
         String email       = binding.etEmail.getText().toString();
         String phoneNumber = binding.etPhoneNumber.getText().toString();
 
-        userViewModel.register(new Api.RegisterRequest(firstName, lastName, email, phoneNumber,
-                                                       username, password), () -> {
+        userViewModel.register(new UsersApi.RegisterRequest(firstName, lastName, email, phoneNumber,
+                                                            username, password), () -> {
         }, (valid, responseError, throwable) -> {
             if (Boolean.TRUE.equals(valid))
                 NavHostFragment.findNavController(RegisterFragment.this).popBackStack();

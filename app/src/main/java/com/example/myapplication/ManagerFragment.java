@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,17 +30,24 @@ public class ManagerFragment extends Fragment {
         add(new ManagerButton("Shift Scheduling Status",R.id.ScheduleStatusFragment));
         add(new ManagerButton("Schedule Worker Into Shift",R.id.ScheduleWorkerIntoShiftsFragment));
         add(new ManagerButton("Define Shifts",R.id.DefineShiftRequirementsFragment));
+        add(new ManagerButton("Auto Schedule",R.id.autoScheduleJob));
     }};
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
-
+        private final View cardView;
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
 
             textView = (TextView) view.findViewById(R.id.date);
+            cardView = (View) view.findViewById(R.id.card);
+
+        }
+
+        public void setOnClickListener(View.OnClickListener listener){
+        cardView.setOnClickListener(listener);
         }
 
         public TextView getTextView() {
@@ -88,6 +96,9 @@ public class ManagerFragment extends Fragment {
             }
         });
         binding.rvManagerMain.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvManagerMain.smoothScrollToPosition(buttonsArrayList.size()-1);
+        Handler handler = new Handler();
+        handler.postDelayed(() -> binding.rvManagerMain.smoothScrollToPosition(0), 500);
         return binding.getRoot();
 
     }

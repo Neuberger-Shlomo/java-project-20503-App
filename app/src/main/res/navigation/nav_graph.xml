@@ -104,6 +104,10 @@
         android:name="com.example.myapplication.DefineShiftFragment"
         android:label="DefineShiftRequirements fragment"
         tools:layout="@layout/fragment_define_shift"/>
+    <fragment
+        android:id="@+id/autoScheduleJob"
+        android:name="com.example.myapplication.AutoSchedule.AutoScheduleJobFragment"
+        android:label="AutoScheduleJob" />
 
 
 </navigation>

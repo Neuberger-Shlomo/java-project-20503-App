@@ -45,5 +45,5 @@ final public class Constants {
     public final static String ADD_SHIFT_URL = String.format("%s/%s", BASE_URL, ADD_SHIFT_ROUTE);
 
 
-
+    public static final String CREATE_JOB_URL =  String.format("%s/%s", BASE_URL,"jobs/");
 }

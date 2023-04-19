@@ -57,7 +57,7 @@ public class UserViewModel extends AndroidViewModel {
 
     }
 
-    public void register(Api.RegisterRequest registerRequest, Api.PreCall preCall,
+    public void register(UsersApi.RegisterRequest registerRequest, Api.PreCall preCall,
                          Api.PostCall<Boolean> postCall) {
 
         preCall.onPreCall();
@@ -91,7 +91,7 @@ public class UserViewModel extends AndroidViewModel {
     }
 
 
-    private void onRegisterResponse(Api.RegisterRequest registerRequest) {
+    private void onRegisterResponse(UsersApi.RegisterRequest registerRequest) {
         BasicUser user = getUserState().getValue();
         if (user == null) {
             user = new BasicUser();
