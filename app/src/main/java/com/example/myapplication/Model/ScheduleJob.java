@@ -20,13 +20,12 @@ public class ScheduleJob implements IModel {
     private String fromDate(java.sql.Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(date.getTime()));
-        int y=calendar.get(Calendar.YEAR),
-                m=calendar.get(Calendar.MONTH)+1,d=calendar.get(Calendar.DAY_OF_MONTH);
+        int y = calendar.get(Calendar.YEAR),
+                m = calendar.get(Calendar.MONTH) + 1, d = calendar.get(Calendar.DAY_OF_MONTH);
 
-        String startDate = String.format("%s-%s-%s",y,
-                                         (m <=9?"0":"")+m,
-                                         (d <=9?"0":"")+d);
-
+        String startDate = String.format("%s-%s-%s", y,
+                                         (m <= 9 ? "0" : "") + m,
+                                         (d <= 9 ? "0" : "") + d);
 
 
         // yyyy-MM-dd
@@ -92,8 +91,28 @@ public class ScheduleJob implements IModel {
         if (!(o instanceof ScheduleJob))
             return false;
         ScheduleJob that = (ScheduleJob) o;
-        return Objects.equals(getId(), that.getId()) && getStartDate().equals(that.getStartDate()) && getEndDate().equals(that.getEndDate()) && Objects.equals(getDone(), that.getDone());
+        return Objects.equals(getId(), that.getId())
+               && startDate.equals(that.startDate)
+               && endDate.equals(that.endDate);
     }
 
 
+    @Override
+    public String toString() {
+        return "ScheduleJob{" +
+               "id=" + id +
+               ", userId=" + userId +
+               ", startDate='" + getStartDate() + '\'' +
+               ", endDate='" + getEndDate() + '\'' +
+               ", done=" + done +
+               '}';
+    }
+
+    @Override
+    public String toPrettyString() {
+        return "id: " + id + "\n" +
+               "start date: " + getStartDate() + "\n" +
+               "end date: " + getEndDate()+ "\n"+
+               "done: "+ getDone();
+    }
 }

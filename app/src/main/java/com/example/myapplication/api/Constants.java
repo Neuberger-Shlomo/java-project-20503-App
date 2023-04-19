@@ -46,4 +46,5 @@ final public class Constants {
 
 
     public static final String CREATE_JOB_URL =  String.format("%s/%s", BASE_URL,"jobs/");
+    public static final String GET_JOB_URL =  String.format("%s/%s", BASE_URL,"jobs/user/");
 }

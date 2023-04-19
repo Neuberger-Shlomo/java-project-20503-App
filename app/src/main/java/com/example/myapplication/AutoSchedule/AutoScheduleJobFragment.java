@@ -10,9 +10,11 @@ import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLinerAdapter;
 import com.example.myapplication.Model.ScheduleJob;
 import com.example.myapplication.User.Model.BasicUser;
 import com.example.myapplication.User.Model.UserViewModel;
@@ -20,6 +22,8 @@ import com.example.myapplication.api.JobApi;
 import com.example.myapplication.databinding.FragmentAutoScheduleBinding;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 
@@ -35,10 +39,13 @@ public class AutoScheduleJobFragment extends Fragment {
             .build();
     private Date start, end;
 
-    String howTo = "This scheduler system will auto organize employees to shifts\n" +
-                   "\t1. Choose the date range you want to auto schedule\n" +
-                   "\t2. Click \"Start Job\"\n" +
-                   "\t3. Sit back and relax";
+    OneLinerAdapter<ScheduleJob> adapter = new OneLinerAdapter<>();
+    String                       howTo   = "This scheduler system will auto organize employees to" +
+                                           " shifts\n" +
+                                           "\t1. Choose the date range you want to auto " +
+                                           "schedule\n" +
+                                           "\t2. Click \"Start Job\"\n" +
+                                           "\t3. Sit back and relax";
     private RequestQueue queue;
 
     UserViewModel userViewModel;
@@ -58,14 +65,32 @@ public class AutoScheduleJobFragment extends Fragment {
         binding = FragmentAutoScheduleBinding.inflate(inflater, container, false);
 
         materialDatePicker.addOnPositiveButtonClickListener(this::onDateChose);
-
         binding.btnSelectDates.setOnClickListener(
                 v -> materialDatePicker
                         .show(requireActivity().getSupportFragmentManager(), "null"));
         binding.howTo.setText(howTo);
         binding.btnStartJob.setOnClickListener(this::onStartClicked);
-
+        binding.rvJob.setAdapter(adapter);
+        binding.rvJob.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        binding.btnGetJobs.setOnClickListener(this::onGetRequest);
         return binding.getRoot();
+    }
+
+    private void onGetRequest(View view) {
+        BasicUser user = userViewModel.getUserState().getValue();
+        queue.add(JobApi.getAllJobs(
+                user.getId(),
+                user.getAuthToken(), null,
+                ((jsonArray, responseError, throwable) -> {
+                    if (jsonArray != null) {
+                        JsonParser.parseString(jsonArray.toString())
+                                .getAsJsonArray()
+                                .forEach(e -> adapter.addEntry(new Gson().fromJson(e.toString(),
+                                                                                   ScheduleJob.class)));
+                    }
+                })));
+
+
     }
 
     private void onStartClicked(View view) {
@@ -95,6 +120,7 @@ public class AutoScheduleJobFragment extends Fragment {
                                       ));
     }
 
+
     private void onDateChose(Pair<Long, Long> longLongPair) {
 
         start = new Date(longLongPair.first);
@@ -105,7 +131,7 @@ public class AutoScheduleJobFragment extends Fragment {
 
         String startDate = String.format("%s/%s/%s",
                                          calendar.get(Calendar.DAY_OF_MONTH),
-                                         calendar.get(Calendar.MONTH)+1,
+                                         calendar.get(Calendar.MONTH) + 1,
                                          calendar.get(Calendar.YEAR)
                                         );
         calendar.setTime(new Date(end.getTime()));
@@ -115,6 +141,7 @@ public class AutoScheduleJobFragment extends Fragment {
                                        calendar.get(Calendar.YEAR)
                                       );
 
+        binding.btnStartJob.setEnabled(true);
 
         binding.tvDates.setText(String.format("%s-%s", startDate, endDate));
 

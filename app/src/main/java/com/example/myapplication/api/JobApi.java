@@ -4,9 +4,11 @@ import androidx.annotation.Nullable;
 
 import com.android.volley.Request;
 import com.example.myapplication.Model.ScheduleJob;
+import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
 import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
 import com.google.gson.Gson;
-
+import com.google.gson.JsonArray;
+import org.json.JSONArray;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +22,9 @@ final public class JobApi {
             ScheduleJob job,
             @Nullable Api.PreCall preListener,
             @NotNull Api.PostCall<JSONObject> postListener) {
+        if(preListener != null){
+            preListener.onPreCall();
+        }
         JSONObject jsonObject;
 
         try {
@@ -38,6 +43,26 @@ final public class JobApi {
                 err -> UsersApi.responseHandler(null, err, postListener)
         );
     }
+
+
+
+    public static AuthedJsonArrayObjectRequest getAllJobs(
+            String userId,
+            String jwt,
+            @Nullable Api.PreCall preListener,
+            @NotNull Api.PostCall<JSONArray> postListener) {
+        if(preListener != null){
+            preListener.onPreCall();
+        }
+
+        return new AuthedJsonArrayObjectRequest(
+                Constants.GET_JOB_URL,
+                userId, jwt,
+                res -> UsersApi.responseHandler(res, null, postListener),
+                err -> UsersApi.responseHandler(null, err, postListener)
+        );
+    }
+
 
 
 }

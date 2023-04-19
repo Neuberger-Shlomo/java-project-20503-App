@@ -7,41 +7,48 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/btnStartJob"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/howTo">
 
         <TextView
             android:id="@+id/tvDates"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="8"
+            android:layout_height="match_parent"
+            android:autoText="false"
+            android:gravity="center|center_horizontal|center_vertical"
             android:text="Start date- end date"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-        <Button
-            android:id="@+id/btnSelectDates"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Choose" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp">
 
-    <Button
-        android:id="@+id/btnStartJob"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Job"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/btnSelectDates"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Choose" />
+
+            <Button
+                android:id="@+id/btnStartJob"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:autoSizeTextType="uniform"
+                android:autoText="true"
+                android:enabled="false"
+                android:text="Start Job" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/howTo"
@@ -49,8 +56,28 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="@+id/linearLayout"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvJob"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnGetJobs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <Button
+        android:id="@+id/btnGetJobs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Get Jobs"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

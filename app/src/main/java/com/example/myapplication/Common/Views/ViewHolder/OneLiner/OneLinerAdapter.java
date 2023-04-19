@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 
+import com.example.myapplication.Common.Views.Fragments.IModel;
 import com.example.myapplication.R;
 
 import java.util.ArrayList;
@@ -54,10 +55,14 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
 
     @Override
     public void onBindViewHolder(@NonNull OneLineViewHolder<T> holder, int position) {
+        holder.setItem(getItems().get(position));
         if (bindListener != null) {
             bindListener.onBindViewHolder(getItems().get(position), holder, position);
         } else {
-            holder.setText(getItems().get(position).toString());
+            if (holder.getItem() instanceof IModel)
+                holder.setText(((IModel) holder.getItem()).toPrettyString());
+            else
+                holder.setText(holder.getItem().toString());
         }
     }
 
@@ -93,10 +98,15 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
     }
 
     public void addEntry(T item, boolean update) {
-        getItems().add(item);
-        rawItems.add(item);
-        if (update)
-            notifyItemInserted(getItems().size() - 1);
+        int itemIndex = getItems().indexOf(item);
+        if (itemIndex != -1) {
+            updateEntry(item, itemIndex);
+        }else {
+            getItems().add(item);
+            rawItems.add(item);
+            if (update)
+                notifyItemInserted(getItems().size() - 1);
+        }
     }
 
     public void clearList() {
@@ -107,20 +117,21 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
     }
 
     public void updateEntry(T entry, int position) {
-        if (position < getItems().size()) {
-            T sourceItem = getItems().get(position);
-            getItems().set(position, entry);
-            for (int i = 0; i < rawItems.size(); i++) {
-                T item = rawItems.get(i);
-                if (item.equals(sourceItem)) {
-                    rawItems.set(i, entry);
-                    i = rawItems.size();
-                }
-            }
-            notifyItemChanged(position);
-        } else {
+        int rawIndex     = rawItems.indexOf(entry);
+        int visibleIndex = visibleList.indexOf(entry);
+
+        if (rawIndex != position && visibleIndex != position)
+            return;
+        if(visibleList.get(visibleIndex).equals(entry)) return;
+        if (rawIndex == visibleIndex && visibleIndex == -1) {
             addEntry(entry);
+            return;
         }
+        notifyItemMoved(visibleIndex, 0);
+        rawItems.set(rawIndex, entry);
+        visibleList.remove(rawIndex);
+        visibleList.add(0, entry);
+        notifyItemChanged(0);
     }
 
     public <Query> void setFilter(Query query, interfaces.FilterMethod<T, Query> filter) {
