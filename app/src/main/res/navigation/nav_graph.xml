@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/SecondFragment">
+    app:startDestination="@id/shiftViewActivity">
 
     <fragment
         android:id="@+id/Login"
@@ -103,6 +103,11 @@
         android:name="com.example.myapplication.DefineShiftFragment"
         android:label="DefineShiftRequirements fragment"
         tools:layout="@layout/fragment_define_shift"/>
+    <fragment
+        android:id="@+id/shiftViewActivity"
+        android:name="com.example.myapplication.ShiftViewActivity"
+        android:label="activity_shift_view"
+        tools:layout="@layout/activity_shift_view" />
 
 
 </navigation>

@@ -147,4 +147,14 @@ public class Shift {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+    @Override
+    public String toString() {
+        return "Shift{" +
+                   "shiftDate='" + shiftDate + '\'' +
+                ", startHour=" + startHour +
+                ", duration=" + duration +
+                ", id=" + id +
+                // Add any other fields you want to display here
+                '}';
+    }
 }
