@@ -52,8 +52,10 @@
                 int duration = 2 ;
 
                 int endHour = (startHour + duration) % 24;
-                Availableshifts.add(new Shift(dateString, startHour, new ArrayList<>(), i + 2, endHour, dayOfWeekValue));
+                Availableshifts.add(new Shift(dateString, 2, new ArrayList<>(), i + 2, startHour, duration));
             }
+            System.out.println(Availableshifts);
+
             return Availableshifts;
         }
         @Nullable
@@ -100,7 +102,6 @@
                 shiftsTable.addView(row);
             }
         }
-
         private View.OnClickListener shiftButtonClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,6 +116,7 @@
                 }
             }
         };
+        //send button listener
 
             private View.OnClickListener sendButtonClickListener = new View.OnClickListener() {
 
@@ -130,13 +132,13 @@
         // UPDTE LIST OF SHIFTS
         private void addSelectedShifts() {
             selectedShifts.clear();
-            for (int i = 1; i <= maxShiftsPerDay; i++) {
+            for (int i = 0; i <= maxShiftsPerDay; i++) {
                 TableRow row = (TableRow) shiftsTable.getChildAt(i);
                 for (int j = 0; j < 7; j++) {
                     if (row.getChildAt(j) instanceof Button) {
                         Button button = (Button) row.getChildAt(j);
                         if (button.getTag() != null && (boolean) button.getTag()) {
-                            int shiftIndex = (i - 1) * 7 + j; // subtract 1 because the first row is the header
+                            int shiftIndex = (i) * maxShiftsPerDay + j; // subtract 1 because the first row is the header
                             selectedShifts.add(Availableshifts.get(shiftIndex));
                         }
                     }
