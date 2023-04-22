@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -39,12 +40,11 @@ public class EntryFragment extends Fragment {
         userViewModel.getUserState().observe(
                 getViewLifecycleOwner(),
                 (user) -> {
+                    ((MainActivity) requireActivity()).updateMenu();
                     if (user.getAuthToken() != null && !user.getAuthToken().isEmpty()) {
                         binding.buttonSecond.setText(R.string.logout);
                         binding.buttonSecond.setOnClickListener(this::onLogout);
-                        if (user.getLevel().equals(RoleLevel.MANAGER)) {
-                            binding.btnMan.setVisibility(View.VISIBLE);
-                        }
+
                     } else {
                         binding.buttonSecond.setText(R.string.login);
                         binding.buttonSecond.setOnClickListener(this::onLogin);
@@ -54,6 +54,12 @@ public class EntryFragment extends Fragment {
                 });
         binding.buttonSecond.setOnClickListener(this::onLogin);
         binding.btnMan.setOnClickListener(this::onMangerClicked);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
     }
 
     void onLogin(View v) {
@@ -66,8 +72,10 @@ public class EntryFragment extends Fragment {
 
             userViewModel.logout(
                     () -> {
-                    }, (aBoolean, responseError, throwable) -> {
-                    });
+                    },
+                    (aBoolean, responseError, throwable) ->
+                            ((MainActivity) requireActivity())
+                                    .updateMenu());
         } catch (Exception e) {
             Log.e(TAG, "onLogout: Error occured", e);
         }

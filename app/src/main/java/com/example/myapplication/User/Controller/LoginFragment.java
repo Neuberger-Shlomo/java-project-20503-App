@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.User.Model.UserViewModel;
 import com.example.myapplication.api.Api;
@@ -56,7 +57,7 @@ public class LoginFragment extends Fragment implements TextWatcher {
                                               );
         userViewModel.getUserState().observe(getViewLifecycleOwner(), (basicUser -> {
             if (!Objects.equals(basicUser.getAuthToken(), null) && !Objects.equals(basicUser.getAuthToken(), "")) {
-                NavHostFragment.findNavController(LoginFragment.this).popBackStack();
+                NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.EntryFragment);
             }
             if (!basicUser.getUsername().isEmpty())
                 binding.etUsername.setText(basicUser.getUsername());

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/SecondFragment">
+    app:startDestination="@id/EntryFragment">
 
     <fragment
         android:id="@+id/Login"
@@ -16,7 +16,7 @@
             app:enterAnim="@anim/nav_default_pop_enter_anim" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
+        android:id="@+id/EntryFragment"
         android:name="com.example.myapplication.EntryFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_entry">
@@ -60,6 +60,9 @@
         <action
             android:id="@+id/action_managerMainFragment_to_DefineShiftRequirementsFragment"
             app:destination="@id/DefineShiftRequirementsFragment" />
+        <action
+            android:id="@+id/action_managerMainFragment_to_autoScheduleJob"
+            app:destination="@id/autoScheduleJob" />
     </fragment>
 
     <fragment
@@ -106,6 +109,7 @@
         tools:layout="@layout/fragment_define_shift"/>
     <fragment
         android:id="@+id/autoScheduleJob"
+        tools:layout="@layout/fragment_auto_schedule"
         android:name="com.example.myapplication.AutoSchedule.AutoScheduleJobFragment"
         android:label="AutoScheduleJob" />
 
