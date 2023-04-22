@@ -25,27 +25,27 @@
                 android:id="@+id/etUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:autofillHints="username"
                 android:ems="10"
                 android:hint="@string/username"
-                android:inputType="textPersonName"
-                android:autofillHints="username"/>
+                android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:passwordToggleEnabled="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:autofillHints="password"
                 android:ems="10"
                 android:hint="@string/password"
-                android:inputType="textPassword"
-                android:autofillHints="password"/>
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
@@ -54,38 +54,34 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/linerLogin"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/linerLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
-            android:layout_weight="1"
             android:text="@string/login" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
-            android:layout_weight="1"
             android:text="@string/register" />
 
     </LinearLayout>
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressBar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         android:indeterminate="true"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@+id/linerLogin"
         app:layout_constraintStart_toStartOf="@+id/linerLogin"
         app:layout_constraintTop_toBottomOf="@+id/linerLogin" />

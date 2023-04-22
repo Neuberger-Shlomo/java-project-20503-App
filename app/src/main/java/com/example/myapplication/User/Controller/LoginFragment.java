@@ -78,6 +78,8 @@ public class LoginFragment extends Fragment implements TextWatcher {
         String message = responseError != null ? responseError.getMessage() : throwable != null ?
                 throwable.getMessage() : "Unknown error";
         Log.d(TAG, "onLogin: Error occurred " + message);
+        binding.etUsername.setError("Error");
+        binding.etPassword.setError("Error");
         Snackbar.make(requireView(), responseError != null ? message : "Unknown error",
                       Snackbar.LENGTH_LONG).show();
 

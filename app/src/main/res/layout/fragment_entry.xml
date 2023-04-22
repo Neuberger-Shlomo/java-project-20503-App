@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".EntryFragment">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_second"
-        style="?android:attr/buttonBarButtonStyle"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"
@@ -17,8 +17,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnMan"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="menager"

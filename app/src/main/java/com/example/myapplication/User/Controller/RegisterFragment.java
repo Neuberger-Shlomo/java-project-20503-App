@@ -18,6 +18,8 @@ import com.example.myapplication.User.Model.UserViewModel;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.api.UsersApi;
 import com.example.myapplication.databinding.FragmentRegisterBinding;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 
 public class RegisterFragment extends Fragment {
@@ -92,12 +94,29 @@ public class RegisterFragment extends Fragment {
 
         userViewModel.register(new UsersApi.RegisterRequest(firstName, lastName, email, phoneNumber,
                                                             username, password), () -> {
-        }, (valid, responseError, throwable) -> {
-            if (Boolean.TRUE.equals(valid))
-                NavHostFragment.findNavController(RegisterFragment.this).popBackStack();
-        });
+        }, this::onRegisterResponse);
 
 
+    }
+
+    private void onRegisterResponse(Boolean valid, Api.ResponseError responseError,
+                                    Throwable throwable) {
+        String msg = "Unknown Error";
+        if (Boolean.TRUE.equals(valid))
+            NavHostFragment.findNavController(RegisterFragment.this).popBackStack();
+        else {
+            if (responseError != null) {
+                if (responseError.getStatus() == 400)
+                    msg = "Some field is or used or invalid";
+                else
+                    msg = responseError.getMessage();
+            } else if (throwable != null) {
+                msg = throwable.getMessage();
+            }
+
+            Snackbar.make(requireView(), msg,
+                          BaseTransientBottomBar.LENGTH_SHORT).show();
+        }
     }
 
     void replace(View v1, View v2) {
