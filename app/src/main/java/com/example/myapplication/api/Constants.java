@@ -43,6 +43,7 @@ final public class Constants {
     public final static String ALL_CONSTRAINTS_URL   = String.format("%s/%s", BASE_URL, GET_ALL_CONSTRAINTS);
     public final static String ALL_SHIFT_REQUESTS_URL   = String.format("%s/%s", BASE_URL, GET_ALL_SHIFT_REQUESTS);
     public final static String ADD_SHIFT_URL = String.format("%s/%s", BASE_URL, ADD_SHIFT_ROUTE);
+    public final static String ADD_WORKER_TO_SHIFT_URL = String.format("%s/%s", BASE_URL, ADD_WORKER_TO_SHIFT_ROUTE);
 
 
     public static final String CREATE_JOB_URL =  String.format("%s/%s", BASE_URL,"jobs/");
