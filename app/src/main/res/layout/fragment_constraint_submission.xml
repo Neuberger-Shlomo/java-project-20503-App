@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ConstraintSubmissionActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+    <TextView
+        android:layout_width="364dp"
+        android:layout_height="38dp"
+        android:text="Please enter constraint:"
+        android:textSize="28sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" start date:"
+        android:textSize="18sp" />
+
+    <DatePicker
+        android:id="@+id/start_date_picker"
+        android:layout_width="377dp"
+        android:layout_height="285dp"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="end date:"
+        android:textSize="18sp" />
+
+    <DatePicker
+        android:id="@+id/end_date_picker"
+        android:layout_width="match_parent"
+        android:layout_height="261dp"
+        android:layout_marginTop="8dp" />
+
+    <CheckBox
+        android:id="@+id/permanent_checkbox"
+        android:layout_width="125dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="8dp"
+        android:text="Permanent" />
+
+    <EditText
+        android:id="@+id/self_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Enter self description"
+        android:inputType="textMultiLine"
+        android:lines="3"
+        android:maxLines="3"
+        android:minLines="3" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Enter constraint type:" />
+
+    <Spinner
+        android:id="@+id/constraint_type_spinner"
+        android:layout_width="386dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/add_constraint_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Add" />
+
+    </LinearLayout>
+</ScrollView>
