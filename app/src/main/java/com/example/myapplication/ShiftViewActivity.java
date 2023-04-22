@@ -29,6 +29,8 @@
         private Button sendButton;
         private List<Shift> Availableshifts = new ArrayList<>();
         private List<Shift> selectedShifts = new ArrayList<>();
+        private ArrayList<View> views= new ArrayList<View>();
+
         private int maxShiftsPerDay = 4; // MAXIMUM shifts per day in the week (to know the number of table rows)
 
         @Override
@@ -94,10 +96,14 @@
                     int shiftIndex = i * 7 + j;
                     Shift shift = shifts.get(shiftIndex);
                     shiftButton.setText(shift.getStartHour() + ":00 - " + ((shift.getStartHour() + shift.getDuration()) % 24) + ":00");
-                    shiftButton.setId(shift.getId());
+                    shiftButton.setId(shiftIndex);
+
                     shiftButton.setPadding(4, 4, 4, 4);
                     shiftButton.setOnClickListener(shiftButtonClickListener);
                     row.addView(shiftButton);
+
+
+
                 }
                 shiftsTable.addView(row);
             }
@@ -105,14 +111,17 @@
         private View.OnClickListener shiftButtonClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Button button = (Button) view;
                 // SET THE  SHIFT IF CHOOSED\ NOT CHOOSED
                 if (button.getTag() == null || !((boolean) button.getTag())) {
                     button.getBackground().setColorFilter(ContextCompat.getColor(requireContext(), R.color.purple_200), PorterDuff.Mode.MULTIPLY);
                     button.setTag(true);
+                    views.add(view);
                 } else {
                     button.getBackground().clearColorFilter();
                     button.setTag(false);
+                    views.remove(view);
                 }
             }
         };
@@ -122,7 +131,12 @@
 
                 public void onClick(View view) {
                 System.out.println("Send button clicked");
-                addSelectedShifts();
+              //  addSelectedShifts();
+                    for(View v:views){
+                        Button button = (Button) v;
+                        selectedShifts.add(Availableshifts.get(button.getId()));
+
+                    }
                 // TO DO later : Send the selectedShifts list to your server
                 System.out.println("Selected shifts: " + selectedShifts);
 
@@ -145,4 +159,4 @@
                 }
             }
         }
-        }
+    }
