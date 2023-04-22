@@ -2,6 +2,8 @@ package com.example.myapplication.Model;
 
 import android.util.Log;
 
+import com.example.myapplication.Common.Views.Fragments.IModel;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Shift {
+public class Shift implements IModel {
     private String shiftDate;
     private int    numOfRequiredWorkers;
     private int    numOfScheduledWorkers;
@@ -18,12 +20,9 @@ public class Shift {
     private int    startHour;
     private int    duration;
 
-
     private ArrayList<Profile> scheduledWorkers;
-    private int weekNumber, year = 123, dayNumber;
-
-
-
+    private int weekNumber, year = 2023, dayNumber;
+//TODO: implement year getting according to database
 
     public Shift(String shiftDate, int numOfRequiredWorkers, int id,
                  int startHour, int duration, int weekNumber, int dayNumber, int numOfScheduledWorkers) {
@@ -37,7 +36,6 @@ public class Shift {
         this.weekNumber = weekNumber;
         this.dayNumber = dayNumber;
     }
-
 
     public String getDate(){
         return shiftDate;
@@ -147,14 +145,35 @@ public class Shift {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
     @Override
-    public String toString() {
-        return "Shift{" +
-                   "shiftDate='" + shiftDate + '\'' +
-                ", startHour=" + startHour +
-                ", duration=" + duration +
-                ", id=" + id +
-                // Add any other fields you want to display here
-                '}';
+    public String toPrettyString() {
+        return "Shift Date: " + this.getDate()
+               + "\nNumber Of Required Workers: " + this.getNumOfRequiredWorkers()
+               + "\nNumber Of Scheduled Workers: " + this.getNumOfScheduledWorkers();
+    }
+
+    public int getWeekNumber() {
+        return weekNumber;
+    }
+
+    public void setWeekNumber(int weekNumber) {
+        this.weekNumber = weekNumber;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getDayNumber() {
+        return dayNumber;
+    }
+
+    public void setDayNumber(int dayNumber) {
+        this.dayNumber = dayNumber;
     }
 }

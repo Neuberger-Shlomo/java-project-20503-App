@@ -11,18 +11,16 @@
         android:id="@+id/dp_date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="412dp"
+        android:layout_marginTop="8dp"
         android:calendarViewShown="false"
-        android:datePickerMode="spinner"
 
+        android:datePickerMode="spinner"
         android:ems="10"
         android:inputType="date"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header_date_picker"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/header_date_picker" />
 
     <TextView
         android:id="@+id/header_date_picker"
@@ -40,18 +38,13 @@
         android:id="@+id/cardView_date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="8dp"
         app:cardBackgroundColor="@color/blueBlack"
         app:cardCornerRadius="8dp"
         app:cardElevation="9dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dp_date_picker"
-        app:layout_constraintVertical_bias="0.056">
+        app:layout_constraintTop_toBottomOf="@+id/dp_date_picker">
 
         <TextView
             android:id="@+id/btn_date_picker"
@@ -71,12 +64,12 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_date_picker"
-        android:layout_width="407dp"
-        android:layout_height="323dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView_date_picker"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView_date_picker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

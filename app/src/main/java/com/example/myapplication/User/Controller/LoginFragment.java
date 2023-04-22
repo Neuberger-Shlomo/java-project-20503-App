@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.User.Controller;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,13 +15,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.widget.Button;
-
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.example.myapplication.ViewModel.UserViewModel;
+import com.example.myapplication.R;
+import com.example.myapplication.User.Model.UserViewModel;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.databinding.FragmentLoginBinding;
 import com.google.android.material.snackbar.Snackbar;

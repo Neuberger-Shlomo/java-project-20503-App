@@ -16,7 +16,7 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
 
     final private ArrayList<T> rawItems;
 
-    private ArrayList<T> visibleList;
+    private final ArrayList<T> visibleList;
 
     private RecyclerView recyclerView;
 
@@ -88,7 +88,6 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
         if(update) notifyItemInserted(getItems().size() - 1);
     }
 
-
     public void clearList() {
         int size = this.getItems().size();
         rawItems.clear();
@@ -132,4 +131,8 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
                 OneLineViewHolder<T>> bindViewHolderListener) {
         this.bindListener = bindViewHolderListener;
     }
+
+
+
+
 }

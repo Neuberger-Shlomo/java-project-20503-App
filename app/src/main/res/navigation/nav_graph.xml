@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/Login"
-        android:name="com.example.myapplication.LoginFragment"
+        android:name="com.example.myapplication.User.Controller.LoginFragment"
         android:label="@string/login_fragment_label"
         tools:layout="@layout/fragment_login">
         <action
@@ -32,7 +32,7 @@
         android:id="@+id/RegisterFragment"
         android:label="@string/register"
         tools:layout="@layout/fragment_register"
-        android:name="com.example.myapplication.RegisterFragment"
+        android:name="com.example.myapplication.User.Controller.RegisterFragment"
         >
     </fragment>
     <fragment android:id="@+id/thiredFregment"
@@ -70,33 +70,42 @@
 
     <fragment
         android:id="@+id/WorkersListFragment"
-        android:name="com.example.myapplication.WorkersListFragment"
+        android:name="com.example.myapplication.WorkersList.WorkersListFragment"
         android:label="WorkersList fragment"
-        tools:layout="@layout/fragment_workers_list"/>
+        tools:layout="@layout/fragment_date_picking"/>
 
     <fragment
         android:id="@+id/ShiftsRequestsFragment"
-        android:name="com.example.myapplication.ShiftsRequestsFragment"
+        android:name="com.example.myapplication.ShiftsRequests.ShiftsRequestsFragment"
         android:label="ShiftsRequests fragment"
-        tools:layout="@layout/fragment_shifts_requests"/>
+        tools:layout="@layout/fragment_date_picking"/>
 
     <fragment
         android:id="@+id/WorkersConstrainsFragment"
         android:name="com.example.myapplication.WorkersConstrains.WorkersConstrainsFragment"
         android:label="WorkersConstrains fragment"
-        tools:layout="@layout/fragment_workers_constrains"/>
+        tools:layout="@layout/fragment_date_picking"/>
 
     <fragment
         android:id="@+id/ScheduleStatusFragment"
         android:name="com.example.myapplication.ScheduleStatus.ScheduleStatusFragment"
         android:label="ScheduleStatus fragment"
-        tools:layout="@layout/fragment_schedule_status"/>
+        tools:layout="@layout/fragment_date_picking"/>
 
     <fragment
         android:id="@+id/ScheduleWorkerIntoShiftsFragment"
-        android:name="com.example.myapplication.ScheduleWorkerIntoShiftsFragment"
+        android:name="com.example.myapplication.ScheduleWorkerIntoShifts.ScheduleWorkerIntoShiftsFragment"
         android:label="ScheduleWorkerIntoShifts fragment"
-        tools:layout="@layout/fragment_schedule_worker_into_shift"/>
+        tools:layout="@layout/fragment_date_picking">
+        <action
+            android:id="@+id/action_ScheduleWorkerIntoShiftsFragment_to_ProfileListFragment"
+            app:destination="@id/ProfileListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ProfileListFragment"
+        android:name="com.example.myapplication.ScheduleWorkerIntoShifts.WorkerFragment"
+        android:label="Workers fragment"
+        tools:layout="@layout/fragment_date_picking"/>
 
     <fragment
         android:id="@+id/DefineShiftRequirementsFragment"

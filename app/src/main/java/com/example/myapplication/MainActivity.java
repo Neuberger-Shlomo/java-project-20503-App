@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
@@ -16,7 +15,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.example.myapplication.ViewModel.UserViewModel;
+import com.example.myapplication.User.Model.UserViewModel;
 import com.example.myapplication.databinding.MainActivityBinding;
 
 public class MainActivity extends AppCompatActivity implements ViewModelStoreOwner {
@@ -24,8 +23,6 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
     private AppBarConfiguration appBarConfiguration;
     private MainActivityBinding binding;
     private RequestQueue restQueue;
-
-    private UserViewModel userViewModel;
 
     @Override
     protected void onResume() {
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         binding = MainActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -53,9 +50,9 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+        binding.fab.setVisibility(View.GONE);
 
     }
-
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -63,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
 
     public void hideAppBar(){
         binding.appBar.setVisibility(View.GONE);}

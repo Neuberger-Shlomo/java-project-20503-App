@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.Model.RoleLevel;
-import com.example.myapplication.ViewModel.UserViewModel;
+import com.example.myapplication.User.Model.UserViewModel;
 import com.example.myapplication.databinding.FragmentEntryBinding;
 
 public class EntryFragment extends Fragment {
