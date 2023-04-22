@@ -112,6 +112,11 @@
         tools:layout="@layout/fragment_auto_schedule"
         android:name="com.example.myapplication.AutoSchedule.AutoScheduleJobFragment"
         android:label="AutoScheduleJob" />
+    <fragment
+        android:id="@+id/constraintSubmissionActivity"
+        android:name="com.example.myapplication.ConstraintSubmissionActivity"
+        android:label="fragment_constraint_submission"
+        tools:layout="@layout/fragment_constraint_submission" />
 
 
 </navigation>

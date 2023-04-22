@@ -9,73 +9,139 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.myapplication.Common.Utils.DateUtils;
 import com.example.myapplication.Model.ConstraintType;
+import com.example.myapplication.Model.Constraints;
+import com.example.myapplication.User.Model.BasicUser;
+import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.api.Constants;
 import com.example.myapplication.databinding.FragmentConstraintSubmissionBinding;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 public class ConstraintSubmissionActivity extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private FragmentConstraintSubmissionBinding binding;
+    private Date                                start, end;
 
     private ConstraintType selectedConstraintType;
 
-    private List<ConstraintType> createDummyConstraintTypes() {
-        List<ConstraintType> constraintTypes = new ArrayList<>();
+    MaterialDatePicker<Pair<Long, Long>> materialDatePicker =
+            MaterialDatePicker.Builder.dateRangePicker().build();
 
-        constraintTypes.add(new ConstraintType(1, 1, "PERSONAL REASON"));
-        constraintTypes.add(new ConstraintType(2, 2, "VACATION"));
-        constraintTypes.add(new ConstraintType(3, 3, "SICK"));
-
-        return constraintTypes;
-    }
+    RequestQueue                 queue;
+    List<ConstraintType>         constraintTypes = new ArrayList<>();
+    ArrayAdapter<ConstraintType> constraintTypeAdapter;
+    UserViewModel                userViewModel;
+    String                       url             = Constants.BASE_URL + "/constraint-types/";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding = FragmentConstraintSubmissionBinding.inflate(inflater, container, false);
+        binding       = FragmentConstraintSubmissionBinding.inflate(inflater, container, false);
+        queue         = Volley.newRequestQueue(requireActivity());
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+
+        queue.add(
+                new JsonArrayRequest(
+                        url,
+                        response -> {
+
+                            for (int i = 0; i < response.length(); i++) {
+                                try {
+                                    JSONObject object = response.getJSONObject(i);
+                                    constraintTypes.add(ConstraintType.fromJson(object));
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                if (constraintTypes.get(0) != null) {
+                                    binding.constraintTypeSpinner.setSelection(0);
+                                    constraintTypeAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        },
+                        error -> Snackbar.make(requireView(), "Some error occured",
+                                               BaseTransientBottomBar.LENGTH_SHORT)));
 
 
-        List<ConstraintType> constraintTypes = createDummyConstraintTypes();
-        ArrayAdapter<ConstraintType> constraintTypeAdapter = new ArrayAdapter<>(requireContext(),
-                                                                                android.R.layout.simple_spinner_item,
-                                                                                constraintTypes);
+        constraintTypeAdapter = new ArrayAdapter<>(requireContext(),
+                                                   android.R.layout.simple_spinner_item,
+                                                   constraintTypes);
         constraintTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        materialDatePicker.addOnPositiveButtonClickListener(this::onDateChose);
+        binding.btnSelectDates.setOnClickListener(
+                v -> materialDatePicker
+                        .show(requireActivity().getSupportFragmentManager(), "null"));
+
+
         binding.constraintTypeSpinner.setAdapter(constraintTypeAdapter);
 
         binding.constraintTypeSpinner.setOnItemSelectedListener(this);
 
         binding.addConstraintButton.setOnClickListener(this::onAddConstraint);
+        binding.addConstraintButton.setEnabled(false);
+
 
         return binding.getRoot();
     }
 
     void onAddConstraint(View v) {
-        // Get the selected start and end dates
-        int    startDay   = binding.startDatePicker.getDayOfMonth();
-        int    startMonth = binding.startDatePicker.getMonth();
-        int    startYear  = binding.startDatePicker.getYear();
-        String startDate  = startYear + "-" + (startMonth + 1) + "-" + startDay;
+        BasicUser user     = userViewModel.getUserState().getValue();
+        Calendar  calendar = Calendar.getInstance();
+        calendar.setTime(Objects.requireNonNull(DateUtils.toDate(start.toString())));
 
-        int    endDay   = binding.endDatePicker.getDayOfMonth();
-        int    endMonth = binding.endDatePicker.getMonth();
-        int    endYear  = binding.endDatePicker.getYear();
-        String endDate  = endYear + "-" + (endMonth + 1) + "-" + endDay;
 
-        boolean isPermanent = binding.permanentCheckbox.isChecked();
-        String  description = binding.selfDescription.getText().toString();
-
-        if (description.isEmpty()) {
-            Toast.makeText(requireContext(), "Please enter a self description",
-                           Toast.LENGTH_SHORT).show();
-            return;
+        Constraints constraints = new Constraints(
+                null,
+                Integer.parseInt(user.getId()),
+                binding.selfDescription.getText().toString(),
+                calendar.get(Calendar.WEEK_OF_YEAR),
+                selectedConstraintType.getId(),
+                binding.permanentCheckbox.isActivated(),
+                start.toString(),
+                end.toString(), 0, "0");
+        JSONObject jsonObj = null;
+        try {
+            jsonObj = new JSONObject(new Gson().toJson(constraints).toString());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
+        queue.add(new JsonObjectRequest(
+                          Request.Method.POST, Constants.BASE_URL + "/constraints/", jsonObj,
+                          response -> {
+                              try {
+                                  response.getString("a");
+                              } catch (JSONException e) {
+                                  throw new RuntimeException(e);
+                              }
+                          }, null));
 
-        Toast.makeText(requireContext(), "Constraint added successfully", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -88,4 +154,17 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
     public void onNothingSelected(AdapterView<?> parent) {
         Toast.makeText(requireContext(), "Please choose the constraint type", Toast.LENGTH_SHORT).show();
     }
+
+    private void onDateChose(Pair<Long, Long> longLongPair) {
+
+        start = new Date(longLongPair.first);
+        end   = new Date(longLongPair.second);
+        String [] starEnd = DateUtils.stringFromDialog(longLongPair);
+        String startDate=starEnd[0],endDate=starEnd[1];
+        binding.addConstraintButton.setEnabled(true);
+
+        binding.tvDates.setText(String.format("%s-%s", startDate, endDate));
+
+    }
+
 }

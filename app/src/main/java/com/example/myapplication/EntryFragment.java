@@ -64,18 +64,21 @@ public class EntryFragment extends Fragment {
 
     void onLogin(View v) {
         NavHostFragment.findNavController(EntryFragment.this)
-                .navigate(R.id.action_to_login);
+//                .navigate(R.id.action_to_login);
+                .navigate(R.id.constraintSubmissionActivity);
     }
 
     void onLogout(View v) {
         try {
-
-            userViewModel.logout(
-                    () -> {
-                    },
-                    (aBoolean, responseError, throwable) ->
-                            ((MainActivity) requireActivity())
-                                    .updateMenu());
+            NavHostFragment.findNavController(EntryFragment.this)
+                    //                .navigate(R.id.action_to_login);
+                    .navigate(R.id.constraintSubmissionActivity);
+//            userViewModel.logout(
+//                    () -> {
+//                    },
+//                    (aBoolean, responseError, throwable) ->
+//                            ((MainActivity) requireActivity())
+//                                    .updateMenu());
         } catch (Exception e) {
             Log.e(TAG, "onLogout: Error occured", e);
         }
