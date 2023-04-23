@@ -36,24 +36,31 @@ public class EntryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.btnMan.setVisibility(View.GONE);
+        binding.btnUser.setVisibility(View.GONE);
+
         userViewModel.getUserState().observe(
                 getViewLifecycleOwner(),
                 (user) -> {
                     if (user.getAuthToken() != null && !user.getAuthToken().isEmpty()) {
                         binding.buttonSecond.setText(R.string.logout);
                         binding.buttonSecond.setOnClickListener(this::onLogout);
-                        if(user.getLevel().equals(RoleLevel.MANAGER) || userViewModel.isManger()) {
+                        if(user.getLevel().equals(RoleLevel.MANAGER) ) {
                             binding.btnMan.setVisibility(View.VISIBLE);
                         }
+                        binding.btnUser.setVisibility(View.VISIBLE);
+
                     } else {
                         binding.buttonSecond.setText(R.string.login);
                         binding.buttonSecond.setOnClickListener(this::onLogin);
                         binding.btnMan.setVisibility(View.GONE);
+                        binding.btnUser.setVisibility(View.GONE);
+
                     }
 
                 });
         binding.buttonSecond.setOnClickListener(this::onLogin);
         binding.btnMan.setOnClickListener(this::onMangerClicked);
+        binding.btnUser.setOnClickListener(this::onUserClicked);
     }
 
     void onLogin(View v) {
@@ -77,6 +84,10 @@ public class EntryFragment extends Fragment {
     void onMangerClicked(View v) {
         NavHostFragment.findNavController(EntryFragment.this)
                 .navigate(R.id.from_login_to_manger);
+    }
+    void onUserClicked(View v) {
+        NavHostFragment.findNavController(EntryFragment.this)
+                .navigate(R.id.from_login_to_user);
     }
 
     @Override

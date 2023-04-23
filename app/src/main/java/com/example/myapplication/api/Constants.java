@@ -26,6 +26,7 @@ final public class Constants {
 
     public final static String GET_ALL_CONSTRAINTS = CONSTRAINTS_ROUTE + "/";
     public final static String GET_ALL_SHIFT_REQUESTS = SHIFT_REQUESTS_ROUTE + "/";
+    public final static String ADD_SHIFT_REQUESTS = SHIFT_REQUESTS_ROUTE + "/";
 
     public static final String GET_SHIFTS_FROM_SCHEDULE = SCHEDULE_ROUTE + "/shifts_from_schedule";
     public static final String GET_FREE_WORKERS = "/free-workers";
@@ -42,6 +43,7 @@ final public class Constants {
     public final static String ALL_SHIFT_REQUESTS_URL   = String.format("%s/%s", BASE_URL, GET_ALL_SHIFT_REQUESTS);
     public final static String ADD_SHIFT_URL = String.format("%s/%s", BASE_URL, ADD_SHIFT_ROUTE);
 
+    public final static String ADD_SHIFT_REQUEST_URL = String.format("%s/%s", BASE_URL, ADD_SHIFT_REQUESTS);
 
 
 }

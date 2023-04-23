@@ -36,7 +36,11 @@ public class ShiftRequest implements IModel {
         this.startHour   = startHour;
         this.duration    = duration;
     }
+ public ShiftRequest(int shiftId, int uid) {
+        this.shiftId     = shiftId;;
+        this.uid         = uid;
 
+    }
     public int getStartHour() {
         return startHour;
     }

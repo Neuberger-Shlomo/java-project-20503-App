@@ -55,7 +55,10 @@
 
                 int endHour = (startHour + duration) % 24;
                 Availableshifts.add(new Shift(dateString, 2, new ArrayList<>(), i + 2, startHour, duration));
+
             }
+            Availableshifts.add(new Shift("2023-04-22", 2, new ArrayList<>(), 99 + 2, 2, 2));
+
             System.out.println(Availableshifts);
 
             return Availableshifts;
