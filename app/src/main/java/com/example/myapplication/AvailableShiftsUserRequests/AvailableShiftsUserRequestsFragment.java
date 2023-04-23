@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLineViewHolder;
 import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLinerAdapter;
 import com.example.myapplication.DefineShiftFragment;
@@ -30,12 +31,11 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-public class AvailableShiftsUserRequestsFragment extends Fragment {
+public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift> {
     private FragmentAvailableShiftsUserRequestsBinding binding;
-    //single shift adapter
-    private OneLinerAdapter<Shift>        shiftsAdapter;
+
     // communicate with the server . import shifts
-    private ShiftsViewModel               shiftViewModel;
+    private ShiftsViewModel       shiftViewModel;
     private ShiftRequestViewModel shiftRequestViewModel;
 
     //  communicate with the server, show which user is logged in
@@ -48,26 +48,18 @@ public class AvailableShiftsUserRequestsFragment extends Fragment {
             Bundle savedInstanceState
                             ) {
 
-        binding = FragmentAvailableShiftsUserRequestsBinding.inflate(inflater, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        shiftViewModel = new ViewModelProvider(requireActivity()).get(ShiftsViewModel.class);
-        shiftRequestViewModel = new ViewModelProvider(requireActivity()).get(ShiftRequestViewModel.class);
-        userViewModel  = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-        //if no user is logged in, so we can work when no one is logged in
-        if (userViewModel.getUserState().getValue() == null)
-            return binding.getRoot();
-            //get all the shifts from the server by id and token
+        shiftViewModel        = new ViewModelProvider(requireActivity()).get(ShiftsViewModel.class);
+        shiftRequestViewModel =
+                new ViewModelProvider(requireActivity()).get(ShiftRequestViewModel.class);
+        userViewModel         = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        adapter.setBindViewHolderListener(this::onShiftBind);
         shiftViewModel.getData(
                 userViewModel.getUserState().getValue().getId(),
                 userViewModel.getUserState().getValue().getAuthToken(),
                 this::onDataArrived);
 
-        shiftsAdapter = new OneLinerAdapter<>();
-        // listener to a shift
-        shiftsAdapter.setBindViewHolderListener(this::onShiftBind);
-        binding.rvAvailableShiftsUserRequests.setAdapter(shiftsAdapter);
-        binding.rvAvailableShiftsUserRequests.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.btnAvailableShiftsUserRequests.setOnClickListener(this::onPickClicked);
         return binding.getRoot();
     }
 
@@ -82,13 +74,15 @@ public class AvailableShiftsUserRequestsFragment extends Fragment {
      *
      * @param view of the clicked the button
      */
-    public void onPickClicked(View view) {
+    @Override
+    protected void onPickClicked(View view, String pickerValue) {
+
         //insert the date from pickdate to the string pickedDate
         String pickedDate = binding.dpAvailableShiftsUserRequests.getDayOfMonth() + "-" +
                             (binding.dpAvailableShiftsUserRequests.getMonth() + 1) + "-" +
                             binding.dpAvailableShiftsUserRequests.getYear();
         //show only shifts equal to the picked date
-        shiftsAdapter.setFilter(pickedDate, (item, s) -> !item.getDate().equals(s));
+        adapter.setFilter(pickedDate, (item, s) -> !item.getDate().equals(s));
     }
 
     /**
@@ -98,6 +92,7 @@ public class AvailableShiftsUserRequestsFragment extends Fragment {
      * @param holder   of the current view
      * @param position of the shift in the list
      */
+
 
     void onShiftBind(Shift shift, OneLineViewHolder<Shift> holder, int position) {
         holder.setItem(shift);
@@ -114,15 +109,16 @@ public class AvailableShiftsUserRequestsFragment extends Fragment {
      * @param view  of the caller
      */
 
-    private void onItemClicked(Shift shift, View view) {
+    @Override
+    protected void onItemClicked(Shift shift, View view) {
         if (userViewModel.getUserState().getValue() == null)
             return;
-String suid = userViewModel.getUserState().getValue().getId();
-        int uid = Integer.parseInt(suid);
-        String token = userViewModel.getUserState().getValue().getAuthToken();
-        int shiftId = shift.getId();
+        String suid    = userViewModel.getUserState().getValue().getId();
+        int    uid     = Integer.parseInt(suid);
+        String token   = userViewModel.getUserState().getValue().getAuthToken();
+        int    shiftId = shift.getId();
 
-        shiftRequestViewModel.addShiftRequest(new ShiftRequest(shiftId, uid),suid,token,() -> {
+        shiftRequestViewModel.addShiftRequest(new ShiftRequest(shiftId, uid), suid, token, () -> {
         }, (valid, responseError, throwable) -> {
             if (Boolean.TRUE.equals(valid))
                 NavHostFragment.findNavController(AvailableShiftsUserRequestsFragment.this).popBackStack();
@@ -155,28 +151,5 @@ String suid = userViewModel.getUserState().getValue().getId();
                 .create().show();
     }
 
-    /**
-     * Handles the getData call
-     *
-     * @param shifts received form the server
-     * @param error  error received from the server
-     * @param t      thrown by the Volley or parsing
-     */
-    void onDataArrived(@Nullable ArrayList<Shift> shifts, @Nullable Api.ResponseError error,
-                       @Nullable Throwable t) {
-        StringBuilder builder = new StringBuilder();
-        if (shifts != null) {
-            for (Shift shift : shifts) {
-                shiftsAdapter.addEntry(shift, false);
-            }
-            return;
-        } else if (error != null) {
-            builder.append(error.getMessage());
-        } else if (t != null) {
-            builder.append(t.getMessage());
-        } else {
-            builder.append("Unknown Error");
-        }
-        Snackbar.make(requireView(), builder.toString(), BaseTransientBottomBar.LENGTH_SHORT).show();
-    }
+
 }

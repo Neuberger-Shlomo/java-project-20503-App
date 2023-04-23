@@ -1,7 +1,12 @@
 package com.example.myapplication.User.Model;
 
 
+import androidx.annotation.Nullable;
+
+import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.RoleLevel;
+
+import org.jetbrains.annotations.NotNull;
 
 public class BasicUser {
     private String    username;
@@ -9,6 +14,9 @@ public class BasicUser {
     private String    password;
     private String    authToken;
     private RoleLevel level = RoleLevel.BASIC;
+
+    @Nullable
+    private Profile profile;
 
     public BasicUser() {
         this.id        = "";
@@ -73,4 +81,16 @@ public class BasicUser {
         this.id = id;
     }
 
+    @Nullable
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(@NotNull Profile profile) {
+        this.profile = profile;
+    }
+
+    public boolean isLoggedIn() {
+        return getAuthToken() != null && !getAuthToken().isEmpty();
+    }
 }

@@ -6,8 +6,9 @@
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="400dp"
-        android:layout_height="100dp"
+        android:id="@+id/card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/CadetBlue"
         app:cardCornerRadius="15dp"
         app:cardElevation="1dp"
@@ -21,15 +22,15 @@
 
         <TextView
             android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="25dp"
             android:text="Date"
             android:textColor="@color/white"
-            android:textSize="25dp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

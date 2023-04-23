@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.Model.Profile;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.Model.RoleLevel;
 import com.example.myapplication.api.UsersApi;
@@ -57,7 +58,7 @@ public class UserViewModel extends AndroidViewModel {
 
     }
 
-    public void register(Api.RegisterRequest registerRequest, Api.PreCall preCall,
+    public void register(UsersApi.RegisterRequest registerRequest, Api.PreCall preCall,
                          Api.PostCall<Boolean> postCall) {
 
         preCall.onPreCall();
@@ -90,15 +91,8 @@ public class UserViewModel extends AndroidViewModel {
 
     }
 
-    public boolean isManger() {
-        // TODO: Ask server if the user is manager
-        BasicUser user = new BasicUser(userState.getValue());
-        user.setLevel(RoleLevel.MANAGER);
-        userState.setValue(user);
-        return true;
-    }
 
-    private void onRegisterResponse(Api.RegisterRequest registerRequest) {
+    private void onRegisterResponse(UsersApi.RegisterRequest registerRequest) {
         BasicUser user = getUserState().getValue();
         if (user == null) {
             user = new BasicUser();
@@ -138,6 +132,8 @@ public class UserViewModel extends AndroidViewModel {
         BasicUser u = new BasicUser(user.getUsername(), user.getPassword(), jwt,
                                     RoleLevel.values()[level]);
         u.setId(id);
+
+        u.setProfile(Profile.fromJSON(jsonObject.getJSONObject("profile")));
         userState.setValue(u);
     }
 
