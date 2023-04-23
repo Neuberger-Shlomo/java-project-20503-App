@@ -78,10 +78,8 @@
 
     <Spinner
         android:id="@+id/constraint_type_spinner"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="@+id/header"
         app:layout_constraintStart_toStartOf="@+id/header"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -108,17 +106,25 @@
         app:layout_constraintStart_toStartOf="@+id/permanent_checkbox"
         app:layout_constraintTop_toBottomOf="@+id/permanent_checkbox" />
 
-    <Button
-        android:id="@+id/load"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/exsistsTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Load"
-        android:visibility="invisible"
+        android:layout_marginTop="16dp"
+        android:text="Exsists"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/self_description"
+        app:layout_constraintTop_toBottomOf="@+id/self_description" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvUserConstraints"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/add_constraint_button"
-        app:layout_constraintEnd_toEndOf="@+id/add_constraint_button"
-        app:layout_constraintStart_toStartOf="@+id/add_constraint_button" />
+        app:layout_constraintEnd_toEndOf="@+id/self_description"
+        app:layout_constraintStart_toStartOf="@+id/exsistsTitle"
+        app:layout_constraintTop_toBottomOf="@+id/exsistsTitle" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.Model.Profile;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.Model.RoleLevel;
 import com.example.myapplication.api.UsersApi;
@@ -131,6 +132,8 @@ public class UserViewModel extends AndroidViewModel {
         BasicUser u = new BasicUser(user.getUsername(), user.getPassword(), jwt,
                                     RoleLevel.values()[level]);
         u.setId(id);
+
+        u.setProfile(Profile.fromJSON(jsonObject.getJSONObject("profile")));
         userState.setValue(u);
     }
 

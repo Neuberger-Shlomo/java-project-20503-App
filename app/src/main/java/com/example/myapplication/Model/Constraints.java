@@ -7,22 +7,25 @@ import com.example.myapplication.Common.Views.Fragments.IModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class Constraints implements IModel {
     private final boolean isPermanent;
-    private final String startDate;
-    private final String endDate;
-    private final String constType;
+    private final String  startDate;
+    private final String  endDate;
+    private final String  constType;
 
     Profile profile = new Profile();
     private Integer id;
 
     private Integer weekNumber;
-    private String data;
+    private String  data;
     private Integer typeId;
 
     private Integer userId;
+
     public Constraints(String firstName, String lastName, String phoneNumber, String email,
                        int userId, String data, int weekNumber, int typeId, boolean isPermanent,
                        String startDate, String endDate, int id, String constType) {
@@ -30,53 +33,55 @@ public class Constraints implements IModel {
         profile.setLastName(lastName);
         profile.setEmail(email);
         profile.setPhoneNumber(phoneNumber);
-        this.userId = userId;
-        this.data = data;
-        this.weekNumber = weekNumber;
-        this.typeId = typeId;
+        this.userId      = userId;
+        this.data        = data;
+        this.weekNumber  = weekNumber;
+        this.typeId      = typeId;
         this.isPermanent = isPermanent;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.id = id;
-        this.constType = constType;
+        this.startDate   = startDate;
+        this.endDate     = endDate;
+        this.id          = id;
+        this.constType   = constType;
     }
+
     public Constraints(Profile profile,
                        int userId, String data, int weekNumber, int typeId, boolean isPermanent,
                        String startDate, String endDate, int id, String constType) {
-        this.profile = profile != null ? profile:this.profile;
-        this.userId = userId;
-        this.data = data;
-        this.weekNumber = weekNumber;
-        this.typeId = typeId;
+        this.profile     = profile != null ? profile : this.profile;
+        this.userId      = userId;
+        this.data        = data;
+        this.weekNumber  = weekNumber;
+        this.typeId      = typeId;
         this.isPermanent = isPermanent;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.id = id;
-        this.constType = constType;
+        this.startDate   = startDate;
+        this.endDate     = endDate;
+        this.id          = id;
+        this.constType   = constType;
     }
+
     public static Constraints fromJSON(JSONObject object) throws JSONException {
 
-        JSONObject users = object.getJSONObject("users");
-        JSONObject profileObj = users.getJSONObject("profile");
-        Profile profile = null;
+        JSONObject users          = object.getJSONObject("users");
+        JSONObject profileObj     = users.getJSONObject("profile");
+        Profile    profile        = null;
         JSONObject constraintType = object.getJSONObject("constraintType");
         try {
             profile = Profile.fromJSON(profileObj);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
-        int id = object.getInt("id");
-        int userId = object.getInt("userId");
-        String data = object.getString("data");
-        int weekNumber = object.getInt("weekNumber");
-        int typeId = object.getInt("typeId");
-        String constType = constraintType.getString("description");
+        int     id          = object.getInt("id");
+        int     userId      = object.getInt("userId");
+        String  data        = object.getString("data");
+        int     weekNumber  = object.getInt("weekNumber");
+        int     typeId      = object.getInt("typeId");
+        String  constType   = constraintType.getString("description");
         boolean isPermanent = object.getBoolean("permanent");
-        String startDate = object.getString("startDate");
-        String endDate = object.getString("endDate");
+        String  startDate   = object.getString("startDate");
+        String  endDate     = object.getString("endDate");
 
         return new Constraints(profile, userId, data, weekNumber,
-                        typeId, isPermanent, startDate, endDate, id, constType);
+                               typeId, isPermanent, startDate, endDate, id, constType);
     }
 
     public String getFirstName() {
@@ -131,11 +136,11 @@ public class Constraints implements IModel {
         return constType;
     }
 
-    public String toPrettyString(){
-        return "Type: " + getConstType() +
-               "\nConstrain: " + getData() +
+    public String toPrettyString() {
+        return "Type: " + getConstType().toLowerCase(Locale.ROOT) +
+               "\ndescription: " + getData().trim() +
                "\nis permanent: " + isPermanent() +
-               "\nEnd Date: " + getEndDate();
+               "\nRange: " + getStartDate() + " to " + getEndDate();
 
     }
 

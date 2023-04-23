@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/EntryFragment"
-        android:name="com.example.myapplication.EntryFragment"
+        android:name="com.example.myapplication.Entry.EntryFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_entry">
 
@@ -115,7 +115,7 @@
     <fragment
         android:id="@+id/constraintSubmissionActivity"
         android:name="com.example.myapplication.ConstraintSubmissionActivity"
-        android:label="fragment_constraint_submission"
+        android:label="Schedule Restrictions"
         tools:layout="@layout/fragment_constraint_submission" />
 
 

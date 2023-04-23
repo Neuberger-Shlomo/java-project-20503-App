@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -73,7 +72,7 @@ public class ManagerFragment extends Fragment {
             public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                                      int viewType) {
                 View view =
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_one_line,
+                        LayoutInflater.from(parent.getContext()).inflate(R.layout.one_line_card_view,
                                 parent, false);
                 return new ViewHolder(view);
             }

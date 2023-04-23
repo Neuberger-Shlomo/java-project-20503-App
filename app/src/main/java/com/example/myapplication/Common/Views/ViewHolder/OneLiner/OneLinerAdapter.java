@@ -22,6 +22,7 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
     private RecyclerView recyclerView;
 
     private interfaces.OnBindViewHolderListener<T, OneLineViewHolder<T>> bindListener = null;
+    private interfaces.OnItemClickListener<T> onItemClickListener = null;
 
     public OneLinerAdapter() {
         rawItems    = new ArrayList<>();
@@ -64,6 +65,7 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
             else
                 holder.setText(holder.getItem().toString());
         }
+        if(onItemClickListener != null) holder.setOnClickListener(onItemClickListener);
     }
 
     @Override
@@ -146,7 +148,6 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
         }
         notifyItemRangeRemoved(0, visibleList.size());
 
-
     }
 
     public void setBindViewHolderListener(interfaces.OnBindViewHolderListener<T,
@@ -154,5 +155,9 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
         this.bindListener = bindViewHolderListener;
     }
 
+
+    public void setOnItemClickListener(interfaces.OnItemClickListener<T> l){
+        this.onItemClickListener = l;
+    }
 
 }
