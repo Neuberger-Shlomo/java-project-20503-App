@@ -3,6 +3,7 @@ package com.example.myapplication.Common.Views.ViewHolder.OneLiner;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,10 +13,13 @@ public class OneLineViewHolder<Item> extends RecyclerView.ViewHolder {
     private final TextView textView;
     private final CardView cardView;
 
+    private final View superView;
+
     private Item item;
 
     public OneLineViewHolder(View view) {
         super(view);
+        superView = view;
         textView = (TextView) view.findViewById(R.id.line1);
         cardView = (CardView) view.findViewById(R.id.cardView0);
 
@@ -34,7 +38,8 @@ public class OneLineViewHolder<Item> extends RecyclerView.ViewHolder {
     }
 
     public void setOnClickListener(interfaces.OnItemClickListener<Item> l){
-        cardView.setOnClickListener(v -> l.onClick(item, v));
+        superView.setOnClickListener(v -> l.onClick(item, v));
     }
+
 
 }

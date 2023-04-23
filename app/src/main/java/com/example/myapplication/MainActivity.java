@@ -30,7 +30,11 @@ import com.example.myapplication.User.Model.BasicUser;
 import com.example.myapplication.User.Model.UserViewModel;
 import com.example.myapplication.databinding.MainActivityBinding;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements ViewModelStoreOwner {
+
+
 
     private AppBarConfiguration appBarConfiguration;
     private MainActivityBinding binding;
