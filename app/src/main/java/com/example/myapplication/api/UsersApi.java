@@ -18,6 +18,12 @@ import java.nio.charset.StandardCharsets;
 final public class UsersApi {
 
     private static final Gson gson = new Gson();
+    public final static String BASE_URL = String.format("%s/%s", Constants.BASE_URL,"users");
+    public final static String LOGIN_URL    = String.format("%s/%s", BASE_URL,"login");
+    public final static String REGISTER_URL = String.format("%s/%s", BASE_URL, "register");
+
+    public final static String LOGOUT_URL   = String.format("%s/%s", BASE_URL, "logout");
+
 
     public static class RegisterRequest {
         String firstName;
@@ -98,7 +104,7 @@ final public class UsersApi {
         }
 
         return new AuthedJsonObjectRequest(
-                Constants.LOGOUT_URL,
+                LOGOUT_URL,
                 userId,
                 jwt,
                 response -> responseHandler(true, null, postListener),
@@ -141,7 +147,7 @@ final public class UsersApi {
 
         return new JsonObjectRequest(
                 Request.Method.POST,
-                Constants.LOGIN_URL,
+                LOGIN_URL,
                 jsonObj,
                 res -> responseHandler(res, null, postCall),
                 err -> responseHandler(null, err, postCall)
@@ -178,7 +184,7 @@ final public class UsersApi {
             return null;
         }
 
-        return new JsonObjectRequest(Request.Method.POST, Constants.REGISTER_URL, jsonObj,
+        return new JsonObjectRequest(Request.Method.POST, REGISTER_URL, jsonObj,
                                      res -> responseHandler(res, null, postCall),
                                      err -> responseHandler(null, err, postCall));
     }

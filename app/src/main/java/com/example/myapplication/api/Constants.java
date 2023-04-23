@@ -7,20 +7,13 @@ final public class Constants {
     public final static String BASE_URL = "http://10.0.2.2:8080";
 
     public final static String SHIFT_ROUTE     = "available-shifts";
-    public final static String USER_ROUTE     = "users";
     public final static String PROFILE_ROUTE     = "profiles";
-
     public final static String CONSTRAINTS_ROUTE     = "constraints";
     public final static String SHIFT_REQUESTS_ROUTE     = "shiftsrequests";
 
     public final static String SCHEDULE_ROUTE = "schedules";
-    public final static String LOGIN_ROUTE    = USER_ROUTE + "/login";
-    public final static String REGISTER_ROUTE = USER_ROUTE + "/signup";
     public final static String ADD_SHIFT_ROUTE = SHIFT_ROUTE + "/addShift";
     public final static String ADD_WORKER_TO_SHIFT_ROUTE = SCHEDULE_ROUTE + "/addWorker";
-
-
-    public final static String LOGOUT_ROUTE = USER_ROUTE + "/logout";
 
     public final static String GET_ALL_SHIFTS = SHIFT_ROUTE + "/test";
 
@@ -33,10 +26,9 @@ final public class Constants {
     public static final String GET_FREE_WORKERS = "/free-workers";
 
 
-    public final static String LOGIN_URL    = String.format("%s/%s", BASE_URL, LOGIN_ROUTE);
+
     public final static String SHIFT_URL    = String.format("%s/%s", BASE_URL, SHIFT_ROUTE);
-    public final static String REGISTER_URL = String.format("%s/%s", BASE_URL, REGISTER_ROUTE);
-    public final static String LOGOUT_URL   = String.format("%s/%s", BASE_URL, LOGOUT_ROUTE);
+
     public final static String ALL_SHIFTS_URL   = String.format("%s/%s", BASE_URL, GET_ALL_SHIFTS);
     public final static String ALL_PROFILES_URL   = String.format("%s/%s", BASE_URL, GET_ALL_PROFILES);
     public final static String SHIFTS_FROM_SCHEDULE_URL   = String.format("%s/%s", BASE_URL, GET_SHIFTS_FROM_SCHEDULE);

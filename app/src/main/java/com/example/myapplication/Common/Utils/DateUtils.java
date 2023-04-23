@@ -32,7 +32,7 @@ final public class DateUtils {
 
         return new Date(calendar.getTime().getTime());
     }
-    static public String[] stringFromDialog(Pair<Long, Long> longLongPair) {
+    static public Pair<String,String> stringFromDialog(Pair<Long, Long> longLongPair) {
 
         Date start = new Date(longLongPair.first);
         Date end   = new Date(longLongPair.second);
@@ -53,7 +53,7 @@ final public class DateUtils {
                                       );
 
 
-        return new String[]{startDate,endDate};
+        return new Pair<>(startDate,endDate);
 
     }
 }

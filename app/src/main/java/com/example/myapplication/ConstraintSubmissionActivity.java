@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,7 +26,10 @@ import com.example.myapplication.Model.ConstraintType;
 import com.example.myapplication.Model.Constraints;
 import com.example.myapplication.User.Model.BasicUser;
 import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.api.Api;
 import com.example.myapplication.api.Constants;
+import com.example.myapplication.api.ConstraintApi;
+import com.example.myapplication.api.ConstraintTypeApi;
 import com.example.myapplication.databinding.FragmentConstraintSubmissionBinding;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -67,27 +71,6 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
         queue         = Volley.newRequestQueue(requireActivity());
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
-        queue.add(
-                new JsonArrayRequest(
-                        url,
-                        response -> {
-
-                            for (int i = 0; i < response.length(); i++) {
-                                try {
-                                    JSONObject object = response.getJSONObject(i);
-                                    constraintTypes.add(ConstraintType.fromJson(object));
-                                } catch (JSONException e) {
-                                    throw new RuntimeException(e);
-                                }
-                                if (constraintTypes.get(0) != null) {
-                                    binding.constraintTypeSpinner.setSelection(0);
-                                    constraintTypeAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        },
-                        error -> Snackbar.make(requireView(), "Some error occured",
-                                               BaseTransientBottomBar.LENGTH_SHORT)));
-
 
         constraintTypeAdapter = new ArrayAdapter<>(requireContext(),
                                                    android.R.layout.simple_spinner_item,
@@ -106,17 +89,48 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
 
         binding.addConstraintButton.setOnClickListener(this::onAddConstraint);
         binding.addConstraintButton.setEnabled(false);
-
+        getAllConstraintsType();
 
         return binding.getRoot();
+    }
+
+
+    private void getAllConstraintsType() {
+        queue.add(ConstraintTypeApi.getConstraintsTypes(this::onConstraintTypeArrived));
+    }
+
+    private void addConstraint(Constraints constraints) {
+
+        queue.add(ConstraintApi.addConstraints(constraints, this::onAddSuccess));
+    }
+
+    private void onConstraintTypeArrived(
+            JSONArray jsonArray,
+            Api.ResponseError responseError,
+            Throwable throwable) {
+        if (jsonArray != null) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    constraintTypes.add(ConstraintType.fromJson(object));
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                if (constraintTypes.get(0) != null) {
+                    binding.constraintTypeSpinner.setSelection(0);
+                    constraintTypeAdapter.notifyDataSetChanged();
+                }
+            }
+        } else {
+            Snackbar.make(requireView(), "Some error occured",
+                          BaseTransientBottomBar.LENGTH_SHORT).show();
+        }
     }
 
     void onAddConstraint(View v) {
         BasicUser user     = userViewModel.getUserState().getValue();
         Calendar  calendar = Calendar.getInstance();
         calendar.setTime(Objects.requireNonNull(DateUtils.toDate(start.toString())));
-
-
         Constraints constraints = new Constraints(
                 null,
                 Integer.parseInt(user.getId()),
@@ -126,21 +140,14 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
                 binding.permanentCheckbox.isActivated(),
                 start.toString(),
                 end.toString(), 0, "0");
-        JSONObject jsonObj = null;
-        try {
-            jsonObj = new JSONObject(new Gson().toJson(constraints).toString());
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-        queue.add(new JsonObjectRequest(
-                          Request.Method.POST, Constants.BASE_URL + "/constraints/", jsonObj,
-                          response -> {
-                              try {
-                                  response.getString("a");
-                              } catch (JSONException e) {
-                                  throw new RuntimeException(e);
-                              }
-                          }, null));
+
+        addConstraint(constraints);
+
+    }
+
+    private void onAddSuccess(JSONObject jsonObject, Api.ResponseError responseError,
+                              Throwable throwable) {
+        //TODO: Alert on error
 
     }
 
@@ -159,8 +166,8 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
 
         start = new Date(longLongPair.first);
         end   = new Date(longLongPair.second);
-        String [] starEnd = DateUtils.stringFromDialog(longLongPair);
-        String startDate=starEnd[0],endDate=starEnd[1];
+        Pair<String, String> datePair  = DateUtils.stringFromDialog(longLongPair);
+        String               startDate = datePair.first, endDate = datePair.second;
         binding.addConstraintButton.setEnabled(true);
 
         binding.tvDates.setText(String.format("%s-%s", startDate, endDate));
