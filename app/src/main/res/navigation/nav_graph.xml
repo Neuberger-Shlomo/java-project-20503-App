@@ -27,9 +27,6 @@
         <action
             android:id="@+id/from_login_to_manger"
             app:destination="@id/managerMainFragment" />
-        <action
-            android:id="@+id/from_login_to_user"
-            app:destination="@id/userFragment" />
     </fragment>
     <fragment
         android:id="@+id/RegisterFragment"
@@ -130,15 +127,6 @@
         android:name="com.example.myapplication.AvailableShiftsUserRequests.AvailableShiftsUserRequestsFragment"
         android:label="fragment_available_shifts_user_requests"
         tools:layout="@layout/fragment_available_shifts_user_requests" />
-    <fragment
-        android:id="@+id/userFragment"
-        android:name="com.example.myapplication.UserFragment"
-        android:label="fragment_user_main"
-        tools:layout="@layout/fragment_user_main" >
-        <action
-            android:id="@+id/action_userFragment_to_availableShiftsUserRequestsFragment"
-            app:destination="@id/AvailableShiftsUserRequestsFragment" />
-    </fragment>
 
 
 </navigation>

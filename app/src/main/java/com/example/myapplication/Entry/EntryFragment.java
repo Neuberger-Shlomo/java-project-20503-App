@@ -40,9 +40,9 @@ public class EntryFragment extends Fragment {
                 R.id.Login,
                 false, true));
         add(new NavItem(
-                "Shifts",
-                "List my shifts",
-                R.id.Login,
+                "Request Shifts",
+                "Enter here to register to a shift",
+                R.id.AvailableShiftsUserRequestsFragment,
                 true, false));
         add(new NavItem(
                 "Signup",
