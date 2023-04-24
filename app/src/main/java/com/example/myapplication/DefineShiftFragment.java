@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.ViewModel.ShiftsViewModel;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.databinding.FragmentDefineShiftBinding;
 import com.google.android.material.snackbar.Snackbar;
 

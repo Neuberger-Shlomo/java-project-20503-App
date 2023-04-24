@@ -1,10 +1,6 @@
-package com.example.myapplication.User.Controller;
-
-import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
+package com.example.myapplication.UserMVC.Controller;
 
 import android.os.Bundle;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,13 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.databinding.FragmentLoginBinding;
 import com.google.android.material.snackbar.Snackbar;

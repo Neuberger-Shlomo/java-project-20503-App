@@ -9,7 +9,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.R;
-import com.example.myapplication.ScheduleStatus.ScheduleStatusFragment;
+import com.example.myapplication.ScheduleStatusFragment;
 
 
 /**

@@ -2,6 +2,7 @@ package com.example.myapplication.Entry;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +15,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.example.myapplication.Common.Views.Fragments.IModel;
 import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLineViewHolder;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.databinding.FragmentEntryBinding;
+import com.google.android.material.datepicker.CalendarConstraints;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
 
 public class EntryFragment extends Fragment {
@@ -31,8 +33,6 @@ public class EntryFragment extends Fragment {
     private              UserViewModel        userViewModel;
 
 
-
-
     ArrayList<NavItem> items   = new ArrayList<NavItem>() {{
         add(new NavItem(
                 "Login",
@@ -40,15 +40,20 @@ public class EntryFragment extends Fragment {
                 R.id.Login,
                 false, true));
         add(new NavItem(
-                "Request Shifts",
-                "Enter here to register to a shift",
-                R.id.AvailableShiftsUserRequestsFragment,
-                true, false));
-        add(new NavItem(
                 "Signup",
                 "Not registered come and join",
                 R.id.RegisterFragment,
                 false, true));
+        add(new NavItem(
+                "My Shifts",
+                "Enter here to register to a shift",
+                R.id.myShiftsFragment,
+                true, false));
+        add(new NavItem(
+                "Request Shifts",
+                "Enter here to",
+                R.id.AvailableShiftsUserRequestsFragment,
+                true, false));
         add(new NavItem("Schedule Restrictions",
                         "Here you can add any constraint to shifts",
                         R.id.constraintSubmissionActivity,
@@ -67,6 +72,7 @@ public class EntryFragment extends Fragment {
         return binding.getRoot();
     }
 
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //        binding.btnMan.setVisibility(View.GONE);
@@ -74,28 +80,29 @@ public class EntryFragment extends Fragment {
                 getViewLifecycleOwner(),
                 (user) -> {
                     ((MainActivity) requireActivity()).updateMenu();
+                    filterEntries();
                     if (user.getAuthToken() != null && !user.getAuthToken().isEmpty()) {
-                        //                        binding.buttonSecond.setText(R.string.logout);
-                        //                        binding.buttonSecond.setOnClickListener
-                        //                        (this::onLogout);
                         binding.txFirstName.setText(user.getProfile().getFirstName());
-                    } else {
-                        //                        binding.buttonSecond.setText(R.string.login);
-                        //                        binding.buttonSecond.setOnClickListener
-                        //                        (this::onLogin);
-                        //                        binding.btnMan.setVisibility(View.GONE);
                     }
-
                 });
 
-        binding.rvButtons.setLayoutManager(new StaggeredGridLayoutManager(2,
-                                                                          StaggeredGridLayoutManager.VERTICAL));
+        binding.rvButtons.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+
 
 
         binding.rvButtons.setAdapter(adapter);
         items.forEach(adapter::addEntry);
         adapter.setBindViewHolderListener(this::onNavItemCrated);
+        filterEntries();
     }
+
+
+    public void filterEntries() {
+        adapter.setFilter(
+                Objects.requireNonNull(userViewModel.getUserState().getValue()).isLoggedIn(),
+                (item, loggedIn) -> (!loggedIn && item.isLoggedInOnly()) || (loggedIn && item.isLoggedOutOnly()));
+    }
+
 
     private void onNavItemCrated(NavItem navItem,
                                  OneLineViewHolder<NavItem> holder,
@@ -105,20 +112,6 @@ public class EntryFragment extends Fragment {
             ((RouteHolder) holder).setTitle(holder.getItem().name);
             ((RouteHolder) holder).setDescription(holder.getItem().description);
             holder.setOnClickListener(this::onItemClicked);
-            if (Objects.requireNonNull(userViewModel.getUserState().getValue()).isLoggedIn()) {
-                if (navItem.isLoggedInOnly()) {
-                    ((RouteHolder) holder).show();
-                } else {
-                    ((RouteHolder) holder).hide();
-                }
-            } else {
-                if (navItem.isLoggedOutOnly()) {
-                    ((RouteHolder) holder).show();
-                } else {
-                    ((RouteHolder) holder).hide();
-                }
-            }
-
         }
 
     }
@@ -128,11 +121,6 @@ public class EntryFragment extends Fragment {
                 .navigate(navItem.navTarget);
     }
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-
-    }
 
     void onLogin(View v) {
         NavHostFragment.findNavController(EntryFragment.this)

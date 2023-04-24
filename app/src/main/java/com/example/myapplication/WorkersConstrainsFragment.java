@@ -1,4 +1,4 @@
-package com.example.myapplication.WorkersConstrains;
+package com.example.myapplication;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Model.Constraints;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.ViewModel.WorkersConstrainsViewModel;
 
 public class WorkersConstrainsFragment extends DateListFragment<Constraints> {

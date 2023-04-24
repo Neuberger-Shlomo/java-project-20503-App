@@ -11,11 +11,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
-import com.example.myapplication.DefineShiftFragment;
 import com.example.myapplication.Model.Profile;
-import com.example.myapplication.Model.Shift;
-import com.example.myapplication.User.Model.BasicUser;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.User;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.ViewModel.WorkersViewModel;
 import com.example.myapplication.api.Api;
 
@@ -39,7 +37,7 @@ public class WorkerFragment extends DateListFragment<Profile> {
         workersViewModel = new ViewModelProvider(this).get(WorkersViewModel.class);
         if(getArguments() != null){
             shiftId = getArguments().getInt(SHIFT_ID_KEY);
-            BasicUser user = userViewModel.getUserState().getValue();
+            User user = userViewModel.getUserState().getValue();
             workersViewModel.getFreeWorkersData(
                     user.getId(),
                     user.getAuthToken(),

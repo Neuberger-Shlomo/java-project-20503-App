@@ -1,38 +1,28 @@
 
-package com.example.myapplication.AvailableShiftsUserRequests;
+package com.example.myapplication;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLineViewHolder;
-import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLinerAdapter;
-import com.example.myapplication.DefineShiftFragment;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.Model.ShiftRequest;
-import com.example.myapplication.User.Model.BasicUser;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.ViewModel.ShiftRequestViewModel;
 import com.example.myapplication.ViewModel.ShiftsViewModel;
 import com.example.myapplication.api.Api;
-import com.example.myapplication.databinding.FragmentAvailableShiftsUserRequestsBinding;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
 public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift> {
-    private FragmentAvailableShiftsUserRequestsBinding binding;
 
     // communicate with the server . import shifts
     private ShiftsViewModel       shiftViewModel;
@@ -78,9 +68,9 @@ public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift>
     protected void onPickClicked(View view, String pickerValue) {
 
         //insert the date from pickdate to the string pickedDate
-        String pickedDate = binding.dpAvailableShiftsUserRequests.getDayOfMonth() + "-" +
-                            (binding.dpAvailableShiftsUserRequests.getMonth() + 1) + "-" +
-                            binding.dpAvailableShiftsUserRequests.getYear();
+        String pickedDate = binding.dpDatePicker.getDayOfMonth() + "-" +
+                            (binding.dpDatePicker.getMonth() + 1) + "-" +
+                            binding.dpDatePicker.getYear();
         //show only shifts equal to the picked date
         adapter.setFilter(pickedDate, (item, s) -> !item.getDate().equals(s));
     }
