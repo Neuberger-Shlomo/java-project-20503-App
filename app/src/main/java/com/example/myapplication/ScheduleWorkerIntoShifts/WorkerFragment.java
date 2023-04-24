@@ -1,5 +1,7 @@
 package com.example.myapplication.ScheduleWorkerIntoShifts;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
-import com.example.myapplication.DefineShiftFragment;
 import com.example.myapplication.Model.Profile;
-import com.example.myapplication.Model.Shift;
 import com.example.myapplication.User.Model.BasicUser;
 import com.example.myapplication.User.Model.UserViewModel;
 import com.example.myapplication.ViewModel.WorkersViewModel;
@@ -35,6 +35,7 @@ public class WorkerFragment extends DateListFragment<Profile> {
         binding.headerDatePicker.setText("Free Workers List");
         binding.dpDatePicker.setVisibility(View.GONE);
         binding.btnDatePicker.setText("Save Changes");
+        binding.btn2DatePicker.setVisibility(View.VISIBLE);
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         workersViewModel = new ViewModelProvider(this).get(WorkersViewModel.class);
         if(getArguments() != null){
@@ -48,6 +49,26 @@ public class WorkerFragment extends DateListFragment<Profile> {
             NavHostFragment.findNavController(WorkerFragment.this).popBackStack();
 
         }
+
+        binding.btn2DatePicker.setOnClickListener(view -> {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Reset Shift")
+                    .setMessage("Are you sure you want\n to reset this shift?")
+                    .setPositiveButton("Ok", (dialogInterface, i) -> {
+                        String uid = userViewModel.getUserState().getValue().getId();
+                        String token = userViewModel.getUserState().getValue().getAuthToken();
+                        workersViewModel.resetShift(uid, token, shiftId, () -> {
+                        }, (valid, responseError, throwable) -> {
+                            adapter.clearList();
+                            workersViewModel.getFreeWorkersData(
+                                    userViewModel.getUserState().getValue().getId(),
+                                    userViewModel.getUserState().getValue().getAuthToken(),
+                                    shiftId,this::onDataArrived);
+                        });
+                    })
+                    .setNegativeButton("Discard", null)
+                    .create().show();
+        });
 
         return v;
     }
@@ -64,13 +85,26 @@ public class WorkerFragment extends DateListFragment<Profile> {
 
     }
 
+
     @Override
     protected void onItemClicked(Profile model, View view) {
-        adapter.removeEntry(model);
         workersViewModel.addWorkerToShift(model.getId(), shiftId, () -> {
         }, (valid, responseError, throwable) -> {
-            if (Boolean.TRUE.equals(valid))
-                NavHostFragment.findNavController(WorkerFragment.this).popBackStack();
+            if(responseError != null || throwable != null){
+                new AlertDialog.Builder(requireContext())
+                        .setTitle("Error")
+                        .setMessage(responseError != null ? responseError.getMessage():"Unknown reason")
+                        .setPositiveButton("Ok", null)
+                        .create().show();
+            }
+            else if (Boolean.TRUE.equals(valid)) {
+                adapter.removeEntry(model);
+                adapter.clearList();
+                workersViewModel.getFreeWorkersData(
+                        userViewModel.getUserState().getValue().getId(),
+                        userViewModel.getUserState().getValue().getAuthToken(),
+                        shiftId, this::onDataArrived);
+            }
         });
     }
 }

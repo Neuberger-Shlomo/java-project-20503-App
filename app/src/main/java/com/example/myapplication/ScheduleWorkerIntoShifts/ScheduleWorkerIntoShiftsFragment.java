@@ -22,7 +22,7 @@ public class ScheduleWorkerIntoShiftsFragment extends ScheduleStatusFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
-        binding.headerDatePicker.setText("");
+        binding.headerDatePicker.setText("Schedule Worker Into Shift");
 
         return v;
     }
