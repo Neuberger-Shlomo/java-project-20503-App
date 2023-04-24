@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
+import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLineViewHolder;
 import com.example.myapplication.Model.Constraints;
 import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.ViewModel.WorkersConstrainsViewModel;
@@ -44,6 +45,14 @@ public class WorkersConstrainsFragment extends DateListFragment<Constraints> {
     protected void onPickClicked(View view, String pickerValue) {
         adapter.setFilter(pickerValue, (item, s) -> item.getStartDate().equals(s));
     }
+
+    @Override
+    protected void onModelBind(Constraints model, OneLineViewHolder<Constraints> holder, int position) {
+        super.onModelBind(model, holder, position);
+        holder.setText("First Name: " + model.getFirstName()+
+                        "\nLast Name: "+ model.getLastName());
+    }
+
 
     @Override
     protected void onItemClicked(Constraints model, View view) {

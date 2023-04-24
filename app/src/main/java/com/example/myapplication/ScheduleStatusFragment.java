@@ -27,6 +27,7 @@ public class ScheduleStatusFragment extends DateListFragment<Shift> {
             Bundle savedInstanceState
                             ) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
+        binding.headerDatePicker.setText("Schedule Status");
 
         shiftViewModel = new ViewModelProvider(requireActivity()).get(ShiftsViewModel.class);
         userViewModel  = new ViewModelProvider(requireActivity()).get(UserViewModel.class);

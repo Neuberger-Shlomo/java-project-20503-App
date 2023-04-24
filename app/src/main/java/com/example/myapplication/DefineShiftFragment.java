@@ -8,11 +8,10 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.Model.Shift;
-import com.example.myapplication.ViewModel.ShiftsViewModel;
 import com.example.myapplication.UserMVC.Model.UserViewModel;
+import com.example.myapplication.ViewModel.ShiftsViewModel;
 import com.example.myapplication.databinding.FragmentDefineShiftBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -60,8 +59,11 @@ public class DefineShiftFragment extends Fragment {
         String pickedDate = binding.dpDefineShift.getDayOfMonth() + "-" +
                             (binding.dpDefineShift.getMonth() + 1) + "-" +
                             binding.dpDefineShift.getYear();
+        int pickedDay = binding.dpDefineShift.getDayOfMonth();
+        int pickedMonth = binding.dpDefineShift.getMonth() + 1;
+        int pickedYear = binding.dpDefineShift.getYear();
         Editable defineShiftText = binding.tfDefineShift.getText();
-        Editable defineShift3Text = binding.tfDefineShift.getText();
+        Editable defineShift3Text = binding.tfDefineShift3.getText();
         ArrayList<Shift> shifts = shiftViewModel.getShiftstate().getValue();
         if(defineShiftText == null)
             // TODO: Alert the user about the error
@@ -91,7 +93,8 @@ public class DefineShiftFragment extends Fragment {
                     Integer.parseInt(defineShift3Text.toString());
             int     hour = binding.tpDefineShift.getHour();
             int     id   = (int) Math.random();
-            boolean flag = false;
+            boolean overlayFlag = false;
+            boolean validityFlag = true;
 
 
             Calendar         c    = Calendar.getInstance();
@@ -103,40 +106,43 @@ public class DefineShiftFragment extends Fragment {
                 //TODO: Don't crash the APP here
                 throw new RuntimeException(e);
             }
-            c.setTime(date);
+            c.setTime(new Date(System.currentTimeMillis()));
             int weekNumber            = c.get(Calendar.WEEK_OF_YEAR);
             int dayNumber             = c.get(Calendar.DAY_OF_WEEK);
             int numOfScheduledWorkers = 0;
 
             for (Shift s : shifts) {
                 if (Objects.equals(s.getShiftDate(), pickedDate)
-                    && (s.getStartHour() <= hour + duration || s.getStartHour() >= hour - duration)) {
-                    flag = true;
+                    && (s.getStartHour() >= hour && s.getStartHour() <= hour + duration)
+                        || (s.getStartHour() + s.getDuration() >= hour && s.getStartHour() + s.getDuration() <= hour + duration)) {
+                    overlayFlag = true;
+                    Snackbar.make(view, "Shift Already Exists For This Time!\nCan't " +
+                                    "Overlay Shifts", Snackbar.LENGTH_LONG)
+                            .setAction("Ok", null).show();
                 }
             }
-            if (hour <= c.get(Calendar.HOUR_OF_DAY)) {
-                flag = true;
+
+            if (pickedDay == c.get(Calendar.DAY_OF_MONTH)
+                    && pickedMonth == c.get(Calendar.MONTH)
+                    && pickedYear == c.get(Calendar.YEAR)
+                    && hour <= c.get(Calendar.HOUR_OF_DAY)) {
+                Snackbar.make(view, "Can't Set Shift To This Hour!",
+                                Snackbar.LENGTH_LONG)
+                        .setAction("Ok", null).show();
+                validityFlag = false;
             }
 
-            if (!flag) {
+            if (!overlayFlag && validityFlag) {
                 shiftViewModel.addShift(new Shift(pickedDate, numOfRequiredWorkers, id,
                                                   hour,
                                                   duration, weekNumber, dayNumber,
                                                   numOfScheduledWorkers), () -> {
                 }, (valid, responseError, throwable) -> {
                     if (Boolean.TRUE.equals(valid))
-                        NavHostFragment.findNavController(DefineShiftFragment.this).popBackStack();
+                        Snackbar.make(view, "Shift defined Successfully!", Snackbar.LENGTH_LONG)
+                                .setAction("Ok", null).show();
                 });
 
-            } else {
-                if (hour <= c.get(Calendar.HOUR_OF_DAY)) {
-                    Snackbar.make(view, "Can't Set Shift To This Hour!",
-                                  Snackbar.LENGTH_LONG)
-                            .setAction("Ok", null).show();
-                } else
-                    Snackbar.make(view, "Shift Already Exists For This Time!\nCan't " +
-                                        "Overlay Shifts", Snackbar.LENGTH_LONG)
-                            .setAction("Ok", null).show();
             }
 
         }
