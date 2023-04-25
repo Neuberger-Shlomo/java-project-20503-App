@@ -32,6 +32,19 @@ final public class DateUtils {
 
         return new Date(calendar.getTime().getTime());
     }
+
+    static public java.sql.Date toDateRegularFormat(String date) {
+        String[] strings = date.split("-");
+        if (strings.length != 3)
+            return null;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, Integer.parseInt(strings[2]));
+        calendar.set(Calendar.MONTH, Integer.parseInt(strings[1]));
+        calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(strings[0]));
+
+        return new Date(calendar.getTime().getTime());
+    }
+
     static public Pair<String,String> stringFromDialog(Pair<Long, Long> longLongPair) {
 
         Date start = new Date(longLongPair.first);

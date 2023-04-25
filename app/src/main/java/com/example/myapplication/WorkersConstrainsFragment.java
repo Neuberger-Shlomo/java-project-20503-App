@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myapplication.Common.Utils.DateUtils;
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLineViewHolder;
 import com.example.myapplication.Model.Constraints;
 import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.ViewModel.WorkersConstrainsViewModel;
+
+import java.util.Date;
 
 public class WorkersConstrainsFragment extends DateListFragment<Constraints> {
 
@@ -43,7 +46,8 @@ public class WorkersConstrainsFragment extends DateListFragment<Constraints> {
 
     @Override
     protected void onPickClicked(View view, String pickerValue) {
-        adapter.setFilter(pickerValue, (item, s) -> item.getStartDate().equals(s));
+        Date date = DateUtils.toDateRegularFormat(pickerValue);
+        adapter.setFilter(date, (item, s) -> DateUtils.toDate(item.getStartDate()).compareTo(s) == -1);
     }
 
     @Override
