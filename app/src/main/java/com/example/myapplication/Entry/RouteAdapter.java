@@ -17,12 +17,11 @@ import com.example.myapplication.R;
 import com.google.android.material.button.MaterialButton;
 
 import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
 
 public class RouteAdapter extends OneLinerAdapter<NavItem> {
-
-    private interfaces.OnItemClickListener<NavItem> onItemClickListener;
 
     @NonNull
     @Override
@@ -35,6 +34,12 @@ public class RouteAdapter extends OneLinerAdapter<NavItem> {
     }
 
 
+    @Override
+    public void onBindViewHolder(@NonNull OneLineViewHolder<NavItem> holder, int position) {
+        super.onBindViewHolder(holder, position);
+        StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+        layoutParams.setFullSpan(position % 3 == 2);
 
 
+    }
 }

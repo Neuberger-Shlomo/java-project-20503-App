@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/Login"
-        android:name="com.example.myapplication.User.Controller.LoginFragment"
+        android:name="com.example.myapplication.UserMVC.Controller.LoginFragment"
         android:label="@string/login_fragment_label"
         tools:layout="@layout/fragment_login">
         <action
@@ -32,7 +32,7 @@
         android:id="@+id/RegisterFragment"
         android:label="@string/register"
         tools:layout="@layout/fragment_register"
-        android:name="com.example.myapplication.User.Controller.RegisterFragment"
+        android:name="com.example.myapplication.UserMVC.Controller.RegisterFragment"
         >
     </fragment>
 
@@ -67,25 +67,25 @@
 
     <fragment
         android:id="@+id/WorkersListFragment"
-        android:name="com.example.myapplication.WorkersList.WorkersListFragment"
+        android:name="com.example.myapplication.WorkersListFragment"
         android:label="WorkersList fragment"
         tools:layout="@layout/fragment_date_picking"/>
 
     <fragment
         android:id="@+id/ShiftsRequestsFragment"
-        android:name="com.example.myapplication.ShiftsRequests.ShiftsRequestsFragment"
+        android:name="com.example.myapplication.ShiftsRequestsFragment"
         android:label="ShiftsRequests fragment"
         tools:layout="@layout/fragment_date_picking"/>
 
     <fragment
         android:id="@+id/WorkersConstrainsFragment"
-        android:name="com.example.myapplication.WorkersConstrains.WorkersConstrainsFragment"
+        android:name="com.example.myapplication.WorkersConstrainsFragment"
         android:label="WorkersConstrains fragment"
         tools:layout="@layout/fragment_date_picking"/>
 
     <fragment
         android:id="@+id/ScheduleStatusFragment"
-        android:name="com.example.myapplication.ScheduleStatus.ScheduleStatusFragment"
+        android:name="com.example.myapplication.ScheduleStatusFragment"
         android:label="ScheduleStatus fragment"
         tools:layout="@layout/fragment_date_picking"/>
 
@@ -110,13 +110,33 @@
     <fragment
         android:id="@+id/autoScheduleJob"
         tools:layout="@layout/fragment_auto_schedule"
-        android:name="com.example.myapplication.AutoSchedule.AutoScheduleJobFragment"
+        android:name="com.example.myapplication.AutoScheduleJobFragment"
         android:label="AutoScheduleJob" />
     <fragment
         android:id="@+id/constraintSubmissionActivity"
         android:name="com.example.myapplication.ConstraintSubmissionActivity"
         android:label="Schedule Restrictions"
         tools:layout="@layout/fragment_constraint_submission" />
+    <fragment
+        android:id="@+id/shiftViewActivity"
+        android:name="com.example.myapplication.ShiftViewActivity"
+        android:label="activity_shift_view"
+        tools:layout="@layout/activity_shift_view" />
+    <fragment
+        android:id="@+id/AvailableShiftsUserRequestsFragment"
+        android:name="com.example.myapplication.AvailableShiftsUserRequestsFragment"
+        android:label="fragment_available_shifts_user_requests"
+        tools:layout="@layout/fragment_date_picking" />
+    <fragment
+        android:id="@+id/myShiftsFragment"
+        android:name="com.example.myapplication.MyShiftsFragment"
+        android:label="fragemnt_my_shifts"
+        tools:layout="@layout/fragemnt_my_shifts" />
+    <fragment
+        android:id="@+id/workerFragment"
+        tools:layout="@layout/fragment_worker_view"
+        android:name="com.example.myapplication.WorkerFragment"
+        android:label="WorkerFragment" />
 
 
 </navigation>

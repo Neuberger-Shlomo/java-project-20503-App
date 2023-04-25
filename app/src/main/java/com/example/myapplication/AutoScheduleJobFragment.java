@@ -1,4 +1,4 @@
-package com.example.myapplication.AutoSchedule;
+package com.example.myapplication;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,8 +16,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLinerAdapter;
 import com.example.myapplication.Model.ScheduleJob;
-import com.example.myapplication.User.Model.BasicUser;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.User;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.api.JobApi;
 import com.example.myapplication.databinding.FragmentAutoScheduleBinding;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -32,6 +32,7 @@ import java.util.Calendar;
 
 
 public class AutoScheduleJobFragment extends Fragment {
+
     FragmentAutoScheduleBinding          binding;
     MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker
             .Builder
@@ -77,7 +78,7 @@ public class AutoScheduleJobFragment extends Fragment {
     }
 
     private void onGetRequest(View view) {
-        BasicUser user = userViewModel.getUserState().getValue();
+        User user = userViewModel.getUserState().getValue();
         queue.add(JobApi.getAllJobs(
                 user.getId(),
                 user.getAuthToken(), null,
@@ -94,7 +95,7 @@ public class AutoScheduleJobFragment extends Fragment {
     }
 
     private void onStartClicked(View view) {
-        BasicUser user = userViewModel.getUserState().getValue();
+        User user = userViewModel.getUserState().getValue();
         queue.add(
                 JobApi.requestSchedule(
                         user.getId(),

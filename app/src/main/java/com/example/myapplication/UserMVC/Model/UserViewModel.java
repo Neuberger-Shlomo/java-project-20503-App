@@ -1,4 +1,4 @@
-package com.example.myapplication.User.Model;
+package com.example.myapplication.UserMVC.Model;
 
 import android.app.Application;
 
@@ -24,9 +24,9 @@ import java.util.Objects;
 public class UserViewModel extends AndroidViewModel {
 
 
-    private final MutableLiveData<BasicUser> userState =
-            new MutableLiveData<>(new BasicUser());
-    private final RequestQueue               queue;
+    private final MutableLiveData<User> userState =
+            new MutableLiveData<>(new User());
+    private final RequestQueue          queue;
 
     final static private Gson gson = new Gson();
 
@@ -35,7 +35,7 @@ public class UserViewModel extends AndroidViewModel {
         queue = Volley.newRequestQueue(getApplication());
     }
 
-    public LiveData<BasicUser> getUserState() {
+    public LiveData<User> getUserState() {
         return userState;
     }
 
@@ -93,9 +93,9 @@ public class UserViewModel extends AndroidViewModel {
 
 
     private void onRegisterResponse(UsersApi.RegisterRequest registerRequest) {
-        BasicUser user = getUserState().getValue();
+        User user = getUserState().getValue();
         if (user == null) {
-            user = new BasicUser();
+            user = new User();
         }
         user.setUsername(registerRequest.getUsername());
         userState.setValue(user);
@@ -103,8 +103,8 @@ public class UserViewModel extends AndroidViewModel {
 
     private void onLogoutResponse(boolean result, Api.ResponseError error, Throwable throwable) {
         if (Boolean.TRUE.equals(result) || (error != null && error.getStatus() != 200) || throwable != null) {
-            BasicUser u =
-                    new BasicUser(Objects.requireNonNull(getUserState().getValue()));
+            User u =
+                    new User(Objects.requireNonNull(getUserState().getValue()));
             u.setAuthToken(null);
             userState.setValue(u);
         }
@@ -113,7 +113,7 @@ public class UserViewModel extends AndroidViewModel {
 
     private void onLoginResponse(JSONObject jsonObject, Api.ResponseError error,
                                  Throwable throwable) throws JSONException, Exception {
-        BasicUser user = userState.getValue();
+        User user = userState.getValue();
         if (user == null) {
             throw new Exception("No user data");
         }
@@ -129,8 +129,8 @@ public class UserViewModel extends AndroidViewModel {
             throw new Exception("Invalid values");
         }
 
-        BasicUser u = new BasicUser(user.getUsername(), user.getPassword(), jwt,
-                                    RoleLevel.values()[level]);
+        User u = new User(user.getUsername(), user.getPassword(), jwt,
+                          RoleLevel.values()[level]);
         u.setId(id);
 
         u.setProfile(Profile.fromJSON(jsonObject.getJSONObject("profile")));

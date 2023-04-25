@@ -4,19 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLineViewHolder;
 import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLinerAdapter;
-import com.example.myapplication.MainActivity;
-import com.example.myapplication.Model.Shift;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.databinding.FragmentDatePickingBinding;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -44,10 +41,24 @@ public abstract class DateListFragment<Model extends IModel> extends Fragment im
                                 binding.dpDatePicker.getYear();
             this.onPickClicked(v, pickedDate);
         });
-
         return binding.getRoot();
 
     }
+
+    public void setOnSearchListener(View.OnClickListener l) {
+        if (binding.searchView.getVisibility() != View.VISIBLE)
+            binding.searchView.setVisibility(View.VISIBLE);
+        binding.searchView.setOnSearchClickListener(l);
+
+    }
+
+    public void setOnQueryListener(SearchView.OnQueryTextListener l) {
+        if (binding.searchView.getVisibility() != View.VISIBLE)
+            binding.searchView.setVisibility(View.VISIBLE);
+        binding.searchView.setOnQueryTextListener(l);
+
+    }
+
 
     /**
      * Handles the pick date action
@@ -76,7 +87,6 @@ public abstract class DateListFragment<Model extends IModel> extends Fragment im
      * @param view  of the caller
      */
     abstract protected void onItemClicked(Model model, View view);
-
 
 
     /**

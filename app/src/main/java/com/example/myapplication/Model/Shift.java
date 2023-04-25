@@ -21,11 +21,12 @@ public class Shift implements IModel {
     private int    duration;
 
     private ArrayList<Profile> scheduledWorkers;
-    private int weekNumber, year = 2023, dayNumber;
-//TODO: implement year getting according to database
+    private int                weekNumber, year = 2023, dayNumber;
+    //TODO: implement year getting according to database
 
     public Shift(String shiftDate, int numOfRequiredWorkers, int id,
-                 int startHour, int duration, int weekNumber, int dayNumber, int numOfScheduledWorkers) {
+                 int startHour, int duration, int weekNumber, int dayNumber,
+                 int numOfScheduledWorkers) {
         this.shiftDate             = shiftDate;
         this.numOfRequiredWorkers  = numOfRequiredWorkers;
         this.id                    = id;
@@ -33,37 +34,37 @@ public class Shift implements IModel {
         this.duration              = duration;
         this.numOfScheduledWorkers = numOfScheduledWorkers;
         this.scheduledWorkers      = new ArrayList<>(numOfRequiredWorkers);
-        this.weekNumber = weekNumber;
-        this.dayNumber = dayNumber;
+        this.weekNumber            = weekNumber;
+        this.dayNumber             = dayNumber;
     }
 
-    public String getDate(){
+    public String getDate() {
         return shiftDate;
     }
 
     public static Shift fromJSON(JSONObject object) throws JSONException {
 
-        int      numOfRequiredWorkers = object.getInt("employeeCount");
-        int      numOfScheduledWorkers = object.getInt("numOfScheduledWorkers");
-        int      id                   = object.getInt("id");
-        int      weekNumber           = object.getInt("weekNumber");
-        int      dayNumber            = object.getInt("dayNumber");
-        int      startHour            = object.getInt("startHour");
-        int      duration             = object.getInt("duration");
-        ArrayList<Profile> scheduledWorkers = new ArrayList<>();
-        Calendar calendar             = Calendar.getInstance();
+        int                numOfRequiredWorkers  = object.optInt("employeeCount", -1);
+        int                numOfScheduledWorkers = object.optInt("numOfScheduledWorkers", -1);
+        int                id                    = object.optInt("id", -1);
+        int                weekNumber            = object.optInt("weekNumber", -1);
+        int                dayNumber             = object.optInt("dayNumber", -1);
+        int                startHour             = object.optInt("startHour", -1);
+        int                duration              = object.optInt("duration", -1);
+        ArrayList<Profile> scheduledWorkers      = new ArrayList<>();
+        Calendar           calendar              = Calendar.getInstance();
         calendar.set(Calendar.WEEK_OF_YEAR, weekNumber);
         calendar.set(Calendar.DAY_OF_WEEK, dayNumber);
 
         // Get the date from the calendar object
-        Date   date      = calendar.getTime();
-        String shiftDate = String.format("%d-%d-%d",date.getDate(),date.getMonth()+1,
-                                         date.getYear()+1900 );
+        Date date = calendar.getTime();
+        String shiftDate = String.format("%d-%d-%d", date.getDate(), date.getMonth() + 1,
+                                         date.getYear() + 1900);
 
-        Log.d("mymsg", "fromJSON: "+shiftDate);
+        Log.d("mymsg", "fromJSON: " + shiftDate);
 
-        return new Shift(shiftDate, numOfRequiredWorkers,id, startHour,
-                duration, weekNumber, dayNumber, numOfScheduledWorkers);
+        return new Shift(shiftDate, numOfRequiredWorkers, id, startHour,
+                         duration, weekNumber, dayNumber, numOfScheduledWorkers);
     }
 
 
@@ -118,9 +119,10 @@ public class Shift implements IModel {
     public ArrayList<Profile> getScheduledWorkers() {
         return scheduledWorkers;
     }
-    public String getScheduledWorkersStr(){
+
+    public String getScheduledWorkersStr() {
         String output = "";
-        for(Profile p:scheduledWorkers){
+        for (Profile p : scheduledWorkers) {
             output += p.toString();
         }
         return output;
@@ -149,8 +151,10 @@ public class Shift implements IModel {
     @Override
     public String toPrettyString() {
         return "Shift Date: " + this.getDate()
-               + "\nNumber Of Required Workers: " + this.getNumOfRequiredWorkers()
-               + "\nNumber Of Scheduled Workers: " + this.getNumOfScheduledWorkers();
+               + (this.getNumOfRequiredWorkers() != -1 ?
+                ("\nNumber Of Required Workers: " + this.getNumOfRequiredWorkers()) : "")
+               + (this.getNumOfScheduledWorkers() != -1 ?
+                "\nNumber Of Scheduled Workers: " + this.getNumOfScheduledWorkers() : "");
     }
 
     public int getWeekNumber() {

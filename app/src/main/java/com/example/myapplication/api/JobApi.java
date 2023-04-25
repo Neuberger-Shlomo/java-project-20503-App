@@ -8,13 +8,18 @@ import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
 import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+
 import org.json.JSONArray;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 final public class JobApi {
-    private static final Gson gson = new Gson();
+    private static final Gson   gson           = new Gson();
+    public static final  String BASE_URL       = String.format("%s/%s", Constants.BASE_URL, "jobs");
+    public static final  String CREATE_JOB_URL = BASE_URL;
+    public static final  String GET_JOB_URL    = String.format("%s/%s", BASE_URL, "user/");
+
 
     public static AuthedJsonObjectRequest requestSchedule(
             String userId,
@@ -22,14 +27,14 @@ final public class JobApi {
             ScheduleJob job,
             @Nullable Api.PreCall preListener,
             @NotNull Api.PostCall<JSONObject> postListener) {
-        if(preListener != null){
+        if (preListener != null) {
             preListener.onPreCall();
         }
         JSONObject jsonObject;
 
         try {
-            jsonObject = new JSONObject(gson.toJson(job,ScheduleJob.class));
-            jsonObject.put("uid",job.getId());
+            jsonObject = new JSONObject(gson.toJson(job, ScheduleJob.class));
+            jsonObject.put("uid", job.getId());
         } catch (JSONException e) {
             postListener.onPostCall(null, null, e);
             return null;
@@ -37,7 +42,7 @@ final public class JobApi {
 
         return new AuthedJsonObjectRequest(
                 Request.Method.POST,
-                Constants.CREATE_JOB_URL,
+                CREATE_JOB_URL,
                 userId, jwt, jsonObject,
                 res -> UsersApi.responseHandler(res, null, postListener),
                 err -> UsersApi.responseHandler(null, err, postListener)
@@ -45,24 +50,22 @@ final public class JobApi {
     }
 
 
-
     public static AuthedJsonArrayObjectRequest getAllJobs(
             String userId,
             String jwt,
             @Nullable Api.PreCall preListener,
             @NotNull Api.PostCall<JSONArray> postListener) {
-        if(preListener != null){
+        if (preListener != null) {
             preListener.onPreCall();
         }
 
         return new AuthedJsonArrayObjectRequest(
-                Constants.GET_JOB_URL,
+                GET_JOB_URL,
                 userId, jwt,
                 res -> UsersApi.responseHandler(res, null, postListener),
                 err -> UsersApi.responseHandler(null, err, postListener)
         );
     }
-
 
 
 }

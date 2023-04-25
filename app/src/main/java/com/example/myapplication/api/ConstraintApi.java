@@ -26,12 +26,6 @@ final public class ConstraintApi {
     public final static String POST_NEW_URL    = String.format("%s/%s", BASE_URL, "");
     public final static String DELETE_URL      = String.format("%s/%s", BASE_URL, "");
 
-//    public static JsonArrayRequest getConstraints(Api.PostCall<JSONArray> postCall) {
-//        return new JsonArrayRequest(
-//                GET_ALL_URL,
-//                response -> UsersApi.responseHandler(response, null, postCall),
-//                error -> UsersApi.responseHandler(null, error, postCall));
-//    }
 
     public static JsonArrayRequest getConstraintsByDate(String userId, String token, int start,
                                                         int end,

@@ -3,13 +3,14 @@ package com.example.myapplication.api;
 import androidx.annotation.Nullable;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
 import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,12 +18,17 @@ import java.nio.charset.StandardCharsets;
 
 final public class UsersApi {
 
-    private static final Gson gson = new Gson();
-    public final static String BASE_URL = String.format("%s/%s", Constants.BASE_URL,"users");
-    public final static String LOGIN_URL    = String.format("%s/%s", BASE_URL,"login");
-    public final static String REGISTER_URL = String.format("%s/%s", BASE_URL, "register");
+    private static final Gson   gson              = new Gson();
+    public final static  String BASE_URL          = String.format("%s/%s", Constants.BASE_URL,
+                                                                  "users");
+    public final static  String GET_BY_ID_URL     = String.format("%s/%s", BASE_URL, "users-id");
+    public final static  String PROMOTE_BY_ID_URL = String.format("%s/%s", BASE_URL, "add-admin");
+    public final static  String DEMOTE_BY_ID_URL  = String.format("%s/%s", BASE_URL, "remove" +
+                                                                                     "-admin");
+    public final static  String LOGIN_URL         = String.format("%s/%s", BASE_URL, "login");
+    public final static  String REGISTER_URL      = String.format("%s/%s", BASE_URL, "register");
 
-    public final static String LOGOUT_URL   = String.format("%s/%s", BASE_URL, "logout");
+    public final static String LOGOUT_URL = String.format("%s/%s", BASE_URL, "logout");
 
 
     public static class RegisterRequest {
@@ -213,4 +219,61 @@ final public class UsersApi {
 
 
     }
+
+
+    public static AuthedJsonArrayObjectRequest getUserById(
+            String userId,
+            String jwt,
+            String targetID,
+            @Nullable Api.PreCall preListener,
+            @NotNull Api.PostCall<JSONArray> postListener) {
+        if (preListener != null) {
+            preListener.onPreCall();
+        }
+        return new AuthedJsonArrayObjectRequest(
+                String.format("%s/%s", GET_BY_ID_URL, targetID),
+                userId, jwt,
+                res -> UsersApi.responseHandler(res, null, postListener),
+                err -> UsersApi.responseHandler(null, err, postListener)
+        );
+    }
+
+    public static AuthedJsonObjectRequest promoteUserByID(
+            String userId,
+            String jwt,
+            String targetID,
+            @Nullable Api.PreCall preListener,
+            @NotNull Api.PostCall<JSONObject> postListener) {
+        if (preListener != null) {
+            preListener.onPreCall();
+        }
+        return new AuthedJsonObjectRequest(
+                Request.Method.POST,
+                String.format("%s/%s", PROMOTE_BY_ID_URL, targetID),
+                userId, jwt,
+                null,
+                res -> UsersApi.responseHandler(res, null, postListener),
+                err -> UsersApi.responseHandler(null, err, postListener)
+        );
+    }
+
+    public static AuthedJsonObjectRequest demoteUserByID(
+            String userId,
+            String jwt,
+            String targetID,
+            @Nullable Api.PreCall preListener,
+            @NotNull Api.PostCall<JSONObject> postListener) {
+        if (preListener != null) {
+            preListener.onPreCall();
+        }
+        return new AuthedJsonObjectRequest(
+                Request.Method.DELETE,
+                String.format("%s/%s", DEMOTE_BY_ID_URL, targetID),
+                userId, jwt,
+                null,
+                res -> UsersApi.responseHandler(res, null, postListener),
+                err -> UsersApi.responseHandler(null, err, postListener)
+        );
+    }
+
 }
