@@ -7,33 +7,6 @@
     tools:context=".ScheduleStatusFragment">
 
 
-    <DatePicker
-        android:id="@+id/dp_date_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:calendarViewShown="false"
-
-        android:datePickerMode="spinner"
-        android:ems="10"
-        android:inputType="date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header_date_picker" />
-
-    <TextView
-        android:id="@+id/header_date_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Header"
-        android:textSize="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView_date_picker"
         android:layout_width="wrap_content"

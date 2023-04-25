@@ -212,12 +212,13 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
     }
 
     private void clearAll() {
-        start = null;
-        end   = null;
         binding.permanentCheckbox.setActivated(false);
         binding.tvDates.setText("");
         binding.selfDescription.setText("");
         userRecyclerAdapter.clearList();
+        onDateChose(new Pair<>(start.getTime(),end.getTime()));
+        start = null;
+        end   = null;
     }
 
 
