@@ -47,7 +47,7 @@ public class WorkersConstrainsFragment extends DateListFragment<Constraints> {
     @Override
     protected void onPickClicked(View view, String pickerValue) {
         Date date = DateUtils.toDateRegularFormat(pickerValue);
-        adapter.setFilter(date, (item, s) -> DateUtils.toDate(item.getStartDate()).compareTo(s) == -1);
+        adapter.setFilter(date, (item, s) -> DateUtils.toDate(item.getEndDate()).compareTo(s) == -1);
     }
 
     @Override
