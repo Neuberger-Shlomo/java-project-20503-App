@@ -49,7 +49,7 @@ public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
                         .append("-")
                         .append(binding.dpDatePicker.getYear())
                         .toString();
-        adapter.setFilter(pickedDate, ((item, s) -> item.getShiftDate().equals(s)));
+        adapter.setFilter(pickedDate, ((item, s) -> !item.getShiftDate().equals(s)));
     }
 
     @Override
