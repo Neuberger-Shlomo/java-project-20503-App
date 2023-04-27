@@ -1,24 +1,30 @@
 package com.example.myapplication.Model;
 
-import android.util.Log;
+import android.annotation.SuppressLint;
 
 import com.example.myapplication.Common.Views.Fragments.IModel;
+import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class Shift implements IModel {
-    private String shiftDate;
+
     private int    numOfRequiredWorkers;
     private int    numOfScheduledWorkers;
     private int    id;
     private int    startHour;
     private int    duration;
+
+    private Timestamp endTime;
+    private Timestamp startTime;
+
+    private Date startDate;
 
     private ArrayList<Profile> scheduledWorkers;
     private int                weekNumber, year = 2023, dayNumber;
@@ -27,7 +33,6 @@ public class Shift implements IModel {
     public Shift(String shiftDate, int numOfRequiredWorkers, int id,
                  int startHour, int duration, int weekNumber, int dayNumber,
                  int numOfScheduledWorkers) {
-        this.shiftDate             = shiftDate;
         this.numOfRequiredWorkers  = numOfRequiredWorkers;
         this.id                    = id;
         this.startHour             = startHour;
@@ -39,32 +44,16 @@ public class Shift implements IModel {
     }
 
     public String getDate() {
-        return shiftDate;
+        return getShiftDate();
     }
 
     public static Shift fromJSON(JSONObject object) throws JSONException {
+        Shift shift = new Gson().fromJson(object.toString(), Shift.class);
+        shift.setNumOfRequiredWorkers(object.optInt("employeeCount", -1));
+        shift.setNumOfScheduledWorkers(object.optInt("numOfScheduledWorkers", -1));
 
-        int                numOfRequiredWorkers  = object.optInt("employeeCount", -1);
-        int                numOfScheduledWorkers = object.optInt("numOfScheduledWorkers", -1);
-        int                id                    = object.optInt("id", -1);
-        int                weekNumber            = object.optInt("weekNumber", -1);
-        int                dayNumber             = object.optInt("dayNumber", -1);
-        int                startHour             = object.optInt("startHour", -1);
-        int                duration              = object.optInt("duration", -1);
-        ArrayList<Profile> scheduledWorkers      = new ArrayList<>();
-        Calendar           calendar              = Calendar.getInstance();
-        calendar.set(Calendar.WEEK_OF_YEAR, weekNumber);
-        calendar.set(Calendar.DAY_OF_WEEK, dayNumber);
 
-        // Get the date from the calendar object
-        Date date = calendar.getTime();
-        String shiftDate = String.format("%d-%d-%d", date.getDate(), date.getMonth() + 1,
-                                         date.getYear() + 1900);
-
-        Log.d("mymsg", "fromJSON: " + shiftDate);
-
-        return new Shift(shiftDate, numOfRequiredWorkers, id, startHour,
-                         duration, weekNumber, dayNumber, numOfScheduledWorkers);
+        return shift;
     }
 
 
@@ -72,7 +61,6 @@ public class Shift implements IModel {
      * this second constructor is for testing use only*/
     public Shift(String shiftDate, int numOfRequiredWorkers, ArrayList<Profile> workersList,
                  int id, int startHour, int duration) {
-        this.shiftDate             = shiftDate;
         this.numOfRequiredWorkers  = numOfRequiredWorkers;
         this.id                    = id;
         this.startHour             = startHour;
@@ -85,12 +73,14 @@ public class Shift implements IModel {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     public String getShiftDate() {
-        return shiftDate;
+        return  String.format("%d-%d-%d", startDate.getDate(), startDate.getMonth() + 1,
+                              startDate.getYear() + 1900);
     }
 
-    public void setShiftDate(String shiftDate) {
-        this.shiftDate = shiftDate;
+    public Date getStartDate(){
+        return startDate;
     }
 
     public int getNumOfRequiredWorkers() {
@@ -179,5 +169,31 @@ public class Shift implements IModel {
 
     public void setDayNumber(int dayNumber) {
         this.dayNumber = dayNumber;
+    }
+
+    public Timestamp getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
+    }
+
+    public Timestamp getStartTime() {
+        return startTime;
+    }
+    public String getStartTime(boolean shortVersion) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        String formattedTime = sdf.format(startTime.getTime());
+        return shortVersion? formattedTime :getStartTime().toString();
+
+    }
+    public String getEndTime(boolean shortVersion) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        String formattedTime = sdf.format(endTime.getTime());
+        return shortVersion? formattedTime :getEndTime().toString();
+    }
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
     }
 }

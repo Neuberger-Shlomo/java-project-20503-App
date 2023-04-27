@@ -52,6 +52,9 @@ public class DefineShiftFragment extends Fragment {
 
         binding.btnDefineShifts.setOnClickListener(this::onDefineShiftClicked);
 
+        binding.tpDefineShift.setOnTimeChangedListener((picker,h,m)-> picker.setMinute(0));
+
+
         return binding.getRoot();
     }
 
@@ -111,10 +114,23 @@ public class DefineShiftFragment extends Fragment {
             int dayNumber             = c.get(Calendar.DAY_OF_WEEK);
             int numOfScheduledWorkers = 0;
 
+            int starTestedHour = hour, endTestedHour = hour + duration;
             for (Shift s : shifts) {
-                if (Objects.equals(s.getShiftDate(), pickedDate)
-                    && (s.getStartHour() >= hour && s.getStartHour() <= hour + duration)
-                        || (s.getStartHour() + s.getDuration() >= hour && s.getStartHour() + s.getDuration() <= hour + duration)) {
+                boolean isSameDate = Objects.equals(s.getShiftDate(), pickedDate);
+                boolean isHourOverLap =
+                        // is to be created shift inside other
+                        s.getStartHour() <= starTestedHour && starTestedHour <= s.getStartHour() + s.getDuration()
+                        ||
+                        s.getStartHour() <= endTestedHour && endTestedHour <= s.getStartHour() + s.getDuration()
+                        ||
+                        // is the shift in side the to be created
+                        starTestedHour<= s.getStartHour()  && s.getStartHour() <= endTestedHour
+                        ||
+                        starTestedHour<= s.getStartHour() + s.getDuration()  && s.getStartHour() + s.getDuration() <= endTestedHour
+                        ;
+
+                if (isSameDate
+                    && isHourOverLap) {
                     overlayFlag = true;
                     Snackbar.make(view, "Shift Already Exists For This Time!\nCan't " +
                                     "Overlay Shifts", Snackbar.LENGTH_LONG)

@@ -9,25 +9,12 @@
         android:id="@+id/Login"
         android:name="com.example.myapplication.UserMVC.Controller.LoginFragment"
         android:label="@string/login_fragment_label"
-        tools:layout="@layout/fragment_login">
-        <action
-            android:id="@+id/action_Login_to_RegisterFragment"
-            app:destination="@id/RegisterFragment"
-            app:enterAnim="@anim/nav_default_pop_enter_anim" />
-    </fragment>
+        tools:layout="@layout/fragment_login"/>
     <fragment
         android:id="@+id/EntryFragment"
         android:name="com.example.myapplication.Entry.EntryFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_entry">
-
-        <action
-            android:id="@+id/action_to_login"
-            app:destination="@id/Login" />
-        <action
-            android:id="@+id/from_login_to_manger"
-            app:destination="@id/managerMainFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_entry"/>
     <fragment
         android:id="@+id/RegisterFragment"
         android:label="@string/register"
@@ -41,29 +28,7 @@
         android:id="@+id/managerMainFragment"
         android:name="com.example.myapplication.ManagerFragment"
         android:label="Manager fragment"
-        tools:layout="@layout/fragment_manager_main">
-        <action
-            android:id="@+id/action_managerMainFragment_to_workersListFragment"
-            app:destination="@id/WorkersListFragment" />
-        <action
-            android:id="@+id/action_managerMainFragment_to_WorkersConstrainsFragment"
-            app:destination="@id/WorkersConstrainsFragment" />
-        <action
-            android:id="@+id/action_managerMainFragment_to_ShiftsRequestsFragment"
-            app:destination="@id/ShiftsRequestsFragment" />
-        <action
-            android:id="@+id/action_managerMainFragment_to_ScheduleStatusFragment"
-            app:destination="@id/ScheduleStatusFragment" />
-        <action
-            android:id="@+id/action_managerMainFragment_to_ScheduleWorkerIntoShiftsFragment"
-            app:destination="@id/ScheduleWorkerIntoShiftsFragment" />
-        <action
-            android:id="@+id/action_managerMainFragment_to_DefineShiftRequirementsFragment"
-            app:destination="@id/DefineShiftRequirementsFragment" />
-        <action
-            android:id="@+id/action_managerMainFragment_to_autoScheduleJob"
-            app:destination="@id/autoScheduleJob" />
-    </fragment>
+        tools:layout="@layout/fragment_manager_main"/>
 
     <fragment
         android:id="@+id/WorkersListFragment"
@@ -114,7 +79,7 @@
         android:label="AutoScheduleJob" />
     <fragment
         android:id="@+id/constraintSubmissionActivity"
-        android:name="com.example.myapplication.ConstraintSubmissionActivity"
+        android:name="com.example.myapplication.ConstraintSubmissionFragment"
         android:label="Schedule Restrictions"
         tools:layout="@layout/fragment_constraint_submission" />
     <fragment

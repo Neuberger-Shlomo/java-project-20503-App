@@ -19,6 +19,7 @@ import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.ViewModel.ShiftRequestViewModel;
 import com.example.myapplication.ViewModel.ShiftsViewModel;
 import com.example.myapplication.api.Api;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -49,7 +50,7 @@ public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift>
                 userViewModel.getUserState().getValue().getId(),
                 userViewModel.getUserState().getValue().getAuthToken(),
                 this::onDataArrived);
-
+        binding.headerDatePicker.setText("Choose date");
         return binding.getRoot();
     }
 
@@ -88,7 +89,9 @@ public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift>
         holder.setItem(shift);
         holder.setText("Shift Date: " + shift.getDate()
                        + "\nNumber Of Required Workers: " + shift.getNumOfRequiredWorkers()
-                       + "\nNumber Of Scheduled Workers: " + shift.getNumOfScheduledWorkers());
+                       + "\nNumber Of Scheduled Workers: " + shift.getNumOfScheduledWorkers()
+                       + "\nat " + shift.getStartTime(true)
+                       + "- " + shift.getEndTime(true));
         holder.setOnClickListener(this::onItemClicked);
     }
 
@@ -111,7 +114,16 @@ public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift>
         shiftRequestViewModel.addShiftRequest(new ShiftRequest(shiftId, uid), suid, token, () -> {
         }, (valid, responseError, throwable) -> {
             if (Boolean.TRUE.equals(valid))
-                NavHostFragment.findNavController(AvailableShiftsUserRequestsFragment.this).popBackStack();
+                new AlertDialog.Builder(requireContext()).setTitle("Submit success").setOnDismissListener(
+                        (dialog -> NavHostFragment
+                                .findNavController(AvailableShiftsUserRequestsFragment.this)
+                                .popBackStack()));
+
+            else if (throwable != null || responseError != null) {
+                Snackbar.make(requireView(), responseError != null ? responseError.getMessage() :
+                                      "Unknown error",
+                              Snackbar.LENGTH_LONG).show();
+            }
         });
     }
 

@@ -1,16 +1,12 @@
 package com.example.myapplication.Entry;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -20,10 +16,8 @@ import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.databinding.FragmentEntryBinding;
-import com.google.android.material.datepicker.CalendarConstraints;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Objects;
 
 public class EntryFragment extends Fragment {
@@ -122,30 +116,7 @@ public class EntryFragment extends Fragment {
     }
 
 
-    void onLogin(View v) {
-        NavHostFragment.findNavController(EntryFragment.this)
-                .navigate(R.id.Login);
-    }
 
-    void onLogout(View v) {
-        try {
-
-            userViewModel.logout(
-                    () -> {
-                    },
-                    (aBoolean, responseError, throwable) ->
-                            ((MainActivity) requireActivity())
-                                    .updateMenu());
-        } catch (Exception e) {
-            Log.e(TAG, "onLogout: Error occured", e);
-        }
-    }
-
-
-    void onMangerClicked(View v) {
-        NavHostFragment.findNavController(EntryFragment.this)
-                .navigate(R.id.from_login_to_manger);
-    }
 
     @Override
     public void onDestroyView() {

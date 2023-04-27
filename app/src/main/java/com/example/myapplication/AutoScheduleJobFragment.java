@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.example.myapplication.api.JobApi;
 import com.example.myapplication.databinding.FragmentAutoScheduleBinding;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 
@@ -33,6 +35,7 @@ import java.util.Calendar;
 
 public class AutoScheduleJobFragment extends Fragment {
 
+    private static final String TAG = "AutoScheduleJobFragment";
     FragmentAutoScheduleBinding          binding;
     MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker
             .Builder
@@ -54,6 +57,7 @@ public class AutoScheduleJobFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: view is is being created");
         queue         = Volley.newRequestQueue(requireActivity());
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
@@ -63,6 +67,7 @@ public class AutoScheduleJobFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: view is created");
         binding = FragmentAutoScheduleBinding.inflate(inflater, container, false);
 
         materialDatePicker.addOnPositiveButtonClickListener(this::onDateChose);
@@ -78,6 +83,7 @@ public class AutoScheduleJobFragment extends Fragment {
     }
 
     private void onGetRequest(View view) {
+        Log.d(TAG, "onGetRequest: get all jobs");
         User user = userViewModel.getUserState().getValue();
         queue.add(JobApi.getAllJobs(
                 user.getId(),
@@ -88,6 +94,19 @@ public class AutoScheduleJobFragment extends Fragment {
                                 .getAsJsonArray()
                                 .forEach(e -> adapter.addEntry(new Gson().fromJson(e.toString(),
                                                                                    ScheduleJob.class)));
+                    } else if (responseError != null || throwable != null) {
+                        Snackbar.make(requireView(), responseError != null ?
+                                              responseError.getMessage() :
+                                              "Unknown error",
+                                      Snackbar.LENGTH_LONG).show();
+                        if(throwable!= null)
+                        Log.e(TAG, "onGetRequest: error when getting jobs",throwable);
+                        else{
+                            Log.e(TAG, "onGetRequest: Server returned with "+responseError);
+                        }
+                    } else {
+                        Snackbar.make(requireView(), "No information",
+                                      Snackbar.LENGTH_LONG).show();
                     }
                 })));
 
@@ -95,6 +114,7 @@ public class AutoScheduleJobFragment extends Fragment {
     }
 
     private void onStartClicked(View view) {
+        Log.d(TAG, "onStartClicked");
         User user = userViewModel.getUserState().getValue();
         queue.add(
                 JobApi.requestSchedule(
@@ -108,7 +128,6 @@ public class AutoScheduleJobFragment extends Fragment {
                         () -> {
                         },
                         (object, responseError, throwable) -> {
-
                             try {
                                 new MaterialAlertDialogBuilder(requireActivity())
                                         .setTitle("Job created")
@@ -116,9 +135,7 @@ public class AutoScheduleJobFragment extends Fragment {
                                                 object.getInt("id") : "Error"));
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
-                            }
-                        }
-                                      ));
+                            }}));
     }
 
 
@@ -138,7 +155,7 @@ public class AutoScheduleJobFragment extends Fragment {
         calendar.setTime(new Date(end.getTime()));
         String endDate = String.format("%s/%s/%s",
                                        calendar.get(Calendar.DAY_OF_MONTH),
-                                       calendar.get(Calendar.MONTH),
+                                       calendar.get(Calendar.MONTH) + 1,
                                        calendar.get(Calendar.YEAR)
                                       );
 

@@ -26,7 +26,7 @@ final public class UsersApi {
     public final static  String DEMOTE_BY_ID_URL  = String.format("%s/%s", BASE_URL, "remove" +
                                                                                      "-admin");
     public final static  String LOGIN_URL         = String.format("%s/%s", BASE_URL, "login");
-    public final static  String REGISTER_URL      = String.format("%s/%s", BASE_URL, "register");
+    public final static  String REGISTER_URL      = String.format("%s/%s", BASE_URL, "signup");
 
     public final static String LOGOUT_URL = String.format("%s/%s", BASE_URL, "logout");
 

@@ -49,7 +49,7 @@ public class LoginFragment extends Fragment implements TextWatcher {
         binding.btnRegister.setOnClickListener(
                 v -> NavHostFragment
                         .findNavController(LoginFragment.this)
-                        .navigate(R.id.action_Login_to_RegisterFragment)
+                        .navigate(R.id.RegisterFragment)
                                               );
         userViewModel.getUserState().observe(getViewLifecycleOwner(), (basicUser -> {
             if (!Objects.equals(basicUser.getAuthToken(), null) && !Objects.equals(basicUser.getAuthToken(), "")) {

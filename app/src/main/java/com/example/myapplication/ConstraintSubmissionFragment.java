@@ -43,7 +43,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-public class ConstraintSubmissionActivity extends Fragment implements AdapterView.OnItemSelectedListener {
+public class ConstraintSubmissionFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private FragmentConstraintSubmissionBinding binding;
     private Date                                start, end;
@@ -204,7 +204,7 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
                     .setMessage("Your " + "request " + "was " + "submitted")
                     .setPositiveButton("Another one?", ((dialog, which) -> clearAll()))
                     .setNegativeButton("Leave", (dialog, which) -> {
-                        NavHostFragment.findNavController(ConstraintSubmissionActivity.this).popBackStack();
+                        NavHostFragment.findNavController(ConstraintSubmissionFragment.this).popBackStack();
                     })
                     .show();
         }
