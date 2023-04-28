@@ -1,7 +1,6 @@
 package com.example.myapplication.ViewModel;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -9,15 +8,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.api.Constants;
 import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
+import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -167,11 +164,11 @@ public class ShiftsViewModel extends AndroidViewModel {
     }
 
 
-    public void addShift(Shift shift, Api.PreCall preCall,
+    public void addShift(Shift shift,String userId,String token, Api.PreCall preCall,
                          Api.PostCall<Boolean> postCall) {
 
         preCall.onPreCall();
-        queue.add(addShiftRequest(shift, preCall, (jsonObject, responseError,
+        queue.add(addShiftRequest(shift,userId,token, preCall, (jsonObject, responseError,
                                                              throwable) -> {
             if (responseError != null || throwable != null) {
                 postCall.onPostCall(null, responseError, throwable);
@@ -190,7 +187,9 @@ public class ShiftsViewModel extends AndroidViewModel {
     }
 
 
-    private JsonObjectRequest addShiftRequest(Shift shift,
+    private AuthedJsonObjectRequest addShiftRequest(Shift shift,
+                                              String userid,
+                                              String token,
                                               Api.PreCall preCall,
                                               Api.PostCall<JSONObject> postCall) {
         preCall.onPreCall();
@@ -203,7 +202,10 @@ public class ShiftsViewModel extends AndroidViewModel {
             return null;
         }
 
-        return new JsonObjectRequest(Request.Method.POST, Constants.ADD_SHIFT_URL, jsonObj, res -> {
+        return new AuthedJsonObjectRequest(Request.Method.POST,userid,token,
+                                           Constants.ADD_SHIFT_URL,
+                                           jsonObj
+                , res -> {
             try {
                 postCall.onPostCall(res, null, null);
             } catch (Exception e) {
