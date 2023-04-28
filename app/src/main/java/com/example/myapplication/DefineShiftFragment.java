@@ -110,7 +110,7 @@ public class DefineShiftFragment extends Fragment {
                 //TODO: Don't crash the APP here
                 throw new RuntimeException(e);
             }
-            c.setTime(new Date(System.currentTimeMillis()));
+            c.setTime(date);
             int weekNumber            = c.get(Calendar.WEEK_OF_YEAR);
             int dayNumber             = c.get(Calendar.DAY_OF_WEEK);
             int numOfScheduledWorkers = 0;
@@ -162,7 +162,6 @@ public class DefineShiftFragment extends Fragment {
                                               Snackbar.LENGTH_LONG)
                                         .setAction("Ok", null).show();
                         });
-
             }
 
         }
