@@ -12,6 +12,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Shift implements IModel {
 
@@ -41,6 +42,29 @@ public class Shift implements IModel {
         this.scheduledWorkers      = new ArrayList<>(numOfRequiredWorkers);
         this.weekNumber            = weekNumber;
         this.dayNumber             = dayNumber;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.WEEK_OF_YEAR,weekNumber);
+        calendar.set(Calendar.DAY_OF_WEEK,dayNumber);
+        this.startDate = new Date(calendar.getTime().getTime());
+    }
+
+    public Shift(String shiftDate, int numOfRequiredWorkers, ArrayList<Profile> workersList,
+                 int id, int startHour, int duration) {
+        this.numOfRequiredWorkers  = numOfRequiredWorkers;
+        this.id                    = id;
+        this.startHour             = startHour;
+        this.duration              = duration;
+        this.numOfScheduledWorkers = 0;
+        this.scheduledWorkers      = new ArrayList<>(numOfRequiredWorkers);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.WEEK_OF_YEAR,weekNumber);
+        calendar.set(Calendar.DAY_OF_WEEK,dayNumber);
+        this.startDate = new Date(calendar.getTime().getTime());
+
+        for (Profile worker : workersList) {
+            setScheduledWorker(worker);
+        }
     }
 
     public String getDate() {
@@ -59,19 +83,7 @@ public class Shift implements IModel {
 
     /*
      * this second constructor is for testing use only*/
-    public Shift(String shiftDate, int numOfRequiredWorkers, ArrayList<Profile> workersList,
-                 int id, int startHour, int duration) {
-        this.numOfRequiredWorkers  = numOfRequiredWorkers;
-        this.id                    = id;
-        this.startHour             = startHour;
-        this.duration              = duration;
-        this.numOfScheduledWorkers = 0;
-        this.scheduledWorkers      = new ArrayList<>(numOfRequiredWorkers);
 
-        for (Profile worker : workersList) {
-            setScheduledWorker(worker);
-        }
-    }
 
     @SuppressLint("DefaultLocale")
     public String getShiftDate() {
