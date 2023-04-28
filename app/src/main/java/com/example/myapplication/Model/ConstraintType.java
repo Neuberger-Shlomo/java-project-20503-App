@@ -1,3 +1,11 @@
+
+/**
+ represents types of constraints of the user - LIST THE POSSIBLE CONSTRAINTS ON SHIFT
+ veriables:
+ constraintLevel = rank of constraint (1-5), for constaints importance hierarchy
+ description = a string describing of the constraint
+
+ */
 package com.example.myapplication.Model;
 
 import androidx.annotation.Nullable;

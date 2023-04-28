@@ -1,5 +1,9 @@
 package com.example.myapplication.api;
 
+/**
+ * This class contains all the constants for the urls for the restful api
+ */
+
 import com.google.gson.Gson;
 
 final public class Constants {

@@ -1,5 +1,4 @@
 /**
- *
  * ShiftRequestViewModel - current representation of the shift request
  * act as bridge between the ShiftRequest in the db and the controllers that handle shift requests
  */
@@ -8,10 +7,12 @@
 package com.example.myapplication.ViewModel;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -24,10 +25,12 @@ import com.example.myapplication.api.Constants;
 import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
 import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
 import com.google.gson.Gson;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -78,7 +81,7 @@ public class ShiftRequestViewModel extends AndroidViewModel {
                                 arrayList.add(ShiftRequest.fromJSON(jsonObject));
                             }
 
-                            // Set shiftRequestState to  ArrayList (of ShiftRequests)
+                            // set shiftRequestState to  ArrayList (of ShiftRequests)
                             shiftRequestState.setValue(arrayList);
                             //  callback with the ArrayList
                             postCall.onPostCall(arrayList, null, null);
@@ -126,6 +129,7 @@ public class ShiftRequestViewModel extends AndroidViewModel {
                     }
                 });
     }
+
     /**
      * add shift request to the server as json object
      * @param shiftRequest  ShiftRequest we want to add
@@ -134,7 +138,7 @@ public class ShiftRequestViewModel extends AndroidViewModel {
      * @param preCall callback before the request sent
      * @param postCall callback  after server response
      */
-    public void addShiftRequest(ShiftRequest shiftRequest,String userId,String token, Api.PreCall preCall,
+    public void addShiftRequest(ShiftRequest shiftRequest, String userId, String token, Api.PreCall preCall,
                                 Api.PostCall<Boolean> postCall) {
 
         // preCall = callback before the request sent
@@ -153,7 +157,8 @@ public class ShiftRequestViewModel extends AndroidViewModel {
                 postCall.onPostCall(null, null, new Exception("No user error"));
                 return;
             }
-            // Add the new shift request to the state and set the LiveData object to the new state
+            // add new shift request to the state
+            // also set the LiveData to the new state
             s.add(shiftRequest);
             shiftRequestState.setValue(s);
             //  postCall callback to indicate sucsessful
@@ -169,9 +174,9 @@ public class ShiftRequestViewModel extends AndroidViewModel {
      * @param token   token of the user
      * @param preCall callback before the request sent
      * @param postCall callback  after server response
-     * @return  JsonObjectRequest=  json represents the shift request
+     * @return JsonObjectRequest=  json represents the shift request
      */
-    private JsonObjectRequest addUserShiftRequest(ShiftRequest shiftRequest,String userId,String token,
+    private JsonObjectRequest addUserShiftRequest(ShiftRequest shiftRequest, String userId, String token,
                                                   Api.PreCall preCall,
                                                   Api.PostCall<JSONObject> postCall) {
         //  preCall = callback before sending request
@@ -187,7 +192,7 @@ public class ShiftRequestViewModel extends AndroidViewModel {
         }
 
         // add shift request to server
-        return new AuthedJsonObjectRequest(Request.Method.POST, Constants.ADD_SHIFT_REQUEST_URL,userId,token, jsonObj, res -> {
+        return new AuthedJsonObjectRequest(Request.Method.POST, Constants.ADD_SHIFT_REQUEST_URL, userId, token, jsonObj, res -> {
             try {
                 //  postCall  with JSONObject
                 postCall.onPostCall(res, null, null);

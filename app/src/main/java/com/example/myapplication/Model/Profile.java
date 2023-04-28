@@ -1,4 +1,12 @@
 package com.example.myapplication.Model;
+/**
+ *  profile of the user who is logged in
+ *  VERIABLES:
+ *  firstName = the first name of the user
+ *  lastName = the last name of the user
+ *  email = the user email
+ *  phoneNumber = the user phone number
+ */
 
 import com.example.myapplication.Common.Views.Fragments.IModel;
 import com.google.gson.Gson;

@@ -7,7 +7,18 @@ import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.RoleLevel;
 
 import org.jetbrains.annotations.NotNull;
+/**
+ represents a basic user  login and permissions data - that is required for user login
 
+ veriables:
+
+ username = the user name fo login
+ id = the user id
+ password = password for login
+ authToken = authentication token of the user
+ RoleLevel = the user permission level (basic or manager)
+
+ */
 public class BasicUser {
     private String    username;
     private String    id;

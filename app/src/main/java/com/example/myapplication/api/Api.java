@@ -9,8 +9,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
 
-public class Api {
+/**
+ * this class handle the api calls
+ *
+ * inner class ResponseError represent the errors the api return
 
+ */
+public class Api {
+    /**
+     * this class represent the errors the api return
+     * with a timestamp of the error, the status code, the error description,
+     * the message showed to the user, and the url path
+     */
     public static class ResponseError {
         String  timestamp;
         Integer status;
@@ -71,11 +81,11 @@ public class Api {
         }
     }
 
-
+    // before the error is called
     public interface PreCall {
         void onPreCall();
     }
-
+    //
     public interface PostCall<T> {
         void onPostCall(@Nullable T t, @Nullable ResponseError responseError,
                         @Nullable Throwable throwable);

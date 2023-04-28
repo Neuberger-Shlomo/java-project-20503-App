@@ -1,4 +1,18 @@
 package com.example.myapplication.Model;
+/**
+ * THIS CLASS DESCRIBES A USER SHIFT REQUEST
+ *    firstName =the user first name
+ *   lastName = the user last name
+ *   phoneNumber = the user phone number
+ *   shiftDate = the date of the shift
+ *   shiftId = the id of the shift
+ *   id = the id of the shift request
+ *   uid = the id of the user who requested the shift
+ *   timestamp = the time of the request
+ *   startHour = the start hour of the shift
+ *   duration = the length of the shift
+ *
+ */
 
 import com.example.myapplication.Common.Views.Fragments.IModel;
 import com.google.gson.Gson;

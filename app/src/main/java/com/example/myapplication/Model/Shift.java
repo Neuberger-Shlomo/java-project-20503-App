@@ -1,4 +1,23 @@
+
+
 package com.example.myapplication.Model;
+
+/**
+ * THIS CLASS REPRESENT A SHIFT (FILLED BY THE MANAGER)
+ * veribles:
+ * shiftDate = the date of the shift
+ * numOfRequiredWorkers = the number of workers required for the shift
+ * numOfScheduledWorkers = the number of workers that already scheduled for the shift
+ * id = the id of the shift
+ * startHour = the start hour of the shift
+ * duration = the length of the shift
+ * scheduledWorkers = profiles of the workers that already scheduled for the shift
+ * weekNumber = the week number of the shift
+ * year = the year of the shift
+ * dayNumber = the day of the week (of the shift)
+ */
+
+
 
 import android.util.Log;
 
@@ -22,6 +41,7 @@ public class Shift implements IModel {
 
     private ArrayList<Profile> scheduledWorkers;
     private int weekNumber, year = 2023, dayNumber;
+
 //TODO: implement year getting according to database
 
     public Shift(String shiftDate, int numOfRequiredWorkers, int id,

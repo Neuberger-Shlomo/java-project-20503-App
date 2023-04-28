@@ -1,4 +1,8 @@
 package com.example.myapplication.ViewModel;
+/**
+ * WorkersConstrainsViewModel - current representation of the workers constraints
+ * this class act as bridge between the constraints in the db and the controllers that handle constraints
+ */
 
 import android.app.Application;
 
@@ -25,25 +29,35 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class WorkersConstrainsViewModel extends AndroidViewModel {
+    //  ArrayList<Constraints> to keep track on workers constraints
 
     private final MutableLiveData<ArrayList<Constraints>> workersConstraintsState =
             new MutableLiveData<ArrayList<Constraints>>(new ArrayList<Constraints>());
+    //queue of requests to the server
     private final RequestQueue queue;
 
+    // data in java will be stored in json format
     final static private Gson gson = new Gson();
-    
+
     public WorkersConstrainsViewModel(@NonNull Application application) {
         super(application);
         queue = Volley.newRequestQueue(getApplication());
     }
+
     public LiveData<ArrayList<Constraints>> getWorkersConstraintsstate() {
         return workersConstraintsState;
     }
 
+    /**
+     * get the constrains from server
+     * @param userId  the user id
+     * @param token  token of the user
+     * @param postCall for after the server response
+     */
     public void getData(String userId,
                         String token,
                         @NotNull Api.PostCall<ArrayList<Constraints>> postCall) {
-
+        //
         queue.add(getConstraints(userId, token, () -> {
                 },
                 (jsonArray, responseError, throwable) -> {
@@ -68,10 +82,18 @@ public class WorkersConstrainsViewModel extends AndroidViewModel {
                 }));
     }
 
+    /**
+     *   get the constrains from server
+     * @param userId  ID of the user making the request
+     * @param token   token of the user
+     * @param preCall callback before the request sent
+     @param postCall callback after the server response
+     @return authenticated network request to fetch a list of constraints from a server
+     */
 
     private static AuthedJsonArrayObjectRequest getConstraints(String userId, String token,
-                                                          @NotNull Api.PreCall preCall,
-                                                          @NotNull Api.PostCall<JSONArray> postCall) {
+                                                               @NotNull Api.PreCall preCall,
+                                                               @NotNull Api.PostCall<JSONArray> postCall) {
         preCall.onPreCall();
         return new AuthedJsonArrayObjectRequest(Constants.ALL_CONSTRAINTS_URL,
                 userId,
@@ -95,5 +117,5 @@ public class WorkersConstrainsViewModel extends AndroidViewModel {
                 });
     }
 
-    
+
 }

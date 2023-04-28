@@ -13,11 +13,13 @@ import com.example.myapplication.ScheduleStatus.ScheduleStatusFragment;
 
 
 /**
+ *
+ *
  * This fragment is the same as {@link ScheduleStatusFragment}
- * And changs only on the header and the item clicked call back
+ * And changes only on the header and the item clicked call back
  */
 public class ScheduleWorkerIntoShiftsFragment extends ScheduleStatusFragment {
-
+    //handle fregment created, inflate view and intilize datepicker
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class ScheduleWorkerIntoShiftsFragment extends ScheduleStatusFragment {
 
         return v;
     }
-
+    //handle when a shift is choosed
     @Override
     protected void onItemClicked(Shift model, View view) {
         Bundle b = new Bundle();
