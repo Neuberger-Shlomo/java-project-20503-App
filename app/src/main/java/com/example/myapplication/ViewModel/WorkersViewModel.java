@@ -186,8 +186,8 @@ public class WorkersViewModel extends AndroidViewModel {
             return null;
         }
 
-        return new AuthedJsonObjectRequest(Request.Method.POST, userId,
-                                           token, Constants.ADD_WORKER_TO_SHIFT_URL, jsonObj,
+        return new AuthedJsonObjectRequest(Request.Method.POST, Constants.ADD_WORKER_TO_SHIFT_URL, userId,
+                                           token, jsonObj,
                                            res -> {
             try {
                 postCall.onPostCall(res.getBoolean("result"), null, null);
