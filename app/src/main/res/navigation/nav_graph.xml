@@ -3,106 +3,97 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/SecondFragment">
+    app:startDestination="@id/EntryFragment">
 
     <fragment
         android:id="@+id/Login"
-        android:name="com.example.myapplication.LoginFragment"
+        android:name="com.example.myapplication.UserMVC.Controller.LoginFragment"
         android:label="@string/login_fragment_label"
-        tools:layout="@layout/fragment_login">
-        <action
-            android:id="@+id/action_Login_to_RegisterFragment"
-            app:destination="@id/RegisterFragment"
-            app:enterAnim="@anim/nav_default_pop_enter_anim" />
-    </fragment>
+        tools:layout="@layout/fragment_login"/>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.myapplication.EntryFragment"
+        android:id="@+id/EntryFragment"
+        android:name="com.example.myapplication.Entry.EntryFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_entry">
-
-        <action
-            android:id="@+id/action_to_login"
-            app:destination="@id/Login" />
-        <action
-            android:id="@+id/from_login_to_manger"
-            app:destination="@id/managerMainFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_entry"/>
     <fragment
         android:id="@+id/RegisterFragment"
         android:label="@string/register"
         tools:layout="@layout/fragment_register"
-        android:name="com.example.myapplication.RegisterFragment"
+        android:name="com.example.myapplication.UserMVC.Controller.RegisterFragment"
         >
     </fragment>
-    <fragment android:id="@+id/thiredFregment"
-        android:name="com.example.myapplication.BlankFragment"
-        android:label="THired fragment"
-        tools:layout="@layout/fragment_blank"
-        >
-
-    </fragment>
-
     <fragment
         android:id="@+id/managerMainFragment"
         android:name="com.example.myapplication.ManagerFragment"
         android:label="Manager fragment"
-        tools:layout="@layout/fragment_manager_main">
-        <action
-            android:id="@+id/action_managerMainFragment_to_workersListFragment"
-            app:destination="@id/WorkersListFragment" />
-        <action
-            android:id="@+id/action_managerMainFragment_to_WorkersConstrainsFragment"
-            app:destination="@id/WorkersConstrainsFragment" />
-        <action
-            android:id="@+id/action_managerMainFragment_to_ShiftsRequestsFragment"
-            app:destination="@id/ShiftsRequestsFragment" />
-        <action
-            android:id="@+id/action_managerMainFragment_to_ScheduleStatusFragment"
-            app:destination="@id/ScheduleStatusFragment" />
-        <action
-            android:id="@+id/action_managerMainFragment_to_ScheduleWorkerIntoShiftsFragment"
-            app:destination="@id/ScheduleWorkerIntoShiftsFragment" />
-        <action
-            android:id="@+id/action_managerMainFragment_to_DefineShiftRequirementsFragment"
-            app:destination="@id/DefineShiftRequirementsFragment" />
-    </fragment>
-
+        tools:layout="@layout/fragment_manager_main"/>
     <fragment
         android:id="@+id/WorkersListFragment"
         android:name="com.example.myapplication.WorkersListFragment"
-        android:label="WorkersList fragment"
-        tools:layout="@layout/fragment_workers_list"/>
-
+        android:label="Workers List"
+        tools:layout="@layout/fragment_date_picking"/>
     <fragment
         android:id="@+id/ShiftsRequestsFragment"
         android:name="com.example.myapplication.ShiftsRequestsFragment"
-        android:label="ShiftsRequests fragment"
-        tools:layout="@layout/fragment_shifts_requests"/>
-
+        android:label="Shifts Requests"
+        tools:layout="@layout/fragment_date_picking"/>
     <fragment
         android:id="@+id/WorkersConstrainsFragment"
-        android:name="com.example.myapplication.WorkersConstrains.WorkersConstrainsFragment"
-        android:label="WorkersConstrains fragment"
-        tools:layout="@layout/fragment_workers_constrains"/>
-
+        android:name="com.example.myapplication.WorkersConstrainsFragment"
+        android:label="Workers Constrains"
+        tools:layout="@layout/fragment_date_picking"/>
     <fragment
         android:id="@+id/ScheduleStatusFragment"
-        android:name="com.example.myapplication.ScheduleStatus.ScheduleStatusFragment"
-        android:label="ScheduleStatus fragment"
-        tools:layout="@layout/fragment_schedule_status"/>
-
+        android:name="com.example.myapplication.ScheduleStatusFragment"
+        android:label="Schedule Status"
+        tools:layout="@layout/fragment_date_picking"/>
     <fragment
         android:id="@+id/ScheduleWorkerIntoShiftsFragment"
-        android:name="com.example.myapplication.ScheduleWorkerIntoShiftsFragment"
-        android:label="ScheduleWorkerIntoShifts fragment"
-        tools:layout="@layout/fragment_schedule_worker_into_shift"/>
+        android:name="com.example.myapplication.ScheduleWorkerIntoShifts.ScheduleWorkerIntoShiftsFragment"
+        android:label="Schedule Into Shifts"
+        tools:layout="@layout/fragment_date_picking">
 
+    </fragment>
+    <fragment
+        android:id="@+id/ProfileListFragment"
+        android:name="com.example.myapplication.ScheduleWorkerIntoShifts.WorkerFragment"
+        android:label="Workers Info"
+        tools:layout="@layout/fragment_date_picking"/>
     <fragment
         android:id="@+id/DefineShiftRequirementsFragment"
         android:name="com.example.myapplication.DefineShiftFragment"
-        android:label="DefineShiftRequirements fragment"
+        android:label="Define Shift Requirements"
         tools:layout="@layout/fragment_define_shift"/>
+    <fragment
+        android:id="@+id/autoScheduleJob"
+        tools:layout="@layout/fragment_auto_schedule"
+        android:name="com.example.myapplication.AutoScheduleJobFragment"
+        android:label="Auto Scheduler" />
+    <fragment
+        android:id="@+id/constraintSubmissionActivity"
+        android:name="com.example.myapplication.ConstraintSubmissionFragment"
+        android:label="Schedule Restrictions"
+        tools:layout="@layout/fragment_constraint_submission" />
+    <fragment
+        android:id="@+id/shiftViewActivity"
+        android:name="com.example.myapplication.ShiftViewActivity"
+        android:label="Shift info"
+        tools:layout="@layout/activity_shift_view" />
+    <fragment
+        android:id="@+id/AvailableShiftsUserRequestsFragment"
+        android:name="com.example.myapplication.AvailableShiftsUserRequestsFragment"
+        android:label="Shift Request"
+        tools:layout="@layout/fragment_date_picking" />
+    <fragment
+        android:id="@+id/myShiftsFragment"
+        android:name="com.example.myapplication.MyShiftsFragment"
+        android:label="My Shifts"
+        tools:layout="@layout/fragemnt_my_shifts" />
+    <fragment
+        android:id="@+id/workerFragment"
+        tools:layout="@layout/fragment_worker_view"
+        android:name="com.example.myapplication.WorkerFragment"
+        android:label="Worker Info" />
 
 
 </navigation>

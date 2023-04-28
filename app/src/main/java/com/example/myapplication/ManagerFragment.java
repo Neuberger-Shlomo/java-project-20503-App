@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,17 +28,24 @@ public class ManagerFragment extends Fragment {
         add(new ManagerButton("Shift Scheduling Status",R.id.ScheduleStatusFragment));
         add(new ManagerButton("Schedule Worker Into Shift",R.id.ScheduleWorkerIntoShiftsFragment));
         add(new ManagerButton("Define Shifts",R.id.DefineShiftRequirementsFragment));
+        add(new ManagerButton("Auto Schedule",R.id.autoScheduleJob));
     }};
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
-
+        private final View cardView;
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
 
             textView = (TextView) view.findViewById(R.id.date);
+            cardView = (View) view.findViewById(R.id.card);
+
+        }
+
+        public void setOnClickListener(View.OnClickListener listener){
+        cardView.setOnClickListener(listener);
         }
 
         public TextView getTextView() {
@@ -65,7 +71,7 @@ public class ManagerFragment extends Fragment {
             public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                                      int viewType) {
                 View view =
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_one_line,
+                        LayoutInflater.from(parent.getContext()).inflate(R.layout.one_line_card_view,
                                 parent, false);
                 return new ViewHolder(view);
             }
@@ -73,13 +79,8 @@ public class ManagerFragment extends Fragment {
             @Override
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
                 (holder).getTextView().setText(buttonsArrayList.get(holder.getAdapterPosition()).getButtonName());
-                holder.getTextView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        NavHostFragment.findNavController(ManagerFragment.this)
-                                .navigate(buttonsArrayList.get(holder.getAdapterPosition()).getFragment());
-                    }
-                });
+                holder.getTextView().setOnClickListener(v -> NavHostFragment.findNavController(ManagerFragment.this)
+                        .navigate(buttonsArrayList.get(holder.getAdapterPosition()).getFragment()));
             }
 
             @Override
@@ -88,6 +89,7 @@ public class ManagerFragment extends Fragment {
             }
         });
         binding.rvManagerMain.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.rvManagerMain.smoothScrollToPosition(buttonsArrayList.size()-1);
         return binding.getRoot();
 
     }

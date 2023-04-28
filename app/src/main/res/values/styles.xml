@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme.MaterialCalendarFullscreen" parent="ThemeOverlay.MaterialComponents.MaterialCalendar.Fullscreen">
+        <!-- Add any customizations here -->
+    </style>
+
+    <style name="AppTheme.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <!-- Add any customizations here -->
+    </style>
+
+
+</resources>

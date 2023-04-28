@@ -1,34 +1,54 @@
-package com.example.myapplication.Model;
+package com.example.myapplication.UserMVC.Model;
 
 
-public class BasicUser {
+import androidx.annotation.Nullable;
+
+import com.example.myapplication.Model.Profile;
+import com.example.myapplication.Model.RoleLevel;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class User {
     private String    username;
     private String    id;
     private String    password;
     private String    authToken;
     private RoleLevel level = RoleLevel.BASIC;
 
-    public BasicUser() {
+    @Nullable
+    private Profile profile;
+
+    public User() {
         this.id        = "";
         this.username  = "";
         this.password  = "";
         this.authToken = "";
-        this.level     = null;
     }
 
-    public BasicUser(String username, String password, String authToken, RoleLevel level) {
+    public User(String username, String password, String authToken, RoleLevel level) {
         this.username  = username;
         this.password  = password;
         this.authToken = authToken;
         this.level     = level;
     }
 
-    public BasicUser(BasicUser u) {
+    public User(User u) {
         this.id        = u.id;
         this.username  = u.getUsername();
         this.password  = u.getPassword();
         this.authToken = u.getAuthToken();
         this.level     = u.getLevel();
+    }
+
+    public static User fromJSON(JSONObject object) throws JSONException {
+        User  user = new User();
+        user.setId(object.getString("id"));
+        user.setLevel(RoleLevel.values()[object.getJSONObject("role").getInt("roleLevel")]);
+        user.setUsername(object.getString("username"));
+
+        return user;
     }
 
     public String getUsername() {
@@ -69,6 +89,26 @@ public class BasicUser {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Nullable
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(@NotNull Profile profile) {
+        this.profile = profile;
+    }
+
+    public boolean isLoggedIn() {
+        return getAuthToken() != null && !getAuthToken().isEmpty();
+    }
+
+    public boolean isAdmin(){
+        return level.ordinal() > RoleLevel.BASIC.ordinal();
+    }
+    public boolean isSuperAdmin(){
+        return level.ordinal() > RoleLevel.MANAGER.ordinal();
     }
 
 }

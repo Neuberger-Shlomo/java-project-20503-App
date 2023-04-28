@@ -1,10 +1,6 @@
-package com.example.myapplication;
-
-import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
+package com.example.myapplication.UserMVC.Controller;
 
 import android.os.Bundle;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,15 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.widget.Button;
-
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.example.myapplication.ViewModel.UserViewModel;
+import com.example.myapplication.R;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.databinding.FragmentLoginBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -55,11 +49,11 @@ public class LoginFragment extends Fragment implements TextWatcher {
         binding.btnRegister.setOnClickListener(
                 v -> NavHostFragment
                         .findNavController(LoginFragment.this)
-                        .navigate(R.id.action_Login_to_RegisterFragment)
+                        .navigate(R.id.RegisterFragment)
                                               );
         userViewModel.getUserState().observe(getViewLifecycleOwner(), (basicUser -> {
             if (!Objects.equals(basicUser.getAuthToken(), null) && !Objects.equals(basicUser.getAuthToken(), "")) {
-                NavHostFragment.findNavController(LoginFragment.this).popBackStack();
+                NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.EntryFragment);
             }
             if (!basicUser.getUsername().isEmpty())
                 binding.etUsername.setText(basicUser.getUsername());
@@ -81,6 +75,8 @@ public class LoginFragment extends Fragment implements TextWatcher {
         String message = responseError != null ? responseError.getMessage() : throwable != null ?
                 throwable.getMessage() : "Unknown error";
         Log.d(TAG, "onLogin: Error occurred " + message);
+        binding.etUsername.setError("Error");
+        binding.etPassword.setError("Error");
         Snackbar.make(requireView(), responseError != null ? message : "Unknown error",
                       Snackbar.LENGTH_LONG).show();
 

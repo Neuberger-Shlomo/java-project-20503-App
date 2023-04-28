@@ -1,120 +1,71 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.lifecycle.ViewModelProvider;
 
 
+import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Model.ShiftRequest;
-import com.example.myapplication.databinding.FragmentDatePickingBinding;
-import com.example.myapplication.databinding.FragmentShiftsRequestsBinding;
-
-import java.util.ArrayList;
+import com.example.myapplication.ViewModel.ShiftRequestViewModel;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 
 
-public class ShiftsRequestsFragment extends Fragment {
+public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
 
-    private FragmentDatePickingBinding binding;
+    private ShiftRequestViewModel shiftRequestViewModel;
+    private UserViewModel         userViewModel;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
 
-        public ViewHolder(View view) {
-            super(view);
-            // Define click listener for the ViewHolder's View
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
-            textView = (TextView) view.findViewById(R.id.line1);
-
-        }
-
-        public TextView getTextView() {
-            return textView;
-        }
-    }
-    ArrayList<ShiftRequest> visibleShiftArrayList = null;
-    ArrayList<ShiftRequest> shiftRequestArrayList= new ArrayList<ShiftRequest>() {{
-        add(new ShiftRequest("tal","tal","050-1234567","6-4-2023"));
-        add(new ShiftRequest("Gal","Gal","050-1234567","6-4-2023"));
-        add(new ShiftRequest("Yuval","Yuval","050-1234567","8-4-2023"));
-        add(new ShiftRequest("tal","tal","050-1234567","8-4-2023"));
-        add(new ShiftRequest("Gal","Gal","050-1234567","8-4-2023"));
-        add(new ShiftRequest("Yuval","Yuval","050-1234567","7-4-2023"));
-        add(new ShiftRequest("Yuval","Yuval","050-1234567","7-4-2023"));
-    }};
-
-    public ShiftsRequestsFragment() {
-        // Required empty public constructor
-    }
-
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-
-        binding = FragmentDatePickingBinding.inflate(inflater, container, false);
-        RecyclerView.Adapter<ViewHolder> adapter = new RecyclerView.Adapter<ViewHolder>() {
-
-            @NonNull
-            @Override
-            public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
-                                                 int viewType) {
-                View view =
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_one_line_dis1,
-                                parent, false);
-                return new ViewHolder(view);
-            }
-
-            @Override
-            public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-                (holder).getTextView().setText("Full Name: "+ visibleShiftArrayList.get(position).getFirstName() + "\t\t" +
-                        visibleShiftArrayList.get(position).getLastName() + "\nPhone Number: " +
-                        visibleShiftArrayList.get(position).getPhoneNumber() + "\nShift Requested Date: " +
-                        visibleShiftArrayList.get(position).getshiftDate());
-            }
-
-            @Override
-            public int getItemCount() {
-                return visibleShiftArrayList != null ? visibleShiftArrayList.size() : 0 ;
-            }
-        };
-
-        binding.rvDatePicker.setAdapter(adapter);
         binding.headerDatePicker.setText("Shifts Requests");
 
-        binding.btnDatePicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        shiftRequestViewModel = new ViewModelProvider(this).get(ShiftRequestViewModel.class);
+        userViewModel         = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
-                visibleShiftArrayList = new ArrayList<>();
 
-                String pickedDate = binding.dpDatePicker.getDayOfMonth() + "-" +
-                        (binding.dpDatePicker.getMonth()+1) +"-"+
-                        binding.dpDatePicker.getYear();
+        shiftRequestViewModel.getData(userViewModel.getUserState().getValue().getId(),
+                                      userViewModel.getUserState().getValue().getAuthToken(),
+                                      this::onDataArrived);
 
-                for (ShiftRequest request:shiftRequestArrayList) {
-                    if(request.getshiftDate().equals(pickedDate)){
-                        visibleShiftArrayList.add(request);
-                    }
-                }
 
-                adapter.notifyDataSetChanged();
-            }
-        });
-        binding.rvDatePicker.setLayoutManager(new LinearLayoutManager(requireContext()));
-        return binding.getRoot();
+        return view;
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    protected void onPickClicked(View view, String pickerValue) {
+        String pickedDate =
+                new StringBuilder()
+                        .append(binding.dpDatePicker.getDayOfMonth())
+                        .append("-")
+                        .append(binding.dpDatePicker.getMonth() + 1)
+                        .append("-")
+                        .append(binding.dpDatePicker.getYear())
+                        .toString();
+        adapter.setFilter(pickedDate, ((item, s) -> !item.getShiftDate().equals(s)));
     }
+
+    @Override
+    protected void onItemClicked(ShiftRequest model, View view) {
+        String requestMessage =
+                "Request Timestamp: " + model.getTimestamp() + "\nShift Start Hour: " +
+                model.getStartHour() + "\nShift Duration: " +
+                model.getDuration();
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("More Info:")
+                .setMessage(requestMessage)
+                .setPositiveButton("Ok", null)
+                .create().show();
+    }
+
+
 
 }

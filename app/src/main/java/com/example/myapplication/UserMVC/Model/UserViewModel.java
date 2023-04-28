@@ -1,6 +1,5 @@
-package com.example.myapplication.ViewModel;
+package com.example.myapplication.UserMVC.Model;
 
-import android.app.AlertDialog;
 import android.app.Application;
 
 import androidx.annotation.Nullable;
@@ -8,15 +7,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.Model.Profile;
 import com.example.myapplication.api.Api;
-import com.example.myapplication.api.Constants;
-import com.example.myapplication.Model.BasicUser;
 import com.example.myapplication.Model.RoleLevel;
-import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
 import com.example.myapplication.api.UsersApi;
 import com.google.gson.Gson;
 
@@ -24,15 +19,14 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class UserViewModel extends AndroidViewModel {
 
 
-    private final MutableLiveData<BasicUser> userState =
-            new MutableLiveData<>(new BasicUser());
-    private final RequestQueue               queue;
+    private final MutableLiveData<User> userState =
+            new MutableLiveData<>(new User());
+    private final RequestQueue          queue;
 
     final static private Gson gson = new Gson();
 
@@ -41,7 +35,7 @@ public class UserViewModel extends AndroidViewModel {
         queue = Volley.newRequestQueue(getApplication());
     }
 
-    public LiveData<BasicUser> getUserState() {
+    public LiveData<User> getUserState() {
         return userState;
     }
 
@@ -64,7 +58,7 @@ public class UserViewModel extends AndroidViewModel {
 
     }
 
-    public void register(Api.RegisterRequest registerRequest, Api.PreCall preCall,
+    public void register(UsersApi.RegisterRequest registerRequest, Api.PreCall preCall,
                          Api.PostCall<Boolean> postCall) {
 
         preCall.onPreCall();
@@ -96,17 +90,12 @@ public class UserViewModel extends AndroidViewModel {
                         }));
 
     }
-public boolean isManger(){
-        // TODO: Ask server if the user is manager
-        BasicUser user = new BasicUser(userState.getValue());
-        user.setLevel(RoleLevel.MANAGER);
-        userState.setValue(user);
-        return true;
-    }
-    private void onRegisterResponse(Api.RegisterRequest registerRequest) {
-        BasicUser user = getUserState().getValue();
+
+
+    private void onRegisterResponse(UsersApi.RegisterRequest registerRequest) {
+        User user = getUserState().getValue();
         if (user == null) {
-            user = new BasicUser();
+            user = new User();
         }
         user.setUsername(registerRequest.getUsername());
         userState.setValue(user);
@@ -114,8 +103,8 @@ public boolean isManger(){
 
     private void onLogoutResponse(boolean result, Api.ResponseError error, Throwable throwable) {
         if (Boolean.TRUE.equals(result) || (error != null && error.getStatus() != 200) || throwable != null) {
-            BasicUser u =
-                    new BasicUser(Objects.requireNonNull(getUserState().getValue()));
+            User u =
+                    new User(Objects.requireNonNull(getUserState().getValue()));
             u.setAuthToken(null);
             userState.setValue(u);
         }
@@ -124,7 +113,7 @@ public boolean isManger(){
 
     private void onLoginResponse(JSONObject jsonObject, Api.ResponseError error,
                                  Throwable throwable) throws JSONException, Exception {
-        BasicUser user = userState.getValue();
+        User user = userState.getValue();
         if (user == null) {
             throw new Exception("No user data");
         }
@@ -140,9 +129,11 @@ public boolean isManger(){
             throw new Exception("Invalid values");
         }
 
-        BasicUser u = new BasicUser(user.getUsername(), user.getPassword(), jwt,
-                                    RoleLevel.values()[level]);
+        User u = new User(user.getUsername(), user.getPassword(), jwt,
+                          RoleLevel.values()[level]);
         u.setId(id);
+
+        u.setProfile(Profile.fromJSON(jsonObject.getJSONObject("profile")));
         userState.setValue(u);
     }
 
