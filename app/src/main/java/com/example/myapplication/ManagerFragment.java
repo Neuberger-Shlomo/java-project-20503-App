@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,13 +79,8 @@ public class ManagerFragment extends Fragment {
             @Override
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
                 (holder).getTextView().setText(buttonsArrayList.get(holder.getAdapterPosition()).getButtonName());
-                holder.getTextView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        NavHostFragment.findNavController(ManagerFragment.this)
-                                .navigate(buttonsArrayList.get(holder.getAdapterPosition()).getFragment());
-                    }
-                });
+                holder.getTextView().setOnClickListener(v -> NavHostFragment.findNavController(ManagerFragment.this)
+                        .navigate(buttonsArrayList.get(holder.getAdapterPosition()).getFragment()));
             }
 
             @Override
@@ -96,8 +90,6 @@ public class ManagerFragment extends Fragment {
         });
         binding.rvManagerMain.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvManagerMain.smoothScrollToPosition(buttonsArrayList.size()-1);
-        Handler handler = new Handler();
-        handler.postDelayed(() -> binding.rvManagerMain.smoothScrollToPosition(0), 500);
         return binding.getRoot();
 
     }

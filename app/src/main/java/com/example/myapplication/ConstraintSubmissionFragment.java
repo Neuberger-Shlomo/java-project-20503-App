@@ -10,11 +10,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.android.volley.RequestQueue;
@@ -23,8 +23,8 @@ import com.example.myapplication.Common.Utils.DateUtils;
 import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLinerAdapter;
 import com.example.myapplication.Model.ConstraintType;
 import com.example.myapplication.Model.Constraints;
-import com.example.myapplication.User.Model.BasicUser;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.User;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.api.ConstraintApi;
 import com.example.myapplication.api.ConstraintTypeApi;
@@ -43,7 +43,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-public class ConstraintSubmissionActivity extends Fragment implements AdapterView.OnItemSelectedListener {
+public class ConstraintSubmissionFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private FragmentConstraintSubmissionBinding binding;
     private Date                                start, end;
@@ -56,8 +56,8 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
     private       RequestQueue                 queue;
     private final List<ConstraintType>         constraintTypes = new ArrayList<>();
     private       ArrayAdapter<ConstraintType> constraintTypeAdapter;
-    private       UserViewModel                userViewModel;
 
+    private User user;
     OneLinerAdapter<Constraints> userRecyclerAdapter = new OneLinerAdapter<>();
 
 
@@ -65,15 +65,16 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding       = FragmentConstraintSubmissionBinding.inflate(inflater, container, false);
-        queue         = Volley.newRequestQueue(requireActivity());
-        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        binding = FragmentConstraintSubmissionBinding.inflate(inflater, container, false);
+        queue   = Volley.newRequestQueue(requireActivity());
 
+        new ViewModelProvider(requireActivity()).get(UserViewModel.class).
+                getUserState().observe(getViewLifecycleOwner(), u -> {
+                    user = u;
+                    if (user.isLoggedIn())
+                        getAllConstraintsType();
+                });
 
-        constraintTypeAdapter = new ArrayAdapter<>(requireContext(),
-                                                   android.R.layout.simple_spinner_item,
-                                                   constraintTypes);
-        constraintTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         materialDatePicker.addOnPositiveButtonClickListener(this::onDateChose);
         binding.btnSelectDates.setOnClickListener(
@@ -84,21 +85,26 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
                     }
                 });
 
+        constraintTypeAdapter = new ArrayAdapter<>(requireContext(),
+                                                   android.R.layout.simple_spinner_item,
+                                                   constraintTypes);
 
+        constraintTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.constraintTypeSpinner.setAdapter(constraintTypeAdapter);
-
         binding.constraintTypeSpinner.setOnItemSelectedListener(this);
+
         binding.rvUserConstraints.setAdapter(userRecyclerAdapter);
         binding.rvUserConstraints.setLayoutManager(new LinearLayoutManager(getContext()));
+
         binding.addConstraintButton.setOnClickListener(this::onAddConstraint);
         binding.addConstraintButton.setEnabled(false);
-        userRecyclerAdapter.setOnItemClickListener(this::onOldConstrainClcked);
-        getAllConstraintsType();
+
+        userRecyclerAdapter.setOnItemClickListener(this::onOldConstrainClicked);
 
         return binding.getRoot();
     }
 
-    private void onOldConstrainClcked(Constraints constraints, View view) {
+    private void onOldConstrainClicked(Constraints constraints, View view) {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Delete the constraint")
                 .setMessage("Do tou want to delete \n" + constraints.toPrettyString())
@@ -109,13 +115,15 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
 
     private void deleteConstraint(Constraints constraints) {
         userRecyclerAdapter.removeEntry(constraints);
-        BasicUser user = userViewModel.getUserState().getValue();
         queue.add(
                 ConstraintApi.deleteConstraint(
                         user.getId(),
                         user.getAuthToken(),
                         constraints.getId(),
                         (jsonObject, responseError, throwable) -> {
+                            if (responseError != null || throwable != null)
+                                Snackbar.make(requireView(), "Unable to delete the constraint",
+                                              BaseTransientBottomBar.LENGTH_SHORT).show();
                             try {
                                 if (jsonObject != null && !jsonObject.getBoolean("deleted")) {
                                     userRecyclerAdapter.addEntry(constraints);
@@ -134,11 +142,12 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
     }
 
     private void getAllConstraintsType() {
-        queue.add(ConstraintTypeApi.getConstraintsTypes(this::onConstraintTypeArrived));
+        queue.add(
+                ConstraintTypeApi.getConstraintsTypes(user.getId(), user.getAuthToken(),
+                                                      this::onConstraintTypeArrived));
     }
 
     private void addConstraint(Constraints constraints) {
-        BasicUser user = userViewModel.getUserState().getValue();
         queue.add(ConstraintApi.addConstraints(user.getId(), user.getAuthToken(), constraints,
                                                this::onAddSuccess));
     }
@@ -167,8 +176,7 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
     }
 
     void onAddConstraint(View v) {
-        BasicUser user     = userViewModel.getUserState().getValue();
-        Calendar  calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(Objects.requireNonNull(DateUtils.toDate(start.toString())));
         Constraints constraints = new Constraints(
                 null,
@@ -186,8 +194,31 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
 
     private void onAddSuccess(JSONObject jsonObject, Api.ResponseError responseError,
                               Throwable throwable) {
-        //TODO: Alert on error
 
+        if (responseError != null || throwable != null)
+            Snackbar.make(requireView(), "Unable to add your constraint",
+                          BaseTransientBottomBar.LENGTH_SHORT).show();
+        else {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Success")
+                    .setMessage("Your " + "request " + "was " + "submitted")
+                    .setPositiveButton("Another one?", ((dialog, which) -> clearAll()))
+                    .setNegativeButton("Leave", (dialog, which) -> {
+                        NavHostFragment.findNavController(ConstraintSubmissionFragment.this).popBackStack();
+                    })
+                    .show();
+        }
+
+    }
+
+    private void clearAll() {
+        binding.permanentCheckbox.setActivated(false);
+        binding.tvDates.setText("");
+        binding.selfDescription.setText("");
+        userRecyclerAdapter.clearList();
+        onDateChose(new Pair<>(start.getTime(),end.getTime()));
+        start = null;
+        end   = null;
     }
 
 
@@ -221,8 +252,6 @@ public class ConstraintSubmissionActivity extends Fragment implements AdapterVie
 
 
     private void getAllConstrainsInWeek(int startDate, int endDate) {
-        BasicUser user = userViewModel.getUserState().getValue();
-
         queue.add(ConstraintApi.getConstraintsByWeek(
                 user.getId(),
                 user.getAuthToken(),

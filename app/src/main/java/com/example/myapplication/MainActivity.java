@@ -1,44 +1,28 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
-
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.example.myapplication.Model.RoleLevel;
-import com.example.myapplication.Model.Shift;
-import com.example.myapplication.User.Model.BasicUser;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.User;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.databinding.MainActivityBinding;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ViewModelStoreOwner {
 
 
-
     private AppBarConfiguration appBarConfiguration;
     private MainActivityBinding binding;
-    private RequestQueue        restQueue;
 
     @Override
     protected void onResume() {
@@ -61,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         setContentView(binding.getRoot());
-        restQueue = Volley.newRequestQueue(this);
 
         setSupportActionBar(binding.toolbar);
 
@@ -112,19 +95,11 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
                || super.onSupportNavigateUp();
     }
 
-    public void hideAppBar() {
-        binding.appBar.setVisibility(View.GONE);
-    }
-
-    public void showAppBar() {
-        binding.appBar.setVisibility(View.VISIBLE);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.bar_menu, menu);
-        BasicUser user = userViewModel.getUserState().getValue();
+        User user = userViewModel.getUserState().getValue();
         if (user == null)
             return true;
         return updateMenu(menu, user);
@@ -137,15 +112,7 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
         return updateMenu(binding.toolbar.getMenu(), userViewModel.getUserState().getValue());
     }
 
-    public boolean updateMenu(BasicUser user) {
-        return updateMenu(binding.toolbar.getMenu(), user);
-    }
-
-    public boolean updateMenu(Menu menu) {
-        return this.updateMenu(menu, userViewModel.getUserState().getValue());
-    }
-
-    private boolean updateMenu(Menu menu, BasicUser user) {
+    private boolean updateMenu(Menu menu, User user) {
         if (menu == null)
             return false;
         MenuItem loginItem   = menu.findItem(R.id.login);
@@ -154,17 +121,14 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
         if (loginItem == null || logoutItem == null || managerItem == null)
             return false;
         boolean userNotLogged = "".equals(user.getAuthToken()) ||
-                             user.getAuthToken() == null;
+                                user.getAuthToken() == null;
 
         menu.findItem(R.id.login).setVisible(userNotLogged);
         menu.findItem(R.id.logout).setVisible(!userNotLogged);
-        menu.findItem(R.id.manager).setVisible(RoleLevel.MANAGER.equals(user.getLevel()));
+        menu.findItem(R.id.manager).setVisible(!userNotLogged && user.isAdmin());
 
         return true;
     }
 
-    public RequestQueue getRestQueue() {
-        return restQueue;
-    }
 
 }

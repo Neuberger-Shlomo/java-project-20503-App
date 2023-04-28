@@ -7,17 +7,16 @@ import com.example.myapplication.Model.ScheduleJob;
 import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
 import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 
-import org.json.JSONArray;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 final public class JobApi {
     private static final Gson   gson           = new Gson();
     public static final  String BASE_URL       = String.format("%s/%s", Constants.BASE_URL, "jobs");
-    public static final  String CREATE_JOB_URL = BASE_URL;
+    public static final  String CREATE_JOB_URL = String.format("%s/%s", BASE_URL, "");
     public static final  String GET_JOB_URL    = String.format("%s/%s", BASE_URL, "user/");
 
 

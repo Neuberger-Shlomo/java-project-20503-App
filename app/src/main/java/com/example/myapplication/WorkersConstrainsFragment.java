@@ -1,4 +1,4 @@
-package com.example.myapplication.WorkersConstrains;
+package com.example.myapplication;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,10 +8,14 @@ import android.view.ViewGroup;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myapplication.Common.Utils.DateUtils;
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
+import com.example.myapplication.Common.Views.ViewHolder.OneLiner.OneLineViewHolder;
 import com.example.myapplication.Model.Constraints;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.ViewModel.WorkersConstrainsViewModel;
+
+import java.util.Date;
 
 public class WorkersConstrainsFragment extends DateListFragment<Constraints> {
 
@@ -42,8 +46,17 @@ public class WorkersConstrainsFragment extends DateListFragment<Constraints> {
 
     @Override
     protected void onPickClicked(View view, String pickerValue) {
-        adapter.setFilter(pickerValue, (item, s) -> item.getStartDate().equals(s));
+        Date date = DateUtils.toDateRegularFormat(pickerValue);
+        adapter.setFilter(date, (item, s) -> DateUtils.toDate(item.getEndDate()).compareTo(s) == -1);
     }
+
+    @Override
+    protected void onModelBind(Constraints model, OneLineViewHolder<Constraints> holder, int position) {
+        super.onModelBind(model, holder, position);
+        holder.setText("First Name: " + model.getFirstName()+
+                        "\nLast Name: "+ model.getLastName());
+    }
+
 
     @Override
     protected void onItemClicked(Constraints model, View view) {

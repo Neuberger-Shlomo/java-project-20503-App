@@ -4,4 +4,9 @@
         <!-- Add any customizations here -->
     </style>
 
+    <style name="AppTheme.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <!-- Add any customizations here -->
+    </style>
+
+
 </resources>
