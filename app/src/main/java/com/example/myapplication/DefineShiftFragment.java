@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.Model.Shift;
+import com.example.myapplication.UserMVC.Model.User;
 import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.ViewModel.ShiftsViewModel;
 import com.example.myapplication.databinding.FragmentDefineShiftBinding;
@@ -52,7 +53,7 @@ public class DefineShiftFragment extends Fragment {
 
         binding.btnDefineShifts.setOnClickListener(this::onDefineShiftClicked);
 
-        binding.tpDefineShift.setOnTimeChangedListener((picker,h,m)-> picker.setMinute(0));
+        binding.tpDefineShift.setOnTimeChangedListener((picker, h, m) -> picker.setMinute(0));
 
 
         return binding.getRoot();
@@ -62,19 +63,19 @@ public class DefineShiftFragment extends Fragment {
         String pickedDate = binding.dpDefineShift.getDayOfMonth() + "-" +
                             (binding.dpDefineShift.getMonth() + 1) + "-" +
                             binding.dpDefineShift.getYear();
-        int pickedDay = binding.dpDefineShift.getDayOfMonth();
-        int pickedMonth = binding.dpDefineShift.getMonth() + 1;
-        int pickedYear = binding.dpDefineShift.getYear();
-        Editable defineShiftText = binding.tfDefineShift.getText();
-        Editable defineShift3Text = binding.tfDefineShift3.getText();
-        ArrayList<Shift> shifts = shiftViewModel.getShiftstate().getValue();
-        if(defineShiftText == null)
+        int              pickedDay        = binding.dpDefineShift.getDayOfMonth();
+        int              pickedMonth      = binding.dpDefineShift.getMonth() + 1;
+        int              pickedYear       = binding.dpDefineShift.getYear();
+        Editable         defineShiftText  = binding.tfDefineShift.getText();
+        Editable         defineShift3Text = binding.tfDefineShift3.getText();
+        ArrayList<Shift> shifts           = shiftViewModel.getShiftstate().getValue();
+        if (defineShiftText == null)
             // TODO: Alert the user about the error
             return;
-        if(defineShift3Text == null)
+        if (defineShift3Text == null)
             // TODO: Alert the user about the error
             return;
-        if(shifts == null)
+        if (shifts == null)
             // TODO: Alert the user about the error
             return;
         if (defineShiftText.toString().matches("")) {
@@ -94,9 +95,9 @@ public class DefineShiftFragment extends Fragment {
                     Integer.parseInt(defineShiftText.toString());
             int duration =
                     Integer.parseInt(defineShift3Text.toString());
-            int     hour = binding.tpDefineShift.getHour();
-            int     id   = (int) Math.random();
-            boolean overlayFlag = false;
+            int     hour         = binding.tpDefineShift.getHour();
+            int     id           = (int) Math.random();
+            boolean overlayFlag  = false;
             boolean validityFlag = true;
 
 
@@ -124,40 +125,43 @@ public class DefineShiftFragment extends Fragment {
                         s.getStartHour() <= endTestedHour && endTestedHour <= s.getStartHour() + s.getDuration()
                         ||
                         // is the shift in side the to be created
-                        starTestedHour<= s.getStartHour()  && s.getStartHour() <= endTestedHour
+                        starTestedHour <= s.getStartHour() && s.getStartHour() <= endTestedHour
                         ||
-                        starTestedHour<= s.getStartHour() + s.getDuration()  && s.getStartHour() + s.getDuration() <= endTestedHour
-                        ;
+                        starTestedHour <= s.getStartHour() + s.getDuration() && s.getStartHour() + s.getDuration() <= endTestedHour;
 
                 if (isSameDate
                     && isHourOverLap) {
                     overlayFlag = true;
                     Snackbar.make(view, "Shift Already Exists For This Time!\nCan't " +
-                                    "Overlay Shifts", Snackbar.LENGTH_LONG)
+                                        "Overlay Shifts", Snackbar.LENGTH_LONG)
                             .setAction("Ok", null).show();
                 }
             }
 
             if (pickedDay == c.get(Calendar.DAY_OF_MONTH)
-                    && pickedMonth == c.get(Calendar.MONTH)
-                    && pickedYear == c.get(Calendar.YEAR)
-                    && hour <= c.get(Calendar.HOUR_OF_DAY)) {
+                && pickedMonth == c.get(Calendar.MONTH)
+                && pickedYear == c.get(Calendar.YEAR)
+                && hour <= c.get(Calendar.HOUR_OF_DAY)) {
                 Snackbar.make(view, "Can't Set Shift To This Hour!",
-                                Snackbar.LENGTH_LONG)
+                              Snackbar.LENGTH_LONG)
                         .setAction("Ok", null).show();
                 validityFlag = false;
             }
 
+
             if (!overlayFlag && validityFlag) {
+                User user = userViewModel.getUserState().getValue();
                 shiftViewModel.addShift(new Shift(pickedDate, numOfRequiredWorkers, id,
                                                   hour,
                                                   duration, weekNumber, dayNumber,
-                                                  numOfScheduledWorkers), () -> {
-                }, (valid, responseError, throwable) -> {
-                    if (Boolean.TRUE.equals(valid))
-                        Snackbar.make(view, "Shift defined Successfully!", Snackbar.LENGTH_LONG)
-                                .setAction("Ok", null).show();
-                });
+                                                  numOfScheduledWorkers), user.getId(),
+                                        user.getAuthToken(), () -> {
+                        }, (valid, responseError, throwable) -> {
+                            if (Boolean.TRUE.equals(valid))
+                                Snackbar.make(view, "Shift defined Successfully!",
+                                              Snackbar.LENGTH_LONG)
+                                        .setAction("Ok", null).show();
+                        });
 
             }
 
