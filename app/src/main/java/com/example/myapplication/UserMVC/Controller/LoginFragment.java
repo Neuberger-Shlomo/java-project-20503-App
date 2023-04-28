@@ -1,10 +1,6 @@
-package com.example.myapplication.User.Controller;
-
-import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
+package com.example.myapplication.UserMVC.Controller;
 
 import android.os.Bundle;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,13 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.databinding.FragmentLoginBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,16 +26,14 @@ import java.util.Objects;
  */
 public class LoginFragment extends Fragment implements TextWatcher {
 
-    // Tag for logging
+    //  for logging from this api
     private final String TAG = "LoginFragment";
 
-    // Binding  fragment
     private FragmentLoginBinding binding;
-
-    private UserViewModel userViewModel;
+    private UserViewModel        userViewModel;
 
     /**
-     * create fragment created.
+     * create fragment
      */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,9 +44,10 @@ public class LoginFragment extends Fragment implements TextWatcher {
      * Inflate the view for the fragment.
      */
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: Login view loaded");
         // Inflate the layout
         binding = FragmentLoginBinding.inflate(inflater, container, false);
@@ -69,30 +64,25 @@ public class LoginFragment extends Fragment implements TextWatcher {
         binding.btnRegister.setOnClickListener(
                 v -> NavHostFragment
                         .findNavController(LoginFragment.this)
-                        .navigate(R.id.action_Login_to_RegisterFragment)
-        );
-
+                        .navigate(R.id.RegisterFragment)
+                                              );
         userViewModel.getUserState().observe(getViewLifecycleOwner(), (basicUser -> {
             //  the user is authenticated go to entry fragment
             if (!Objects.equals(basicUser.getAuthToken(), null) && !Objects.equals(basicUser.getAuthToken(), "")) {
                 NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.EntryFragment);
             }
-
-
             if (!basicUser.getUsername().isEmpty())
                 binding.etUsername.setText(basicUser.getUsername());
 
         }));
-
         return binding.getRoot();
 
     }
 
-    /**
-     * This method is called immediately after onCreateView.
-     */
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
     }
 
     /**
@@ -109,7 +99,8 @@ public class LoginFragment extends Fragment implements TextWatcher {
         binding.etPassword.setError("Error");
         // show error massage
         Snackbar.make(requireView(), responseError != null ? message : "Unknown error",
-                Snackbar.LENGTH_LONG).show();
+                      Snackbar.LENGTH_LONG).show();
+
 
     }
 
@@ -117,10 +108,8 @@ public class LoginFragment extends Fragment implements TextWatcher {
      handle login button pressed.
      */
     private void onLoginPressed(View v) {
-        String username = binding.etUsername.getText().toString();
-        String password = binding.etPassword.getText().toString();
-
-        // Show the progress bar and disable the login button
+        String username = binding.etUsername.getText().toString(), password =
+                binding.etPassword.getText().toString();
         binding.progressBar.setVisibility(View.VISIBLE);
         binding.btnLogin.setEnabled(false);
 
@@ -147,6 +136,7 @@ public class LoginFragment extends Fragment implements TextWatcher {
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
     }
 
     /**
@@ -162,5 +152,8 @@ public class LoginFragment extends Fragment implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
+
     }
+
+
 }

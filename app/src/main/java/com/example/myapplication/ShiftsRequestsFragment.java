@@ -1,4 +1,4 @@
-package com.example.myapplication.ShiftsRequests;
+package com.example.myapplication;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Model.ShiftRequest;
 import com.example.myapplication.ViewModel.ShiftRequestViewModel;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 
 
 public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
@@ -49,7 +49,7 @@ public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
                         .append("-")
                         .append(binding.dpDatePicker.getYear())
                         .toString();
-        adapter.setFilter(pickedDate, ((item, s) -> item.getShiftDate().equals(s)));
+        adapter.setFilter(pickedDate, ((item, s) -> !item.getShiftDate().equals(s)));
     }
 
     @Override

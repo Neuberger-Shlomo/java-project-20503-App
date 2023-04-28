@@ -5,7 +5,7 @@
     android:id="@+id/scrollView2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ConstraintSubmissionActivity">
+    tools:context=".ConstraintSubmissionFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
@@ -57,6 +57,7 @@
         android:hint="Enter self description"
         android:inputType="textMultiLine"
         android:lines="3"
+        android:maxLength="80"
         android:maxLines="3"
         android:minLines="3"
         app:layout_constraintEnd_toEndOf="@+id/constraint_type_spinner"

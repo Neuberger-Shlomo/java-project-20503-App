@@ -5,5 +5,6 @@ package com.example.myapplication.Model;
  */
 public enum RoleLevel {
     BASIC,
-    MANAGER
+    MANAGER,
+    SUPER_ADMIN
 }

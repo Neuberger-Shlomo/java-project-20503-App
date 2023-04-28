@@ -1,4 +1,4 @@
-package com.example.myapplication.ScheduleStatus;
+package com.example.myapplication;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.ViewModel.ShiftsViewModel;
-import com.example.myapplication.User.Model.UserViewModel;
+import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.api.Api;
 
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ public class ScheduleStatusFragment extends DateListFragment<Shift> {
             Bundle savedInstanceState
                             ) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
+        binding.headerDatePicker.setText("Schedule Status");
 
         shiftViewModel = new ViewModelProvider(requireActivity()).get(ShiftsViewModel.class);
         userViewModel  = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
