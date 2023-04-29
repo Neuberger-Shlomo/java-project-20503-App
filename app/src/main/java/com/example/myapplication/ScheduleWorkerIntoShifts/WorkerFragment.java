@@ -19,13 +19,27 @@ import com.example.myapplication.ViewModel.WorkersViewModel;
 import com.example.myapplication.api.Api;
 
 import java.util.ArrayList;
+/**
 
+  in this fragment:
+ -display list of available workers for a certain shift
+ - schedule worker to shift
+ */
 public class WorkerFragment extends DateListFragment<Profile> {
+    // key to get the shift id from arguments
+
     public final static String SHIFT_ID_KEY = "shiftIdKey";
-    private             int    shiftId      = -1;
+    private             int    shiftId      = -1; // initilize to no shift
     UserViewModel    userViewModel;
     WorkersViewModel workersViewModel;
-
+    /**
+     * inflate the view and initialize the components.
+     *
+     * @param inflater          to inflate the view
+     * @param container          the parent view
+     * @param savedInstanceState previous saved state (so we can restore the previous screen)
+     * @return the inflated view
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -37,6 +51,7 @@ public class WorkerFragment extends DateListFragment<Profile> {
         binding.btn2DatePicker.setVisibility(View.VISIBLE);
         userViewModel    = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         workersViewModel = new ViewModelProvider(this).get(WorkersViewModel.class);
+        // get the list of free workers for this shift
         if (getArguments() != null) {
             shiftId = getArguments().getInt(SHIFT_ID_KEY);
             User user = userViewModel.getUserState().getValue();
@@ -45,10 +60,11 @@ public class WorkerFragment extends DateListFragment<Profile> {
                     user.getAuthToken(),
                     shiftId, this::onDataArrived);
         } else {
+            //if no shiftid given go to previous screen
             NavHostFragment.findNavController(WorkerFragment.this).popBackStack();
 
         }
-
+        // handle click on the reset button
         binding.btn2DatePicker.setOnClickListener(view -> {
             new AlertDialog.Builder(requireContext())
                     .setTitle("Reset Shift")
@@ -56,9 +72,11 @@ public class WorkerFragment extends DateListFragment<Profile> {
                     .setPositiveButton("Ok", (dialogInterface, i) -> {
                         String uid   = userViewModel.getUserState().getValue().getId();
                         String token = userViewModel.getUserState().getValue().getAuthToken();
+                        //reset the shift in api
                         workersViewModel.resetShift(uid, token, shiftId, () -> {
                         }, (valid, responseError, throwable) -> {
                             adapter.clearList();
+                            //get the list of free workers for the shift
                             workersViewModel.getFreeWorkersData(
                                     userViewModel.getUserState().getValue().getId(),
                                     userViewModel.getUserState().getValue().getAuthToken(),
@@ -72,23 +90,42 @@ public class WorkerFragment extends DateListFragment<Profile> {
         return v;
     }
 
-
+    /**
+     * callback function - called when we get the list of free workers.
+     * (update the view to show the list of workers)
+     *
+     * @param profiles the list of free workers
+     * @param error    if error
+     * @param t        if throwable
+     */
     @Override
     public void onDataArrived(@Nullable ArrayList<Profile> profiles,
                               @Nullable Api.ResponseError error, @Nullable Throwable t) {
         super.onDataArrived(profiles, error, t);
         adapter.notifyItemRangeInserted(0, adapter.getItemCount());
     }
+    /**
+     * callback function for clicking pick date button
+     * @param view         the view that we clicked
+     * @param pickerValue the date picker value we choose
+     */
 
     @Override
     protected void onPickClicked(View view, String pickerValue) {
 
     }
-
+    /**
+     * callback function when click on free worker from the list
+     * add the selected worker to the shift
+     *
+     * @param model the selected worker
+     * @param view  the view we clicked on
+     */
 
     @Override
     protected void onItemClicked(Profile model, View view) {
         User user = userViewModel.getUserState().getValue();
+        // add the selected worker to the shift (from the api)
         workersViewModel.addWorkerToShift(
                 model.getId(),
                 shiftId, user.getId(),
@@ -106,6 +143,7 @@ public class WorkerFragment extends DateListFragment<Profile> {
                     } else if (Boolean.TRUE.equals(valid)) {
                         adapter.removeEntry(model);
                         adapter.clearList();
+                        // get the updated list of free workers (from the api)
                         workersViewModel.getFreeWorkersData(
                                 userViewModel.getUserState().getValue().getId(),
                                 userViewModel.getUserState().getValue().getAuthToken(),
