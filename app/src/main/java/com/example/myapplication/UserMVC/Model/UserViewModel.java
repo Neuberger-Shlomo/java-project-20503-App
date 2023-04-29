@@ -168,7 +168,7 @@ public class UserViewModel extends AndroidViewModel {
      * @throws Exception     exception if login data not valid
      */
     private void onLoginResponse(JSONObject jsonObject, Api.ResponseError error,
-                                 Throwable throwable) throws JSONException, Exception {
+                                 Throwable throwable) throws Exception {
         User user = userState.getValue();
         if (user == null) {
             throw new Exception("No user data");

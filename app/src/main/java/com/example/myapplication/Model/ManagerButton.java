@@ -4,7 +4,6 @@ package com.example.myapplication.Model;
  * from this button navigate to a specific user secreen
  */
 
-
 public class ManagerButton {
     String buttonName;
     int    fragment;

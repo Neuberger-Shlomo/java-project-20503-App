@@ -44,4 +44,8 @@ final public class Constants {
     public static final String DELETE_SHIFT_SCHEDULE_ROUTE = SCHEDULE_ROUTE + DELETE_SHIFT_SCHEDULE;
     public static final String DELETE_SHIFT_SCHEDULE_URL = String.format("%s/%s", BASE_URL, DELETE_SHIFT_SCHEDULE_ROUTE);
     public final static String SHIFT_URL = String.format("%s/%s", BASE_URL, SHIFT_ROUTE);
+    public static final String CREATE_JOB_URL            = String.format("%s/%s", BASE_URL, "jobs" +
+                                                                                            "/");
+    public static final String GET_JOB_URL               = String.format("%s/%s", BASE_URL, "jobs" +
+                                                                                            "/user/");
 }

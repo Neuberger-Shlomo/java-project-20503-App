@@ -51,7 +51,6 @@ public class ShiftRequest implements IModel {
 
     public ShiftRequest(int shiftId, int uid) {
         this.shiftId = shiftId;
-        ;
         this.uid = uid;
 
     }

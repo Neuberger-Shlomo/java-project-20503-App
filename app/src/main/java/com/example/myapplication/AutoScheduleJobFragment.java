@@ -44,7 +44,8 @@ public class AutoScheduleJobFragment extends Fragment {
             .Builder
             .dateRangePicker()
             .build();
-    //adapter for the recycler view that show the jobs scheduled
+    private Date start, end;
+
     OneLinerAdapter<ScheduleJob> adapter = new OneLinerAdapter<>();
     String                       howTo   = "This scheduler system will auto organize employees to" +
                                            " shifts\n" +
@@ -53,7 +54,6 @@ public class AutoScheduleJobFragment extends Fragment {
                                            "\t2. Click \"Start Job\"\n" +
                                            "\t3. Sit back and relax";
     UserViewModel userViewModel;
-    private Date start, end;
     private RequestQueue queue;
 
     @Override

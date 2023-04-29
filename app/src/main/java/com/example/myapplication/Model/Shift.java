@@ -12,6 +12,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Shift class represents a shift filled by the manager.
@@ -40,10 +41,10 @@ public class Shift implements IModel {
     private Timestamp endTime;
     private Timestamp startTime;
 
-    private Date startDate;
+    private final Date startDate;
 
-    private ArrayList<Profile> scheduledWorkers;
-    private int                weekNumber, year = 2023, dayNumber;
+    private final ArrayList<Profile> scheduledWorkers;
+    private       int                weekNumber, year = 2023, dayNumber;
     //TODO: implement year getting according to database
 
     public Shift(String shiftDate, int numOfRequiredWorkers, int id,
@@ -57,10 +58,12 @@ public class Shift implements IModel {
         this.scheduledWorkers      = new ArrayList<>(numOfRequiredWorkers);
         this.weekNumber            = weekNumber;
         this.dayNumber             = dayNumber;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.WEEK_OF_YEAR, weekNumber);
+        calendar.set(Calendar.DAY_OF_WEEK, dayNumber);
+        this.startDate = new Date(calendar.getTime().getTime());
     }
 
-    /*
-     * this second constructor is for testing use only*/
     public Shift(String shiftDate, int numOfRequiredWorkers, ArrayList<Profile> workersList,
                  int id, int startHour, int duration) {
         this.numOfRequiredWorkers  = numOfRequiredWorkers;
@@ -69,6 +72,11 @@ public class Shift implements IModel {
         this.duration              = duration;
         this.numOfScheduledWorkers = 0;
         this.scheduledWorkers      = new ArrayList<>(numOfRequiredWorkers);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.WEEK_OF_YEAR, weekNumber);
+        calendar.set(Calendar.DAY_OF_WEEK, dayNumber);
+        this.startDate = new Date(calendar.getTime().getTime());
 
         for (Profile worker : workersList) {
             setScheduledWorker(worker);
@@ -88,10 +96,12 @@ public class Shift implements IModel {
         return getShiftDate();
     }
 
+
     @SuppressLint("DefaultLocale")
     public String getShiftDate() {
         return String.format("%d-%d-%d", startDate.getDate(), startDate.getMonth() + 1,
                              startDate.getYear() + 1900);
+
     }
 
     public Date getStartDate() {

@@ -96,20 +96,20 @@ public class DefineShiftFragment extends Fragment {
         if (shifts == null)
             // TODO: Alert the user about the error
             return;
-        if (defineShiftText.toString().matches("")) {
+        if (defineShiftText.toString().isEmpty()) {
             Snackbar.make(view, "Please Enter Number Of Required Workers!",
                           Snackbar.LENGTH_LONG)
                     .setAction("Ok", null).show();
         }
 
-        if (defineShift3Text.toString().matches("")) {
+        if (defineShift3Text.toString().isEmpty()) {
             Snackbar.make(view, "Please Enter The Shift Duration!", Snackbar.LENGTH_LONG)
                     .setAction("Ok", null).show();
         }
         //after all the fields are filled:
 
-        if (!defineShift3Text.toString().matches("") &&
-            !defineShiftText.toString().matches("")) {
+        if (!defineShift3Text.toString().isEmpty() &&
+            !defineShiftText.toString().isEmpty()) {
             int numOfRequiredWorkers =
                     Integer.parseInt(defineShiftText.toString());
             int duration =
@@ -129,7 +129,9 @@ public class DefineShiftFragment extends Fragment {
                 //TODO: Don't crash the APP here
                 throw new RuntimeException(e);
             }
-            c.setTime(new Date(System.currentTimeMillis()));
+            if (date == null)
+                return;
+            c.setTime(date);
             int weekNumber            = c.get(Calendar.WEEK_OF_YEAR);
             int dayNumber             = c.get(Calendar.DAY_OF_WEEK);
             int numOfScheduledWorkers = 0;
@@ -182,7 +184,6 @@ public class DefineShiftFragment extends Fragment {
                                               Snackbar.LENGTH_LONG)
                                         .setAction("Ok", null).show();
                         });
-
             }
 
         }

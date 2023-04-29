@@ -18,11 +18,10 @@ import org.json.JSONObject;
  * JobApi handle api requests related to jobs.
  */
 final public class JobApi {
-
-    public static final String BASE_URL = String.format("%s/%s", Constants.BASE_URL, "jobs");
-    public static final String CREATE_JOB_URL = String.format("%s/%s", BASE_URL, "");
-    public static final String GET_JOB_URL = String.format("%s/%s", BASE_URL, "user/");
-    private static final Gson gson = new Gson();
+    public static final  String BASE_URL       = String.format("%s/%s", Constants.BASE_URL, "jobs");
+    public static final  String CREATE_JOB_URL = String.format("%s/%s", BASE_URL, "");
+    public static final  String GET_JOB_URL    = String.format("%s/%s", BASE_URL, "user/");
+    private static final Gson   gson           = new Gson();
 
     /**
      * requset from user to schedule a shift.

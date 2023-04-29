@@ -58,13 +58,11 @@ public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
     @Override
     protected void onPickClicked(View view, String pickerValue) {
         String pickedDate =
-                new StringBuilder()
-                        .append(binding.dpDatePicker.getDayOfMonth())
-                        .append("-")
-                        .append(binding.dpDatePicker.getMonth() + 1)
-                        .append("-")
-                        .append(binding.dpDatePicker.getYear())
-                        .toString();
+                binding.dpDatePicker.getDayOfMonth() +
+                "-" +
+                (binding.dpDatePicker.getMonth() + 1) +
+                "-" +
+                binding.dpDatePicker.getYear();
         adapter.setFilter(pickedDate, ((item, s) -> !item.getShiftDate().equals(s)));
     }
 

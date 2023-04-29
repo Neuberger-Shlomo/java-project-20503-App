@@ -31,7 +31,7 @@ public class WorkerFragment extends DateListFragment<Profile> {
     public final static String SHIFT_ID_KEY = "shiftIdKey";
     UserViewModel    userViewModel;
     WorkersViewModel workersViewModel;
-    private             int    shiftId      = -1; // initilize to no shift
+    private             int    shiftId      = -1;
 
     /**
      * inflate the view and initialize the components.

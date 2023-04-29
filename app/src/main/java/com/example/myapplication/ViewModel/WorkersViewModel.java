@@ -270,8 +270,9 @@ public class WorkersViewModel extends AndroidViewModel {
             return null;
         }
 
-        return new AuthedJsonObjectRequest(Request.Method.POST, userId,
-                                           token, Constants.ADD_WORKER_TO_SHIFT_URL, jsonObj,
+        return new AuthedJsonObjectRequest(Request.Method.POST, Constants.ADD_WORKER_TO_SHIFT_URL
+                , userId,
+                                           token, jsonObj,
                                            res -> {
                                                try {
                                                    // Callback with result
@@ -339,51 +340,6 @@ public class WorkersViewModel extends AndroidViewModel {
         });
     }
 
-    //    public void resetShift(String uid, String token,int sId, Api.PreCall preCall,
-    //                                 Api.PostCall<Boolean> postCall) {
-    //
-    //        preCall.onPreCall();
-    //        queue.add(resetShiftRequest(uid, token, sId, preCall, (result, responseError,
-    //                                                      throwable) -> {
-    //            if (responseError != null || throwable != null) {
-    //                postCall.onPostCall(null, responseError, throwable);
-    //                return;
-    //            }
-    //            postCall.onPostCall(result, null, null);
-    //        }));
-    //    }
-    //
-    //
-    //    private JsonObjectRequest resetShiftRequest(String uid, String token, int sId,
-    //                                               Api.PreCall preCall,
-    //                                               Api.PostCall<Boolean> postCall) {
-    //        preCall.onPreCall();
-    //
-    //        JSONObject jsonObj = new JSONObject();
-    //        try {
-    //
-    //            jsonObj.put("sId",sId);
-    //        } catch (JSONException e) {
-    //            postCall.onPostCall(null, null, e);
-    //            return null;
-    //        }
-    //
-    //        return new AuthedJsonObjectRequest(Request.Method.DELETE, Constants
-    //        .DELETE_SHIFT_SCHEDULE_URL+ "/" + sId,uid,
-    //                token, jsonObj, res -> {
-    //            try {
-    //                postCall.onPostCall(res.getBoolean("result"), null, null);
-    //            } catch (Exception e) {
-    //                postCall.onPostCall(null, null, e);
-    //            }
-    //        }, err -> {
-    //            if (err.networkResponse != null && err.networkResponse.data != null) {
-    //                String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
-    //                postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class), null);
-    //            } else {
-    //                postCall.onPostCall(null, null, err);
-    //            }
-    //        });
-    //    }
+    
 
 }

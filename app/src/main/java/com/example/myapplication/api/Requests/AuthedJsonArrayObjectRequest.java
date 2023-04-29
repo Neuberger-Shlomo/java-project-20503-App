@@ -15,8 +15,8 @@ import java.util.Map;
  * add authentication headers to the request
  */
 public class AuthedJsonArrayObjectRequest extends JsonArrayRequest {
-    private String token;
-    private String userId;
+    private final String token;
+    private final String userId;
 
     /**
      * constructor that adds authentication headers to the request.

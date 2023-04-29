@@ -29,13 +29,13 @@ public class Constraints implements IModel {
     private final String  constType;
 
     Profile profile = new Profile();
-    private Integer id;
+    private final Integer id;
 
-    private Integer weekNumber;
-    private String  data;
-    private Integer typeId;
+    private final Integer weekNumber;
+    private final String  data;
+    private final Integer typeId;
 
-    private Integer userId;
+    private final Integer userId;
 
     public Constraints(String firstName, String lastName, String phoneNumber, String email,
                        int userId, String data, int weekNumber, int typeId, boolean isPermanent,
