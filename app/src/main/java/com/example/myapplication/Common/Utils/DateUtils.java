@@ -25,15 +25,15 @@ final public class DateUtils {
                 m = calendar.get(Calendar.MONTH) + 1, d = calendar.get(Calendar.DAY_OF_MONTH);
         //
         String startDate = String.format("%s-%s-%s", y,
-                (m <= 9 ? "0" : "") + m,
-                (d <= 9 ? "0" : "") + d);
+                                         (m <= 9 ? "0" : "") + m,
+                                         (d <= 9 ? "0" : "") + d);
 
         return startDate;
     }
 
     /**
      * convert date string to date in sql
-     *
+     * <p>
      * --> INPUT - YEAR-MONTH-DAY   <--
      *
      * @param date date in string format
@@ -55,7 +55,7 @@ final public class DateUtils {
 
     /**
      * convert date string to date in sql
-     *
+     * <p>
      * --> INPUT - DAY-MONTH-YEAR  <--
      *
      * @param date date in string format
@@ -82,7 +82,7 @@ final public class DateUtils {
     static public Pair<String, String> stringFromDialog(Pair<Long, Long> longLongPair) {
 
         Date start = new Date(longLongPair.first);
-        Date end = new Date(longLongPair.second);
+        Date end   = new Date(longLongPair.second);
 
         Calendar calendar = Calendar.getInstance();
         //get start date to string:
@@ -91,10 +91,10 @@ final public class DateUtils {
 
         // format of start date string is- "dd/mm/yyyy"
         String startDate = String.format("%s/%s/%s",
-                calendar.get(Calendar.DAY_OF_MONTH),
-                calendar.get(Calendar.MONTH) + 1,
-                calendar.get(Calendar.YEAR)
-        );
+                                         calendar.get(Calendar.DAY_OF_MONTH),
+                                         calendar.get(Calendar.MONTH) + 1,
+                                         calendar.get(Calendar.YEAR)
+                                        );
 
         // get end date to string:
         // set calendar time to end date
@@ -102,10 +102,10 @@ final public class DateUtils {
 
         // format of end date string is- "dd/mm/yyyy"
         String endDate = String.format("%s/%s/%s",
-                calendar.get(Calendar.DAY_OF_MONTH),
-                calendar.get(Calendar.MONTH) + 1,
-                calendar.get(Calendar.YEAR)
-        );
+                                       calendar.get(Calendar.DAY_OF_MONTH),
+                                       calendar.get(Calendar.MONTH) + 1,
+                                       calendar.get(Calendar.YEAR)
+                                      );
 
         return new Pair<>(startDate, endDate);
     }

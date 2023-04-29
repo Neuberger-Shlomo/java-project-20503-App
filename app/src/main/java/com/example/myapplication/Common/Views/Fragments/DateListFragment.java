@@ -22,13 +22,14 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 /**
- * handles date selection and data display.
- * @param <Model> = type of data to display
+ * Implements a generic fragment that shows  date picker and list that is refreshed by it
+ *
+ * @param <Model> that is been shown in the recycler view
  */
 public abstract class DateListFragment<Model extends IModel> extends Fragment implements ViewModelStoreOwner {
 
     protected FragmentDatePickingBinding binding;
-    protected OneLinerAdapter<Model> adapter;
+    protected OneLinerAdapter<Model>     adapter;
 
     @Nullable
     @Override
@@ -47,8 +48,8 @@ public abstract class DateListFragment<Model extends IModel> extends Fragment im
         // set the date picker listener to the button
         binding.btnDatePicker.setOnClickListener((v) -> {
             String pickedDate = binding.dpDatePicker.getDayOfMonth() + "-" +
-                    (binding.dpDatePicker.getMonth() + 1) + "-" +
-                    binding.dpDatePicker.getYear();
+                                (binding.dpDatePicker.getMonth() + 1) + "-" +
+                                binding.dpDatePicker.getYear();
             this.onPickClicked(v, pickedDate);
         });
         return binding.getRoot();
@@ -69,7 +70,7 @@ public abstract class DateListFragment<Model extends IModel> extends Fragment im
     }
 
     /**
-      handle the pick date action.
+     * handle the pick date action.
      *
      * @param view        View of button clicked
      * @param pickerValue Selected date
@@ -77,11 +78,11 @@ public abstract class DateListFragment<Model extends IModel> extends Fragment im
     abstract protected void onPickClicked(View view, String pickerValue);
 
     /**
-     * Binds a model object to the ViewHolder.
+     * Handles the bind item <-> view
      *
      * @param model    Model object to bind
-     * @param holder   ViewHolder
-     * @param position Position in the list
+     * @param holder   ViewHolder that will hold it
+     * @param position Position of the model in the visible list
      */
     protected void onModelBind(Model model, OneLineViewHolder<Model> holder, int position) {
         holder.setText(model.toPrettyString());
@@ -90,7 +91,12 @@ public abstract class DateListFragment<Model extends IModel> extends Fragment im
     }
 
 
-     // handle item clicked
+    /**
+     * Default on item clicked
+     *
+     * @param model of the clicked element
+     * @param view  that has been clicked
+     */
     abstract protected void onItemClicked(Model model, View view);
 
     /**
@@ -112,14 +118,11 @@ public abstract class DateListFragment<Model extends IModel> extends Fragment im
                 adapter.addEntry(shift, false);
             }
             return;
-        }
-        else if (error != null) {
+        } else if (error != null) {
             builder.append(error.getMessage());
-        }
-        else if (t != null) {
+        } else if (t != null) {
             builder.append(t.getMessage());
-        }
-        else {
+        } else {
             builder.append("Unknown Error");
         }
         // show the error message in Snackbar

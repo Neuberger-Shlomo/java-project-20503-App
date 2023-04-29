@@ -1,9 +1,11 @@
 package com.example.myapplication;
 /**
-
- This class represents a fragment in the Android application that displays information about a worker.
- It displays the worker's profile and allows a super admin to promote or demote the worker's role level.
+ * This class represents a fragment in the Android application that displays information about a
+ * worker.
+ * It displays the worker's profile and allows a super admin to promote or demote the worker's
+ * role level.
  */
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Application;
@@ -39,15 +41,14 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 public class WorkerFragment extends Fragment implements ViewModelStoreOwner {
-    private             FragmentWorkerViewBinding binding;
     final public static String                    WORKER_ID_KEY = "WORKER_ID_KEY";
-
-    private String employeeID;
-
     User         user;
     Profile      profile;
     ProfileModel profileModel;
     RequestQueue queue;
+    private             FragmentWorkerViewBinding binding;
+    private String employeeID;
+
     /**
      inflate the view  and set the listeners
      * @param inflater
@@ -99,6 +100,7 @@ public class WorkerFragment extends Fragment implements ViewModelStoreOwner {
 
         return binding.getRoot();
     }
+
     /**
      * Set the profile for to update or downgrade the worker role level
      *
@@ -147,6 +149,7 @@ public class WorkerFragment extends Fragment implements ViewModelStoreOwner {
                             }
                         }));
     }
+
     /**
      * Handle promote button clicked.
      * @param view
@@ -166,6 +169,7 @@ public class WorkerFragment extends Fragment implements ViewModelStoreOwner {
                             }
                         }));
     }
+
     /**
      *handle when the user data received from the server
      * @param jsonObject jsonarray contain the user data.
@@ -201,6 +205,7 @@ public class WorkerFragment extends Fragment implements ViewModelStoreOwner {
             }
         }
     }
+
     /**
      * ViewModel for the Profile.
      */
@@ -216,11 +221,13 @@ public class WorkerFragment extends Fragment implements ViewModelStoreOwner {
         public LiveData<Profile> getProfileState() {
             return profileState;
         }
+
         //add user to the profile
         public void addUser(User u) {
             profileState.getValue().getUsers().add(u);
             profileState.setValue(profileState.getValue());
         }
+
         //set profile for the view
         public void setProfile(Profile p) {
             if (!Objects.equals(p, profileState.getValue())) {

@@ -1,9 +1,8 @@
 package com.example.myapplication;
 /**
-
-this fragment  displays the shifts of a specific user and date
-so the user see the shifts
- add functenality-  red dots in calender to mark days where the user has shifts
+ * this fragment  displays the shifts of a specific user and date
+ * so the user see the shifts
+ * add functenality-  red dots in calender to mark days where the user has shifts
  */
 
 import android.animation.Animator;
@@ -42,13 +41,12 @@ import java.util.Calendar;
 
 public class MyShiftsFragment extends Fragment {
 
-    private FragemntMyShiftsBinding binding;
     OneLinerAdapter<Shift> adapter   = new OneLinerAdapter<>();
     EventDecorator         decorator = new EventDecorator();
     RequestQueue           queue;
-
-
     User user = new User();
+    private FragemntMyShiftsBinding binding;
+
     /**
      inflate the view  and set the listeners
      * @param inflater
@@ -80,6 +78,7 @@ public class MyShiftsFragment extends Fragment {
         enableCalender();
         return binding.getRoot();
     }
+
     /**
      *show the shifts of the user that selected in the calender
      *
@@ -95,11 +94,12 @@ public class MyShiftsFragment extends Fragment {
         calendar.setFirstDayOfWeek(Calendar.SUNDAY);
         getShiftsBy(user, calendar);
     }
+
     /**
      * show the shifts of the user for specific date
-    * @param user     the user using the screen to see his shifts
-    * @param calendar  the calender to get the week from
-    */
+     * @param user     the user using the screen to see his shifts
+     * @param calendar  the calender to get the week from
+     */
     void getShiftsBy(User user, Calendar calendar) {
         binding.progressBar.setVisibility(View.VISIBLE);
         queue.add(ScheduleAPI.getSchedulesByUser(
@@ -109,6 +109,7 @@ public class MyShiftsFragment extends Fragment {
                 calendar.get(Calendar.DAY_OF_WEEK),
                 this::onDailyShiftArrived));
     }
+
     /**
      * show the shifts of the user
      * @param user the user using the screen to see his shifts
@@ -129,6 +130,7 @@ public class MyShiftsFragment extends Fragment {
 
 
     }
+
     /**
      * when dailey shift recived from the server
      * update the adapter and hide the calender (and show only the list of shifts
@@ -239,6 +241,7 @@ public class MyShiftsFragment extends Fragment {
 
         }
     }
+
     /**
      * show view
      *
@@ -283,6 +286,7 @@ public class MyShiftsFragment extends Fragment {
                                  "-" +
                                  date.getYear());
         }
+
         //add red dots in calender to the days that has shifts
         @Override
         public void decorate(DayViewFacade view) {
@@ -296,10 +300,12 @@ public class MyShiftsFragment extends Fragment {
         public void setDays(ArrayList<String> days) {
             this.days = days;
         }
+
         /**
-         * add day with shift to the decorator to mark the day has shift (to add dot to this day in the calender)
+         * add day with shift to the decorator to mark the day has shift (to add dot to this day
+         * in the calender)
          * @param day   the day we want to add
-         * @return      true if we add day, false if already existsd in the list
+         * @return true if we add day, false if already existsd in the list
          */
         public boolean addDay(String day) {
             if (!this.days.contains(day)) {

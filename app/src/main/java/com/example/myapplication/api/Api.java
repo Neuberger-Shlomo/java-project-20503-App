@@ -2,20 +2,25 @@ package com.example.myapplication.api;
 
 import androidx.annotation.Nullable;
 
-import com.android.volley.VolleyError;
-import com.google.gson.Gson;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.nio.charset.StandardCharsets;
-
 /**
  * this class handle the api calls
- *
+ * <p>
  * inner class ResponseError represent the errors the api return
-
  */
 public class Api {
+    // before the error is called
+    public interface PreCall {
+        void onPreCall();
+    }
+
+    //
+    public interface PostCall<T> {
+        void onPostCall(@Nullable T t, @Nullable ResponseError responseError,
+                        @Nullable Throwable throwable);
+
+
+    }
+
     /**
      * this class represent the errors the api return
      * with a timestamp of the error, the status code, the error description,
@@ -79,18 +84,6 @@ public class Api {
         public void setPath(String path) {
             this.path = path;
         }
-    }
-
-    // before the error is called
-    public interface PreCall {
-        void onPreCall();
-    }
-    //
-    public interface PostCall<T> {
-        void onPostCall(@Nullable T t, @Nullable ResponseError responseError,
-                        @Nullable Throwable throwable);
-
-
     }
 
 

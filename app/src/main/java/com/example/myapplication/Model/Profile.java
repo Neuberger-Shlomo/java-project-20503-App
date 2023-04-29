@@ -1,11 +1,11 @@
 package com.example.myapplication.Model;
 /**
- *  profile of the user who is logged in
- *  VERIABLES:
- *  firstName = the first name of the user
- *  lastName = the last name of the user
- *  email = the user email
- *  phoneNumber = the user phone number
+ * profile of the user who is logged in
+ * VERIABLES:
+ * firstName = the first name of the user
+ * lastName = the last name of the user
+ * email = the user email
+ * phoneNumber = the user phone number
  */
 
 import com.example.myapplication.Common.Views.Fragments.IModel;
@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Profile implements IModel {
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phoneNumber;
-    private int    id;
+    private String    firstName;
+    private String    lastName;
+    private String    email;
+    private String    phoneNumber;
+    private int       id;
     private RoleLevel maxRole = RoleLevel.BASIC;
 
     private ArrayList<User> users;
@@ -34,7 +34,7 @@ public class Profile implements IModel {
         this.lastName    = "";
         this.email       = "";
         this.phoneNumber = "";
-        users= new ArrayList<>();
+        users            = new ArrayList<>();
     }
 
     public Profile(String first_Name, String last_Name, String email, String phone_Number, int id) {
@@ -43,8 +43,14 @@ public class Profile implements IModel {
         this.email       = email;
         this.phoneNumber = phone_Number;
         this.id          = id;
-        users= new ArrayList<>();
+        users            = new ArrayList<>();
     }
+
+    public static Profile fromJSON(JSONObject object) throws JSONException {
+        Gson g = new Gson();
+        return g.fromJson(object.toString(), Profile.class);
+    }
+
     @Override
     public String toString() {
         return "Profile{" +
@@ -55,14 +61,6 @@ public class Profile implements IModel {
                ", id=" + id +
                '}';
     }
-
-
-
-    public static Profile fromJSON(JSONObject object) throws JSONException {
-        Gson g = new Gson();
-        return g.fromJson(object.toString(), Profile.class);
-    }
-
 
     public String getFirstName() {
         return firstName;
@@ -114,8 +112,8 @@ public class Profile implements IModel {
     public RoleLevel getMaxRole() {
         AtomicInteger maxValue = new AtomicInteger();
         maxValue.set(maxRole.ordinal());
-        users.forEach(user-> maxValue.set(Math.max(maxValue.get(), user.getLevel().ordinal())));
-        maxRole = RoleLevel.values()[maxValue.get()%RoleLevel.values().length];
+        users.forEach(user -> maxValue.set(Math.max(maxValue.get(), user.getLevel().ordinal())));
+        maxRole = RoleLevel.values()[maxValue.get() % RoleLevel.values().length];
         return maxRole;
     }
 
@@ -125,7 +123,8 @@ public class Profile implements IModel {
     }
 
     public ArrayList<User> getUsers() {
-        if(users == null) users = new ArrayList<>();
+        if (users == null)
+            users = new ArrayList<>();
         return users;
     }
 

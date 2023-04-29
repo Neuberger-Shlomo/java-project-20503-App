@@ -17,8 +17,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.myapplication.Model.Constraints;
-import com.example.myapplication.Model.Shift;
 import com.example.myapplication.Model.ShiftRequest;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.api.Constants;
@@ -37,14 +35,13 @@ import java.util.ArrayList;
 public class ShiftRequestViewModel extends AndroidViewModel {
 
 
+    // to later convert data to json
+    final static private Gson gson = new Gson();
     // shiftRequestState= arraylist that represents the current state of shift requests
     private final MutableLiveData<ArrayList<ShiftRequest>> shiftRequestState =
             new MutableLiveData<ArrayList<ShiftRequest>>(new ArrayList<ShiftRequest>());
     //queue of requests to the server
-    private final RequestQueue queue;
-
-    // to later convert data to json
-    final static private Gson gson = new Gson();
+    private final RequestQueue                             queue;
 
 
     public ShiftRequestViewModel(@NonNull Application application) {
@@ -53,15 +50,51 @@ public class ShiftRequestViewModel extends AndroidViewModel {
         queue = Volley.newRequestQueue(getApplication());
     }
 
+    /**
+     * get shift requests from the server
+     *
+     * @param userId   ID of the user
+     * @param token    token of the user
+     * @param preCall  callback before the request sent
+     * @param postCall callback  after server response
+     */
+    private static AuthedJsonArrayObjectRequest getShiftRequest(String userId, String token,
+                                                                @NotNull Api.PreCall preCall,
+                                                                @NotNull Api.PostCall<JSONArray> postCall) {
+        preCall.onPreCall();
+        return new AuthedJsonArrayObjectRequest(Constants.ALL_SHIFT_REQUESTS_URL,
+                                                userId,
+                                                token,
+                                                res -> {
+                                                    try {
+                                                        postCall.onPostCall(res, null, null);
+                                                    } catch (Exception e) {
+                                                        postCall.onPostCall(null, null, e);
+                                                    }
+                                                },
+                                                err -> {
+                                                    if (err.networkResponse != null && err.networkResponse.data != null) {
+                                                        String resString =
+                                                                new String(err.networkResponse.data, StandardCharsets.UTF_8);
+                                                        postCall.onPostCall(null,
+                                                                            gson.fromJson(resString, Api.ResponseError
+
+                                                                .class), null);
+                                                    } else {
+                                                        postCall.onPostCall(null, null, err);
+                                                    }
+                                                });
+    }
+
     public LiveData<ArrayList<ShiftRequest>> getShiftRequestState() {
         return shiftRequestState;
     }
 
-
     /**
      * get the shift requests from server
-     * @param userId  the user id
-     * @param token  token of the user
+     *
+     * @param userId   the user id
+     * @param token    token of the user
      * @param postCall for after the server response
      */
     public void getData(String userId,
@@ -70,81 +103,53 @@ public class ShiftRequestViewModel extends AndroidViewModel {
 
         //  get shift requests from the server
         queue.add(getShiftRequest(userId, token, () -> {
-                },
-                (jsonArray, responseError, throwable) -> {
-                    try {
-                        if (jsonArray != null) {
-                            // convert from JSONArray to ArrayList of ShiftRequests
-                            ArrayList<ShiftRequest> arrayList = new ArrayList<>();
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                arrayList.add(ShiftRequest.fromJSON(jsonObject));
-                            }
+                                  },
+                                  (jsonArray, responseError, throwable) -> {
+                                      try {
+                                          if (jsonArray != null) {
+                                              // convert from JSONArray to ArrayList of
+                                              // ShiftRequests
+                                              ArrayList<ShiftRequest> arrayList = new ArrayList<>();
+                                              for (int i = 0; i < jsonArray.length(); i++) {
+                                                  JSONObject jsonObject =
+                                                          jsonArray.getJSONObject(i);
+                                                  arrayList.add(ShiftRequest.fromJSON(jsonObject));
+                                              }
 
-                            // set shiftRequestState to  ArrayList (of ShiftRequests)
-                            shiftRequestState.setValue(arrayList);
-                            //  callback with the ArrayList
-                            postCall.onPostCall(arrayList, null, null);
-                        } else {
-                            // callback with responseError and throwable
-                            postCall.onPostCall(null, responseError, throwable);
-                        }
-                    } catch (JSONException e) {
-                        // callback with the JSONException
-                        postCall.onPostCall(null, null, e);
-                    }
-                }));
-    }
-
-
-    /**
-     *  get shift requests from the server
-     * @param userId  ID of the user
-     * @param token   token of the user
-     * @param preCall callback before the request sent
-     * @param postCall callback  after server response
-     */
-    private static AuthedJsonArrayObjectRequest getShiftRequest(String userId, String token,
-                                                                @NotNull Api.PreCall preCall,
-                                                                @NotNull Api.PostCall<JSONArray> postCall) {
-        preCall.onPreCall();
-        return new AuthedJsonArrayObjectRequest(Constants.ALL_SHIFT_REQUESTS_URL,
-                userId,
-                token,
-                res -> {
-                    try {
-                        postCall.onPostCall(res, null, null);
-                    } catch (Exception e) {
-                        postCall.onPostCall(null, null, e);
-                    }
-                },
-                err -> {
-                    if (err.networkResponse != null && err.networkResponse.data != null) {
-                        String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
-                        postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError
-
-                                .class), null);
-                    } else {
-                        postCall.onPostCall(null, null, err);
-                    }
-                });
+                                              // set shiftRequestState to  ArrayList (of
+                                              // ShiftRequests)
+                                              shiftRequestState.setValue(arrayList);
+                                              //  callback with the ArrayList
+                                              postCall.onPostCall(arrayList, null, null);
+                                          } else {
+                                              // callback with responseError and throwable
+                                              postCall.onPostCall(null, responseError, throwable);
+                                          }
+                                      } catch (JSONException e) {
+                                          // callback with the JSONException
+                                          postCall.onPostCall(null, null, e);
+                                      }
+                                  }));
     }
 
     /**
      * add shift request to the server as json object
-     * @param shiftRequest  ShiftRequest we want to add
-     * @param userId  ID of the user
-     * @param token   token of the user
-     * @param preCall callback before the request sent
-     * @param postCall callback  after server response
+     *
+     * @param shiftRequest ShiftRequest we want to add
+     * @param userId       ID of the user
+     * @param token        token of the user
+     * @param preCall      callback before the request sent
+     * @param postCall     callback  after server response
      */
-    public void addShiftRequest(ShiftRequest shiftRequest, String userId, String token, Api.PreCall preCall,
+    public void addShiftRequest(ShiftRequest shiftRequest, String userId, String token,
+                                Api.PreCall preCall,
                                 Api.PostCall<Boolean> postCall) {
 
         // preCall = callback before the request sent
         preCall.onPreCall();
         //   add shift request to the server
-        queue.add(addUserShiftRequest(shiftRequest, userId, token, preCall, (jsonObject, responseError,
+        queue.add(addUserShiftRequest(shiftRequest, userId, token, preCall, (jsonObject,
+                                                                             responseError,
                                                                              throwable) -> {
             if (responseError != null || throwable != null) {
                 postCall.onPostCall(null, responseError, throwable);
@@ -169,14 +174,16 @@ public class ShiftRequestViewModel extends AndroidViewModel {
 
     /**
      * request to add shift request to the server as json object
-     * @param shiftRequest  ShiftRequest we want to add
-     * @param userId  ID of the user
-     * @param token   token of the user
-     * @param preCall callback before the request sent
-     * @param postCall callback  after server response
+     *
+     * @param shiftRequest ShiftRequest we want to add
+     * @param userId       ID of the user
+     * @param token        token of the user
+     * @param preCall      callback before the request sent
+     * @param postCall     callback  after server response
      * @return JsonObjectRequest=  json represents the shift request
      */
-    private JsonObjectRequest addUserShiftRequest(ShiftRequest shiftRequest, String userId, String token,
+    private JsonObjectRequest addUserShiftRequest(ShiftRequest shiftRequest, String userId,
+                                                  String token,
                                                   Api.PreCall preCall,
                                                   Api.PostCall<JSONObject> postCall) {
         //  preCall = callback before sending request

@@ -1,26 +1,6 @@
-
-
 package com.example.myapplication.Model;
 
 import android.annotation.SuppressLint;
-/**
- * THIS CLASS REPRESENT A SHIFT (FILLED BY THE MANAGER)
- * veribles:
- * shiftDate = the date of the shift
- * numOfRequiredWorkers = the number of workers required for the shift
- * numOfScheduledWorkers = the number of workers that already scheduled for the shift
- * id = the id of the shift
- * startHour = the start hour of the shift
- * duration = the length of the shift
- * scheduledWorkers = profiles of the workers that already scheduled for the shift
- * weekNumber = the week number of the shift
- * year = the year of the shift
- * dayNumber = the day of the week (of the shift)
- */
-
-
-
-import android.util.Log;
 
 import com.example.myapplication.Common.Views.Fragments.IModel;
 import com.google.gson.Gson;
@@ -32,6 +12,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 /**
  * Shift class represents a shift filled by the manager.
  * veriables:
@@ -47,15 +28,14 @@ import java.util.ArrayList;
  * weekNumber=  week number of the year (1-52)
  * year
  * dayNumber=  day of the week
- *
  */
 public class Shift implements IModel {
 
-    private int    numOfRequiredWorkers;
-    private int    numOfScheduledWorkers;
-    private int    id;
-    private int    startHour;
-    private int    duration;
+    private int numOfRequiredWorkers;
+    private int numOfScheduledWorkers;
+    private int id;
+    private int startHour;
+    private int duration;
 
     private Timestamp endTime;
     private Timestamp startTime;
@@ -79,20 +59,6 @@ public class Shift implements IModel {
         this.dayNumber             = dayNumber;
     }
 
-    public String getDate() {
-        return getShiftDate();
-    }
-
-    public static Shift fromJSON(JSONObject object) throws JSONException {
-        Shift shift = new Gson().fromJson(object.toString(), Shift.class);
-        shift.setNumOfRequiredWorkers(object.optInt("employeeCount", -1));
-        shift.setNumOfScheduledWorkers(object.optInt("numOfScheduledWorkers", -1));
-
-
-        return shift;
-    }
-
-
     /*
      * this second constructor is for testing use only*/
     public Shift(String shiftDate, int numOfRequiredWorkers, ArrayList<Profile> workersList,
@@ -109,13 +75,26 @@ public class Shift implements IModel {
         }
     }
 
-    @SuppressLint("DefaultLocale")
-    public String getShiftDate() {
-        return  String.format("%d-%d-%d", startDate.getDate(), startDate.getMonth() + 1,
-                              startDate.getYear() + 1900);
+    public static Shift fromJSON(JSONObject object) throws JSONException {
+        Shift shift = new Gson().fromJson(object.toString(), Shift.class);
+        shift.setNumOfRequiredWorkers(object.optInt("employeeCount", -1));
+        shift.setNumOfScheduledWorkers(object.optInt("numOfScheduledWorkers", -1));
+
+
+        return shift;
     }
 
-    public Date getStartDate(){
+    public String getDate() {
+        return getShiftDate();
+    }
+
+    @SuppressLint("DefaultLocale")
+    public String getShiftDate() {
+        return String.format("%d-%d-%d", startDate.getDate(), startDate.getMonth() + 1,
+                             startDate.getYear() + 1900);
+    }
+
+    public Date getStartDate() {
         return startDate;
     }
 
@@ -162,12 +141,12 @@ public class Shift implements IModel {
         return startHour;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-
     public void setStartHour(int startHour) {
         this.startHour = startHour;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public void setDuration(int duration) {
@@ -218,18 +197,21 @@ public class Shift implements IModel {
     public Timestamp getStartTime() {
         return startTime;
     }
-    public String getStartTime(boolean shortVersion) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        String formattedTime = sdf.format(startTime.getTime());
-        return shortVersion? formattedTime :getStartTime().toString();
 
-    }
-    public String getEndTime(boolean shortVersion) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        String formattedTime = sdf.format(endTime.getTime());
-        return shortVersion? formattedTime :getEndTime().toString();
-    }
     public void setStartTime(Timestamp startTime) {
         this.startTime = startTime;
+    }
+
+    public String getStartTime(boolean shortVersion) {
+        SimpleDateFormat sdf           = new SimpleDateFormat("HH:mm");
+        String           formattedTime = sdf.format(startTime.getTime());
+        return shortVersion ? formattedTime : getStartTime().toString();
+
+    }
+
+    public String getEndTime(boolean shortVersion) {
+        SimpleDateFormat sdf           = new SimpleDateFormat("HH:mm");
+        String           formattedTime = sdf.format(endTime.getTime());
+        return shortVersion ? formattedTime : getEndTime().toString();
     }
 }

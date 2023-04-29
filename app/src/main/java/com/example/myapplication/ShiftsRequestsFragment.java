@@ -8,14 +8,13 @@ import android.view.ViewGroup;
 
 import androidx.lifecycle.ViewModelProvider;
 
-
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Model.ShiftRequest;
-import com.example.myapplication.ViewModel.ShiftRequestViewModel;
 import com.example.myapplication.UserMVC.Model.UserViewModel;
-/**
+import com.example.myapplication.ViewModel.ShiftRequestViewModel;
 
-disply list of of shifts requests
+/**
+ * disply list of of shifts requests
  */
 
 public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
@@ -24,9 +23,10 @@ public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
     private UserViewModel         userViewModel;
 
     /**
-     inflate the view  and set the listeners
+     * inflate the view  and set the listeners
+     *
      * @param inflater
-     * @param container             the parent view
+     * @param container          the parent view
      * @param savedInstanceState saved previous state. so we can restore it.
      * @return the view for the fregment
      */
@@ -50,6 +50,7 @@ public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
 
     /**
      * filter shifts via the adapter (to show only shifts for the selected date)
+     *
      * @param view        the view clicked
      * @param pickerValue the selected date
      */
@@ -66,10 +67,12 @@ public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
                         .toString();
         adapter.setFilter(pickedDate, ((item, s) -> !item.getShiftDate().equals(s)));
     }
+
     /**
      * shift request is clicked -> show data about the request
+     *
      * @param model the shift request model
-     * @param view the view
+     * @param view  the view
      */
 
     @Override
@@ -85,7 +88,6 @@ public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
                 .setPositiveButton("Ok", null)
                 .create().show();
     }
-
 
 
 }

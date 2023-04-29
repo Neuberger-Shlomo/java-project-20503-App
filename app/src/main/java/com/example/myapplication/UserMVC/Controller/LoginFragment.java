@@ -21,6 +21,7 @@ import com.example.myapplication.databinding.FragmentLoginBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
+
 /**
  * controller for user login fragment
  */
@@ -105,7 +106,7 @@ public class LoginFragment extends Fragment implements TextWatcher {
     }
 
     /**
-     handle login button pressed.
+     * handle login button pressed.
      */
     private void onLoginPressed(View v) {
         String username = binding.etUsername.getText().toString(), password =

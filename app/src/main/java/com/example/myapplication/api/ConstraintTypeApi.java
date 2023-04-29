@@ -10,8 +10,8 @@ import org.json.JSONArray;
  */
 public class ConstraintTypeApi {
 
-    public final static String BASE_URL = String.format("%s/%s", Constants.BASE_URL,
-            "constraint-types");
+    public final static String BASE_URL    = String.format("%s/%s", Constants.BASE_URL,
+                                                           "constraint-types");
     public final static String GET_ALL_URL = String.format("%s/%s", BASE_URL, "");
 
     /**

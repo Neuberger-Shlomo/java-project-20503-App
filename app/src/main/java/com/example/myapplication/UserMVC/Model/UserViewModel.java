@@ -10,8 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.Model.Profile;
-import com.example.myapplication.api.Api;
 import com.example.myapplication.Model.RoleLevel;
+import com.example.myapplication.api.Api;
 import com.example.myapplication.api.UsersApi;
 import com.google.gson.Gson;
 
@@ -20,39 +20,40 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Objects;
+
 /**
  * ShiftRequestViewModel - current representation of the user
  * act as bridge between the user in the db and the controllers that handle user
  */
 public class UserViewModel extends AndroidViewModel {
 
+    // to later convert data to json
+    final static private Gson         gson = new Gson();
+    //queue of requests to the server
     // shiftRequestState= arraylist that represents the current state of user
     private final MutableLiveData<User> userState =
             new MutableLiveData<>(new User());
-    //queue of requests to the server
-
-    private final RequestQueue          queue;
-    // to later convert data to json
-    final static private Gson gson = new Gson();
+    private final        RequestQueue queue;
 
     public UserViewModel(@NotNull Application application) {
         super(application);
         //initializes the queue instance variable
         queue = Volley.newRequestQueue(getApplication());
     }
-    /**
 
+    /**
      * @return LiveData = that represent the userState
      */
     public LiveData<User> getUserState() {
         return userState;
     }
+
     /**
      * Sends a login request to the server.
      *
-     * @param username  the user name
-     * @param password  callback function before sending the request
-     * @param preCall   callback function after sending the request
+     * @param username the user name
+     * @param password callback function before sending the request
+     * @param preCall  callback function after sending the request
      */
     public void login(
             @NotNull String username,
@@ -72,11 +73,12 @@ public class UserViewModel extends AndroidViewModel {
                         })));
 
     }
+
     /**
      * send register request to server.
      *
      * @param registerRequest register request we want to send
-     * @param preCall          callback function  before sending request
+     * @param preCall         callback function  before sending request
      * @param postCall        callback function after sending the request
      */
 
@@ -97,8 +99,9 @@ public class UserViewModel extends AndroidViewModel {
 
     /**
      * Sends a logout request to the server.
-     * @param preCall          callback function  before sending request
-     * @param postCall        callback function after sending the request
+     *
+     * @param preCall  callback function  before sending request
+     * @param postCall callback function after sending the request
      */
     public void logout(@Nullable Api.PreCall preCall, @NotNull Api.PostCall<Boolean> postCall) {
         if (userState.getValue() == null) {
@@ -118,10 +121,12 @@ public class UserViewModel extends AndroidViewModel {
                         }));
 
     }
+
     /**
      * Sets the user's registration information in the userState.
      *
-     * @param registerRequest A RegisterRequest object containing the user's registration information
+     * @param registerRequest A RegisterRequest object containing the user's registration
+     *                        information
      */
 
     private void onRegisterResponse(UsersApi.RegisterRequest registerRequest) {
@@ -132,11 +137,14 @@ public class UserViewModel extends AndroidViewModel {
         user.setUsername(registerRequest.getUsername());
         userState.setValue(user);
     }
+
     /**
-     * Sets the userState to a new User object with an authToken of null if the logout request was successful.
+     * Sets the userState to a new User object with an authToken of null if the logout request
+     * was successful.
      *
      * @param result    A boolean value representing whether the logout was successful
-     * @param error     A ResponseError object containing information about the error (if there was one)
+     * @param error     A ResponseError object containing information about the error (if there
+     *                  was one)
      * @param throwable An exception that was thrown (if there was one)
      */
     private void onLogoutResponse(boolean result, Api.ResponseError error, Throwable throwable) {
@@ -148,10 +156,12 @@ public class UserViewModel extends AndroidViewModel {
         }
 
     }
+
     /**
-     * Sets the userState to a new User object with the login information if the login request was successful.
+     * Sets the userState to a new User object with the login information if the login request
+     * was successful.
      *
-     * @param jsonObject  JSONObject with the user login date
+     * @param jsonObject JSONObject with the user login date
      * @param error      ResponseError with error data
      * @param throwable  the exception that was thrown
      * @throws JSONException exception if json not valid

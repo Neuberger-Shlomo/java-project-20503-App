@@ -15,27 +15,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- *  JobApi handle api requests related to jobs.
+ * JobApi handle api requests related to jobs.
  */
 final public class JobApi {
 
-    private static final Gson gson = new Gson();
-
     public static final String BASE_URL = String.format("%s/%s", Constants.BASE_URL, "jobs");
-
     public static final String CREATE_JOB_URL = String.format("%s/%s", BASE_URL, "");
-
     public static final String GET_JOB_URL = String.format("%s/%s", BASE_URL, "user/");
+    private static final Gson gson = new Gson();
 
     /**
      * requset from user to schedule a shift.
      *
-     * @param userId      the user id
+     * @param userId       the user id
      * @param jwt          The user json web token
      * @param job          The shift the user want to schedule
      * @param preListener  callback before the request
      * @param postListener callback after the request
-     * @return AuthedJsonObjectRequest (request to get json object of sceduled shift)     */
+     * @return AuthedJsonObjectRequest (request to get json object of sceduled shift)
+     */
     public static AuthedJsonObjectRequest requestSchedule(
             String userId,
             String jwt,

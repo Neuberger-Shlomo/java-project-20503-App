@@ -2,11 +2,10 @@ package com.example.myapplication;
 
 
 /**
- *  manager fragment = manager screen where manager can choose screen to go to
+ * manager fragment = manager screen where manager can choose screen to go to
  */
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,43 +24,22 @@ import java.util.ArrayList;
 
 public class ManagerFragment extends Fragment {
 
-    private FragmentManagerMainBinding binding;
-
     // ArrayList of ManagerButton that represents different manager operations
     ArrayList<ManagerButton> buttonsArrayList = new ArrayList<ManagerButton>() {{
-        add(new ManagerButton("Workers List",R.id.WorkersListFragment));
-        add(new ManagerButton("Shift Requests",R.id.ShiftsRequestsFragment));
-        add(new ManagerButton("Workers Constrains",R.id.WorkersConstrainsFragment));
-        add(new ManagerButton("Shift Scheduling Status",R.id.ScheduleStatusFragment));
-        add(new ManagerButton("Schedule Worker Into Shift",R.id.ScheduleWorkerIntoShiftsFragment));
-        add(new ManagerButton("Define Shifts",R.id.DefineShiftRequirementsFragment));
-        add(new ManagerButton("Auto Schedule",R.id.autoScheduleJob));
+        add(new ManagerButton("Workers List", R.id.WorkersListFragment));
+        add(new ManagerButton("Shift Requests", R.id.ShiftsRequestsFragment));
+        add(new ManagerButton("Workers Constrains", R.id.WorkersConstrainsFragment));
+        add(new ManagerButton("Shift Scheduling Status", R.id.ScheduleStatusFragment));
+        add(new ManagerButton("Schedule Worker Into Shift", R.id.ScheduleWorkerIntoShiftsFragment));
+        add(new ManagerButton("Define Shifts", R.id.DefineShiftRequirementsFragment));
+        add(new ManagerButton("Auto Schedule", R.id.autoScheduleJob));
     }};
-
-    // viewHolder for the recyclerView that represents the manager options
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
-        private final View cardView;
-        public ViewHolder(View view) {
-            super(view);
-            // Identify view components
-            textView = (TextView) view.findViewById(R.id.date);
-            cardView = (View) view.findViewById(R.id.card);
-
-        }
-
-        public void setOnClickListener(View.OnClickListener listener){
-        cardView.setOnClickListener(listener);
-        }
-
-        public TextView getTextView() {
-            return textView;
-        }
-    }
+    private FragmentManagerMainBinding binding;
 
     public ManagerFragment() {
         // Required empty public constructor
     }
+
     /**
      inflate the view  and set the listeners
      * @param inflater
@@ -73,7 +51,7 @@ public class ManagerFragment extends Fragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
-    ) {
+                            ) {
 
         binding = FragmentManagerMainBinding.inflate(inflater, container, false);
 
@@ -83,10 +61,10 @@ public class ManagerFragment extends Fragment {
             @NonNull
             @Override
             public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
-                                                                     int viewType) {
+                                                 int viewType) {
                 View view =
                         LayoutInflater.from(parent.getContext()).inflate(R.layout.one_line_card_view,
-                                parent, false);
+                                                                         parent, false);
                 return new ViewHolder(view);
             }
 
@@ -97,6 +75,7 @@ public class ManagerFragment extends Fragment {
                 holder.getTextView().setOnClickListener(v -> NavHostFragment.findNavController(ManagerFragment.this)
                         .navigate(buttonsArrayList.get(holder.getAdapterPosition()).getFragment()));
             }
+
             // get the number of items in the RecyclerView
             @Override
             public int getItemCount() {
@@ -106,7 +85,7 @@ public class ManagerFragment extends Fragment {
 
         // set layout manager for RecyclerView
         binding.rvManagerMain.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.rvManagerMain.smoothScrollToPosition(buttonsArrayList.size()-1);
+        binding.rvManagerMain.smoothScrollToPosition(buttonsArrayList.size() - 1);
         return binding.getRoot();
 
     }
@@ -115,6 +94,28 @@ public class ManagerFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    // viewHolder for the recyclerView that represents the manager options
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView textView;
+        private final View     cardView;
+
+        public ViewHolder(View view) {
+            super(view);
+            // Identify view components
+            textView = (TextView) view.findViewById(R.id.date);
+            cardView = (View) view.findViewById(R.id.card);
+
+        }
+
+        public void setOnClickListener(View.OnClickListener listener) {
+            cardView.setOnClickListener(listener);
+        }
+
+        public TextView getTextView() {
+            return textView;
+        }
     }
 
 

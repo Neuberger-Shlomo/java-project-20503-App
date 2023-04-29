@@ -10,19 +10,22 @@ import org.json.JSONArray;
 
 import java.util.HashMap;
 import java.util.Map;
+
 /**
- add authentication headers to the request
+ * add authentication headers to the request
  */
 public class AuthedJsonArrayObjectRequest extends JsonArrayRequest {
     private String token;
     private String userId;
+
     /**
      * constructor that adds authentication headers to the request.
-     * @param url the url to send the request
-     *  @param userId the user id
-       @param token the user token
-     * @param listener  listener handle successful responses
-     * @param errorListener  listener that handle errors
+     *
+     * @param url           the url to send the request
+     * @param userId        the user id
+     * @param token         the user token
+     * @param listener      listener handle successful responses
+     * @param errorListener listener that handle errors
      */
     public AuthedJsonArrayObjectRequest(String url, String userId,
                                         String token, Response.Listener<JSONArray> listener,
@@ -31,15 +34,17 @@ public class AuthedJsonArrayObjectRequest extends JsonArrayRequest {
         this.token  = token;
         this.userId = userId;
     }
+
     /**
      * constructor that adds authentication headers to the request.
-     * @param method the http method for the request (for example GET, Post..)
-     * @param url the url to send the request
-     * @param userId the user id
-     * @param token the user token
-     * @param jsonRequest The jaon request body
-     * @param listener  listener = handle successful responses
-     * @param errorListener  listener = handle errors
+     *
+     * @param method        the http method for the request (for example GET, Post..)
+     * @param url           the url to send the request
+     * @param userId        the user id
+     * @param token         the user token
+     * @param jsonRequest   The jaon request body
+     * @param listener      listener = handle successful responses
+     * @param errorListener listener = handle errors
      */
 
     public AuthedJsonArrayObjectRequest(int method, String url, String userId,
@@ -50,9 +55,11 @@ public class AuthedJsonArrayObjectRequest extends JsonArrayRequest {
         this.token  = token;
         this.userId = userId;
     }
+
     /**
-     add authentication headers to request
-     * @return  map of headers that inclde in the request
+     * add authentication headers to request
+     *
+     * @return map of headers that inclde in the request
      * @throws AuthFailureError if error
      */
     @Override

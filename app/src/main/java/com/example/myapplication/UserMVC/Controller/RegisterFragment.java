@@ -4,15 +4,14 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.api.Api;
@@ -20,26 +19,29 @@ import com.example.myapplication.api.UsersApi;
 import com.example.myapplication.databinding.FragmentRegisterBinding;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+
 /**
-enable new user to register
- fields: first name, last name, email, username,  password.
- functions: validate profile,register, handle response.
+ * enable new user to register
+ * fields: first name, last name, email, username,  password.
+ * functions: validate profile,register, handle response.
  */
 
 public class RegisterFragment extends Fragment {
     private FragmentRegisterBinding binding;
 
     private UserViewModel userViewModel;
+
     //initialize view
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     /**
      * inflate the view and set up the componenets
      *
-     * @param inflater layout inflater
-     * @param container parent view
+     * @param inflater           layout inflater
+     * @param container          parent view
      * @param savedInstanceState saved state for previous screen
      * @return the inflated View
      */
@@ -63,8 +65,9 @@ public class RegisterFragment extends Fragment {
         binding.btnRegister.setOnClickListener(this::onRegisterClicked);
         return binding.getRoot();
     }
+
     /**
-     *validate the profile fields
+     * validate the profile fields
      * field empty= set EditText to red.
      *
      * @return true if valid profile
@@ -98,8 +101,10 @@ public class RegisterFragment extends Fragment {
         }
         return true;
     }
+
     /**
-     handle register button click
+     * handle register button click
+     *
      * @param view the View we click on
      */
 
@@ -118,14 +123,15 @@ public class RegisterFragment extends Fragment {
 
 
     }
+
     /**
      * after reciving response from server
      * successful registration = go to previous fragment.
      * else= show error
      *
-     * @param valid          true if the response is valid; false otherwise
-     * @param responseError  the error message returned from the server
-     * @param throwable      the throwable message returned from the server
+     * @param valid         true if the response is valid; false otherwise
+     * @param responseError the error message returned from the server
+     * @param throwable     the throwable message returned from the server
      */
     private void onRegisterResponse(Boolean valid, Api.ResponseError responseError,
                                     Throwable throwable) {
@@ -146,8 +152,9 @@ public class RegisterFragment extends Fragment {
                           BaseTransientBottomBar.LENGTH_SHORT).show();
         }
     }
+
     /**
-     *  replace views
+     * replace views
      * hide the first view and show the second view second view
      *
      * @param v1 the view we hide

@@ -12,15 +12,6 @@ import com.example.myapplication.Common.Views.Fragments.IModel;
 import com.example.myapplication.R;
 
 import java.util.ArrayList;
-/**
- * ADAPTER FOR EACH ITEM IN THE RECYCLER VIEW
- * <p>
- * An abstract Fragment that handles date selection and data display.
- * The fragment hosts a RecyclerView and a DatePicker.
- *
- * @param <Model>
- */
-
 
 /**
  * An adapter for displaying a list of items in a one-liner format.
@@ -48,21 +39,23 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
      * create OneLinerAdapter with empty list
      */
     public OneLinerAdapter() {
-        rawItems = new ArrayList<>();
+        rawItems    = new ArrayList<>();
         visibleList = new ArrayList<>();
     }
 
     /**
-     *create  OneLinerAdapter with the given list of items.
+     * create  OneLinerAdapter with the given list of items.
+     *
      * @param objects the list of items we want to display
      */
     public OneLinerAdapter(ArrayList<T> objects) {
-        this.rawItems = objects;
+        this.rawItems    = objects;
         this.visibleList = objects;
     }
 
     /**
      * return the visible items in the list.
+     *
      * @return the list of visible items
      */
     public ArrayList<T> getItems() {
@@ -71,6 +64,7 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
 
     /**
      * Called when the adapter is attached to a RecyclerView instance.
+     *
      * @param recyclerView the RecyclerView instance
      */
     @Override
@@ -91,12 +85,12 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
     public OneLineViewHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view =
                 LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_one_line_dis1,
-                        parent, false);
+                                                                 parent, false);
         return new OneLineViewHolder<T>(view);
     }
 
     /**
-     *bind data to the view holder
+     * bind data to the view holder
      *
      * @param holder   the view holder
      * @param position the position of the item in the list
@@ -118,11 +112,12 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
                 holder.setText(holder.getItem().toString());
         }
         // If an item click listener is set, also set it for the view holder.
-        if (onItemClickListener != null) holder.setOnClickListener(onItemClickListener);
+        if (onItemClickListener != null)
+            holder.setOnClickListener(onItemClickListener);
     }
 
     /**
-      @return the number of visible items
+     * @return the number of visible items
      */
     @Override
     public int getItemCount() {
@@ -154,8 +149,8 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
      * @return the removed item
      */
     public T removeEntry(T model) {
-        int visiblePosition = visibleList.indexOf(model);
-        boolean removed = visibleList.remove(model);
+        int     visiblePosition = visibleList.indexOf(model);
+        boolean removed         = visibleList.remove(model);
         rawItems.remove(model);
         if (removed)
             notifyItemRemoved(visiblePosition);
@@ -170,7 +165,8 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
     }
 
     /**
-    add a new item to the list and notify the adapter of the change.
+     * add a new item to the list and notify the adapter of the change.
+     *
      * @param item   the item we want to add/ update
      * @param update is item updated already exists in the list??
      */
@@ -197,18 +193,19 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
     }
 
     /**
-     *update item in the list
+     * update item in the list
      *
      * @param entry    the item to update
      * @param position the position of the item in the list
      */
     public void updateEntry(T entry, int position) {
-        int rawIndex = rawItems.indexOf(entry);
+        int rawIndex     = rawItems.indexOf(entry);
         int visibleIndex = visibleList.indexOf(entry);
 
         if (rawIndex != position && visibleIndex != position)
             return;
-        if (visibleList.get(visibleIndex).equals(entry)) return;
+        if (visibleList.get(visibleIndex).equals(entry))
+            return;
         if (rawIndex == visibleIndex && visibleIndex == -1) {
             addEntry(entry);
             return;
@@ -224,6 +221,7 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
     /**
      * -filter a list with query filter method
      * -updates visible list
+     *
      * @param query   the query to filter the list with
      * @param filter  the filter method
      * @param <Query> the query type
@@ -249,6 +247,7 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
 
     /**
      * Set listener for binding view holder.
+     *
      * @param bindViewHolderListener the listener
      */
     public void setBindViewHolderListener(interfaces.OnBindViewHolderListener<T,
@@ -258,6 +257,7 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
 
     /**
      * Set listener for item click events
+     *
      * @param l the listener
      */
     public void setOnItemClickListener(interfaces.OnItemClickListener<T> l) {

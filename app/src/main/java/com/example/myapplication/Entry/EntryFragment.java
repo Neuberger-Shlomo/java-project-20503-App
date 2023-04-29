@@ -1,8 +1,9 @@
 package com.example.myapplication.Entry;
 /**
- *fragment that provides a list of navigation items to the user
+ * fragment that provides a list of navigation items to the user
  * (by click on an item the user will move to the desierd screen)
  */
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,10 +26,7 @@ import java.util.Objects;
 
 public class EntryFragment extends Fragment {
     //identify we are in the entry fragment
-    private static final String   TAG = "EntryFragment";
-    private              FragmentEntryBinding binding;
-    private              UserViewModel        userViewModel;
-
+    private static final String               TAG = "EntryFragment";
     // list of navigation options the user can choose by clicking on them
     ArrayList<NavItem> items   = new ArrayList<NavItem>() {{
         add(new NavItem(
@@ -58,6 +56,9 @@ public class EntryFragment extends Fragment {
     }};
     //  adapter for RecyclerView ( to present the navigation options)
     RouteAdapter       adapter = new RouteAdapter();
+    private              FragmentEntryBinding binding;
+    private              UserViewModel        userViewModel;
+
     //create the view hierarchy
     @Override
     public View onCreateView(
@@ -86,7 +87,8 @@ public class EntryFragment extends Fragment {
                     }
                 });
         //set the recycler view layout manager
-        binding.rvButtons.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        binding.rvButtons.setLayoutManager(new StaggeredGridLayoutManager(2,
+                                                                          StaggeredGridLayoutManager.VERTICAL));
 
 
         //set the recycler view adapter
@@ -126,6 +128,7 @@ public class EntryFragment extends Fragment {
         }
 
     }
+
     /**
      * callback method when navigation item is clicked
      *
@@ -136,8 +139,6 @@ public class EntryFragment extends Fragment {
         NavHostFragment.findNavController(EntryFragment.this)
                 .navigate(navItem.navTarget);
     }
-
-
 
 
     @Override

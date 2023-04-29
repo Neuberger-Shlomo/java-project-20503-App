@@ -5,20 +5,18 @@ import static com.example.myapplication.api.UsersApi.responseHandler;
 import android.annotation.SuppressLint;
 
 import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
-import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 
 /**
- *  ScheduleAPI handle requests related to sceduling shifts.
+ * ScheduleAPI handle requests related to sceduling shifts.
  */
 final public class ScheduleAPI {
-    private static final Gson gson = new Gson();
-    public static final String BASE_URL = String.format("%s/%s", Constants.BASE_URL,
-            "schedules");
+    public static final String BASE_URL           = String.format("%s/%s", Constants.BASE_URL,
+                                                                  "schedules");
     public static final String GET_USER_SCHEDULES = String.format("%s/%s", BASE_URL, "user" +
-            "/shifts");
+                                                                                     "/shifts");
 
     /**
      * getSchedulesByUser retrieves schedules by user for a specific day of the week.
@@ -29,7 +27,7 @@ final public class ScheduleAPI {
      * @param day      the day of the week
      * @param postCall callback after the server response
      * @return AuthedJsonObjectRequest (request to get json object of sceduled shift
-     * */
+     */
     @SuppressLint("DefaultLocale")
     static public AuthedJsonArrayObjectRequest getSchedulesByUser(String userId, String token,
                                                                   int week, int day,
@@ -38,7 +36,7 @@ final public class ScheduleAPI {
 
         return new AuthedJsonArrayObjectRequest(
                 String.format("%s/%d/%d", GET_USER_SCHEDULES, week,
-                        day), userId, token,
+                              day), userId, token,
                 res -> responseHandler(res, null, postCall),
                 err -> responseHandler(null, err, postCall));
 

@@ -19,23 +19,24 @@ import com.example.myapplication.ViewModel.WorkersViewModel;
 import com.example.myapplication.api.Api;
 
 import java.util.ArrayList;
-/**
 
-  in this fragment:
- -display list of available workers for a certain shift
- - schedule worker to shift
+/**
+ * in this fragment:
+ * -display list of available workers for a certain shift
+ * - schedule worker to shift
  */
 public class WorkerFragment extends DateListFragment<Profile> {
     // key to get the shift id from arguments
 
     public final static String SHIFT_ID_KEY = "shiftIdKey";
-    private             int    shiftId      = -1; // initilize to no shift
     UserViewModel    userViewModel;
     WorkersViewModel workersViewModel;
+    private             int    shiftId      = -1; // initilize to no shift
+
     /**
      * inflate the view and initialize the components.
      *
-     * @param inflater          to inflate the view
+     * @param inflater           to inflate the view
      * @param container          the parent view
      * @param savedInstanceState previous saved state (so we can restore the previous screen)
      * @return the inflated view
@@ -104,9 +105,11 @@ public class WorkerFragment extends DateListFragment<Profile> {
         super.onDataArrived(profiles, error, t);
         adapter.notifyItemRangeInserted(0, adapter.getItemCount());
     }
+
     /**
      * callback function for clicking pick date button
-     * @param view         the view that we clicked
+     *
+     * @param view        the view that we clicked
      * @param pickerValue the date picker value we choose
      */
 
@@ -114,6 +117,7 @@ public class WorkerFragment extends DateListFragment<Profile> {
     protected void onPickClicked(View view, String pickerValue) {
 
     }
+
     /**
      * callback function when click on free worker from the list
      * add the selected worker to the shift

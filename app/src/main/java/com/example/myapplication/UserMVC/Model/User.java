@@ -11,16 +11,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- represents a basic user  login and permissions data - that is required for user login
-
- veriables:
-
- username = the user name fo login
- id = the user id
- password = password for login
- authToken = authentication token of the user
- RoleLevel = the user permission level (basic or manager)
-
+ * represents a basic user  login and permissions data - that is required for user login
+ * <p>
+ * veriables:
+ * <p>
+ * username = the user name fo login
+ * id = the user id
+ * password = password for login
+ * authToken = authentication token of the user
+ * RoleLevel = the user permission level (basic or manager)
  */
 public class User {
     private String    username;
@@ -56,7 +55,7 @@ public class User {
     }
 
     public static User fromJSON(JSONObject object) throws JSONException {
-        User  user = new User();
+        User user = new User();
         user.setId(object.getString("id"));
         user.setLevel(RoleLevel.values()[object.getJSONObject("role").getInt("roleLevel")]);
         user.setUsername(object.getString("username"));
@@ -117,10 +116,11 @@ public class User {
         return getAuthToken() != null && !getAuthToken().isEmpty();
     }
 
-    public boolean isAdmin(){
+    public boolean isAdmin() {
         return level.ordinal() > RoleLevel.BASIC.ordinal();
     }
-    public boolean isSuperAdmin(){
+
+    public boolean isSuperAdmin() {
         return level.ordinal() > RoleLevel.MANAGER.ordinal();
     }
 

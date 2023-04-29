@@ -31,9 +31,9 @@ import org.json.JSONException;
 
 import java.sql.Date;
 import java.util.Calendar;
-/**
 
- this fragment is for scheduling jobs automatically
+/**
+ * this fragment is for scheduling jobs automatically
  */
 
 public class AutoScheduleJobFragment extends Fragment {
@@ -44,7 +44,6 @@ public class AutoScheduleJobFragment extends Fragment {
             .Builder
             .dateRangePicker()
             .build();
-    private Date start, end;
     //adapter for the recycler view that show the jobs scheduled
     OneLinerAdapter<ScheduleJob> adapter = new OneLinerAdapter<>();
     String                       howTo   = "This scheduler system will auto organize employees to" +
@@ -53,9 +52,9 @@ public class AutoScheduleJobFragment extends Fragment {
                                            "schedule\n" +
                                            "\t2. Click \"Start Job\"\n" +
                                            "\t3. Sit back and relax";
-    private RequestQueue queue;
-
     UserViewModel userViewModel;
+    private Date start, end;
+    private RequestQueue queue;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +84,7 @@ public class AutoScheduleJobFragment extends Fragment {
         binding.btnGetJobs.setOnClickListener(this::onGetRequest);
         return binding.getRoot();
     }
+
     /**
      * callback function for button get jobs
      * ( get all jobs within the selected date range_
@@ -111,10 +111,10 @@ public class AutoScheduleJobFragment extends Fragment {
                                               responseError.getMessage() :
                                               "Unknown error",
                                       Snackbar.LENGTH_LONG).show();
-                        if(throwable!= null)
-                        Log.e(TAG, "onGetRequest: error when getting jobs",throwable);
-                        else{
-                            Log.e(TAG, "onGetRequest: Server returned with "+responseError);
+                        if (throwable != null)
+                            Log.e(TAG, "onGetRequest: error when getting jobs", throwable);
+                        else {
+                            Log.e(TAG, "onGetRequest: Server returned with " + responseError);
                         }
                     } else {
                         // if no response and no error, show a "No information" message
@@ -125,6 +125,7 @@ public class AutoScheduleJobFragment extends Fragment {
 
 
     }
+
     /**
      * callback function for button get jobs
      * ( get all jobs within the selected date range_
@@ -155,7 +156,8 @@ public class AutoScheduleJobFragment extends Fragment {
                                                 object.getInt("id") : "Error"));
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
-                            }}));
+                            }
+                        }));
     }
 
     /**

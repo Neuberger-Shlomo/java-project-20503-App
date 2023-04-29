@@ -29,6 +29,8 @@ import com.example.myapplication.databinding.MainActivityBinding;
 public class MainActivity extends AppCompatActivity implements ViewModelStoreOwner {
 
 
+    NavController navController;
+    UserViewModel userViewModel;
     private AppBarConfiguration appBarConfiguration;
     private MainActivityBinding binding;
 
@@ -37,17 +39,15 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
         super.onResume();
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
     }
 
-    NavController navController;
-    UserViewModel userViewModel;
     /**
      * activity to start the app,
      * inflate define and initialize components.
+     *
      * @param savedInstanceState data from previous activity (before shutdown)
      */
     @Override
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
 
 
     }
+
     /**
      * handle toolbar item selection (login, logout, manager)
      *
@@ -104,12 +105,13 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
-    /**
 
-     handle -user press up on ActionBar.
-     - updates the menu with the current user state
-      -navigate up to the parent activity
-     @return true if navigation successful
+    /**
+     * handle -user press up on ActionBar.
+     * - updates the menu with the current user state
+     * -navigate up to the parent activity
+     *
+     * @return true if navigation successful
      */
     @Override
     public boolean onSupportNavigateUp() {
@@ -117,9 +119,10 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
 
         updateMenu(binding.toolbar.getMenu(), userViewModel.getUserState().getValue());
         NavController navController = Navigation.findNavController(this,
-                // navigate up and return the nev result
+                                                                   // navigate up and return the
+                                                                   // nev result
 
-                R.id.nav_host_fragment_content_main);
+                                                                   R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                || super.onSupportNavigateUp();
     }
@@ -142,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
 
     /**
      * update the menu with the current user state
+     *
      * @return true if the menu updated
      */
     public boolean updateMenu() {
@@ -151,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
             return false;
         return updateMenu(binding.toolbar.getMenu(), userViewModel.getUserState().getValue());
     }
+
     /**
      * update the menu with the current user state
      *

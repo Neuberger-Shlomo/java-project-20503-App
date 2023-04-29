@@ -1,7 +1,6 @@
 package com.example.myapplication.ViewModel;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -13,7 +12,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.Model.Profile;
-import com.example.myapplication.Model.Shift;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.api.Constants;
 import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
@@ -30,28 +28,18 @@ import java.util.ArrayList;
 
 /**
  * WorkersViewModel - A ViewModel representation of the workers in the system
- * Act as a bridge between the worker profiles in the db and the controllers that handle worker profiles
+ * Act as a bridge between the worker profiles in the db and the controllers that handle worker
+ * profiles
  */
 public class WorkersViewModel extends AndroidViewModel {
 
-    // Queue for managing requests to the server
-    private final RequestQueue queue;
-
     // Gson instance for converting data to JSON
     final static private Gson gson = new Gson();
-
+    // Queue for managing requests to the server
+    private final RequestQueue queue;
     // LiveData object that represents the current state of the worker profiles
     private final MutableLiveData<ArrayList<Profile>> workersState =
             new MutableLiveData<ArrayList<Profile>>(new ArrayList<Profile>());
-
-    /**
-     * Return the current worker state
-     *
-     * @return LiveData object representing the current state of the worker profiles
-     */
-    public LiveData<ArrayList<Profile>> getWorkersState() {
-        return workersState;
-    }
 
     /**
      * Initialize WorkersViewModel with application context
@@ -62,46 +50,6 @@ public class WorkersViewModel extends AndroidViewModel {
         super(application);
         // Initialize request queue
         queue = Volley.newRequestQueue(getApplication());
-    }
-
-    /**
-     * Fetch worker profiles from server
-     *
-     * @param userId   User ID
-     * @param token    User token
-     * @param postCall Callback to handle server response
-     */
-    public void getData(String userId,
-                        String token,
-                        @NotNull Api.PostCall<ArrayList<Profile>> postCall) {
-
-        // Add request to queue
-        queue.add(getProfiles(userId, token, () -> {
-                },
-                (jsonArray, responseError, throwable) -> {
-                    try {
-                        if (jsonArray != null) {
-                            ArrayList<Profile> arrayList = new ArrayList<>();
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                // This only work if the the class has the same
-                                // attribute as the DATABASE
-                                arrayList.add(Profile.fromJSON(jsonObject));
-
-                            }
-                            // Update worker state
-                            workersState.setValue(arrayList);
-                            // Callback with result
-                            postCall.onPostCall(arrayList, null, null);
-                        } else {
-                            // Callback with error
-                            postCall.onPostCall(null, responseError, throwable);
-                        }
-                    } catch (JSONException e) {
-                        // Callback with JSON exception
-                        postCall.onPostCall(null, null, e);
-                    }
-                }));
     }
 
     /**
@@ -141,6 +89,92 @@ public class WorkersViewModel extends AndroidViewModel {
     }
 
     /**
+     * Request to get worker profiles from server who are available to work in a given shift
+     *
+     * @param userId   User ID
+     * @param token    User token
+     * @param shiftId  ID of the shift
+     * @param preCall  Callback before request is sent
+     * @param postCall Callback after server response
+     * @return AuthedJsonArrayObjectRequest representing the request
+     */
+    private static AuthedJsonArrayObjectRequest getfreeWorkers(String userId, String token,
+                                                               int shiftId,
+                                                               @NotNull Api.PreCall preCall,
+                                                               @NotNull Api.PostCall<JSONArray> postCall) {
+        preCall.onPreCall();
+        return new AuthedJsonArrayObjectRequest(Constants.SHIFT_URL + "/" + shiftId + Constants.GET_FREE_WORKERS,
+                                                userId,
+                                                token,
+                                                res -> {
+                                                    try {
+                                                        postCall.onPostCall(res, null, null);
+                                                    } catch (Exception e) {
+                                                        postCall.onPostCall(null, null, e);
+                                                    }
+                                                },
+                                                err -> {
+                                                    if (err.networkResponse != null && err.networkResponse.data != null) {
+                                                        String resString =
+                                                                new String(err.networkResponse.data, StandardCharsets.UTF_8);
+                                                        postCall.onPostCall(null,
+                                                                            gson.fromJson(resString, Api.ResponseError.class), null);
+                                                    } else {
+                                                        postCall.onPostCall(null, null, err);
+                                                    }
+                                                });
+    }
+
+    /**
+     * Return the current worker state
+     *
+     * @return LiveData object representing the current state of the worker profiles
+     */
+    public LiveData<ArrayList<Profile>> getWorkersState() {
+        return workersState;
+    }
+
+    /**
+     * Fetch worker profiles from server
+     *
+     * @param userId   User ID
+     * @param token    User token
+     * @param postCall Callback to handle server response
+     */
+    public void getData(String userId,
+                        String token,
+                        @NotNull Api.PostCall<ArrayList<Profile>> postCall) {
+
+        // Add request to queue
+        queue.add(getProfiles(userId, token, () -> {
+                              },
+                              (jsonArray, responseError, throwable) -> {
+                                  try {
+                                      if (jsonArray != null) {
+                                          ArrayList<Profile> arrayList = new ArrayList<>();
+                                          for (int i = 0; i < jsonArray.length(); i++) {
+                                              JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                              // This only work if the the class has the same
+                                              // attribute as the DATABASE
+                                              arrayList.add(Profile.fromJSON(jsonObject));
+
+                                          }
+                                          // Update worker state
+                                          workersState.setValue(arrayList);
+                                          // Callback with result
+                                          postCall.onPostCall(arrayList, null, null);
+                                      } else {
+                                          // Callback with error
+                                          postCall.onPostCall(null, responseError, throwable);
+                                      }
+                                  } catch (JSONException e) {
+                                      // Callback with JSON exception
+                                      postCall.onPostCall(null, null, e);
+                                  }
+                              }));
+    }
+
+    /**
      * Fetch worker profiles from server who are available to work in a given shift
      *
      * @param userId   User ID
@@ -165,57 +199,22 @@ public class WorkersViewModel extends AndroidViewModel {
                                                  // attribute as the DATABASE
                                                  arrayList.add(Profile.fromJSON(jsonObject));
 
-                            }
-                            // Update worker state
-                            workersState.setValue(arrayList);
-                            // Callback with result
-                            postCall.onPostCall(arrayList, null, null);
-                        } else {
-                            // Callback with error
-                            postCall.onPostCall(null, responseError, throwable);
-                        }
-                    } catch (JSONException e) {
-                        // Callback with JSON exception
-                        postCall.onPostCall(null, null, e);
-                    }
-                }));
+                                             }
+                                             // Update worker state
+                                             workersState.setValue(arrayList);
+                                             // Callback with result
+                                             postCall.onPostCall(arrayList, null, null);
+                                         } else {
+                                             // Callback with error
+                                             postCall.onPostCall(null, responseError, throwable);
+                                         }
+                                     } catch (JSONException e) {
+                                         // Callback with JSON exception
+                                         postCall.onPostCall(null, null, e);
+                                     }
+                                 }));
     }
 
-    /**
-     * Request to get worker profiles from server who are available to work in a given shift
-     *
-     * @param userId   User ID
-     * @param token    User token
-     * @param shiftId  ID of the shift
-     * @param preCall  Callback before request is sent
-     * @param postCall Callback after server response
-     * @return AuthedJsonArrayObjectRequest representing the request
-     */
-    private static AuthedJsonArrayObjectRequest getfreeWorkers(String userId, String token, int shiftId,
-                                                               @NotNull Api.PreCall preCall,
-                                                               @NotNull Api.PostCall<JSONArray> postCall) {
-        preCall.onPreCall();
-        return new AuthedJsonArrayObjectRequest(Constants.SHIFT_URL + "/" + shiftId + Constants.GET_FREE_WORKERS,
-                userId,
-                token,
-                res -> {
-                    try {
-                        postCall.onPostCall(res, null, null);
-                    } catch (Exception e) {
-                        postCall.onPostCall(null, null, e);
-                    }
-                },
-                err -> {
-                    if (err.networkResponse != null && err.networkResponse.data != null) {
-                        String resString =
-                                new String(err.networkResponse.data, StandardCharsets.UTF_8);
-                        postCall.onPostCall(null,
-                                gson.fromJson(resString, Api.ResponseError.class), null);
-                    } else {
-                        postCall.onPostCall(null, null, err);
-                    }
-                });
-    }
     /**
      * Add a worker to a shift
      * /**
@@ -232,8 +231,8 @@ public class WorkersViewModel extends AndroidViewModel {
 
         // Call the preCall callback before making the request
         preCall.onPreCall();
-        queue.add(addWorkerRequest(pId, sId,userId,token, preCall, (result, responseError,
-                                                       throwable) -> {
+        queue.add(addWorkerRequest(pId, sId, userId, token, preCall, (result, responseError,
+                                                                      throwable) -> {
             if (responseError != null || throwable != null) {
                 postCall.onPostCall(null, responseError, throwable);
                 return;
@@ -242,6 +241,7 @@ public class WorkersViewModel extends AndroidViewModel {
             postCall.onPostCall(result, null, null);
         }));
     }
+
     /**
      * Request to add worker to a shift
      *
@@ -273,14 +273,15 @@ public class WorkersViewModel extends AndroidViewModel {
         return new AuthedJsonObjectRequest(Request.Method.POST, userId,
                                            token, Constants.ADD_WORKER_TO_SHIFT_URL, jsonObj,
                                            res -> {
-            try {
-                // Callback with result
-                postCall.onPostCall(res.getBoolean("result"), null, null);
-            } catch (Exception e) {
-                // Callback with exception
-                postCall.onPostCall(null, null, e);
-            }
-        }, err -> {
+                                               try {
+                                                   // Callback with result
+                                                   postCall.onPostCall(res.getBoolean("result"),
+                                                                       null, null);
+                                               } catch (Exception e) {
+                                                   // Callback with exception
+                                                   postCall.onPostCall(null, null, e);
+                                               }
+                                           }, err -> {
             // Handle the error scenario
             if (err.networkResponse != null && err.networkResponse.data != null) {
                 String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);

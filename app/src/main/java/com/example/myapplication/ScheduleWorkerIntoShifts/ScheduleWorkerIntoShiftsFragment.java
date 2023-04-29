@@ -27,12 +27,15 @@ public class ScheduleWorkerIntoShiftsFragment extends ScheduleStatusFragment {
 
         return v;
     }
+
     //handle when a shift is choosed
     @Override
     protected void onItemClicked(Shift model, View view) {
         Bundle b = new Bundle(); //bundle = class to store date in key-value pairs
-        b.putInt(WorkerFragment.SHIFT_ID_KEY,model.getId());  // store the Shift ID in the bundle using a specific key
+        b.putInt(WorkerFragment.SHIFT_ID_KEY, model.getId());  // store the Shift ID in the
+        // bundle using a specific key
         NavHostFragment.findNavController(ScheduleWorkerIntoShiftsFragment.this)
-                .navigate(R.id.ProfileListFragment,b);// navigate to the ProfileListFragment, passing the bundle as an argument
+                .navigate(R.id.ProfileListFragment, b);// navigate to the ProfileListFragment,
+        // passing the bundle as an argument
     }
 }

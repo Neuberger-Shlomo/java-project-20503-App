@@ -2,15 +2,10 @@ package com.example.myapplication.api;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.myapplication.Model.ConstraintType;
 import com.example.myapplication.Model.Constraints;
 import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
 import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -23,12 +18,12 @@ import org.json.JSONObject;
  */
 final public class ConstraintApi {
     //
-    public final static String BASE_URL = String.format("%s/%s", Constants.BASE_URL,
-            "constraints/user");
-    public final static String GET_ALL_URL = String.format("%s/%s", BASE_URL, "");
+    public final static String BASE_URL        = String.format("%s/%s", Constants.BASE_URL,
+                                                               "constraints/user");
+    public final static String GET_ALL_URL     = String.format("%s/%s", BASE_URL, "");
     public final static String GET_BY_WEEK_URL = String.format("%s/%s", BASE_URL, "range/");
-    public final static String POST_NEW_URL = String.format("%s/%s", BASE_URL, "");
-    public final static String DELETE_URL = String.format("%s/%s", BASE_URL, "");
+    public final static String POST_NEW_URL    = String.format("%s/%s", BASE_URL, "");
+    public final static String DELETE_URL      = String.format("%s/%s", BASE_URL, "");
 
     /**
      * getConstraintsByDate return constraints given date range.
@@ -36,8 +31,8 @@ final public class ConstraintApi {
      * @param userId   the user id
      * @param token    the user login token
      * @param postCall callback to handle response from the server
-     * @param start    the start day of date---------------------------------------------------------
-     * @param end      the end day of date--------------------------------------------------------------
+     * @param start    the start day of date
+     * @param end      the end day of date
      * @return AuthedJsonObjectRequest (request to get json object of constraints)
      */
     public static JsonArrayRequest getConstraintsByDate(String userId, String token, int start,
@@ -58,7 +53,7 @@ final public class ConstraintApi {
      * @param postCall callback to handle response from the server
      * @param start    the start day of the week
      * @param end      the end day of the week
-     * @return AuthedJsonObjectRequest (request to get json object of constraints)-
+     * @return AuthedJsonObjectRequest (request to get json object of constraints)
      */
     public static JsonArrayRequest getConstraintsByWeek(String userId, String token, int start,
                                                         int end,

@@ -18,18 +18,21 @@ import com.example.myapplication.ViewModel.WorkersViewModel;
 import com.example.myapplication.api.Api;
 
 import java.util.ArrayList;
+
 /**
-this user screen show list of worker profiles.
+ * this user screen show list of worker profiles.
  */
 public class WorkersListFragment extends DateListFragment<Profile> implements SearchView.OnQueryTextListener {
 
 
     WorkersViewModel workersViewModel;
     UserViewModel    userViewModel;
+
     /**
-     inflate the view  and set the listeners
+     * inflate the view  and set the listeners
+     *
      * @param inflater
-     * @param container             the parent view
+     * @param container          the parent view
      * @param savedInstanceState saved previous state. so we can restore it.
      * @return the view for the fregment
      */
@@ -55,18 +58,21 @@ public class WorkersListFragment extends DateListFragment<Profile> implements Se
         return view;
 
     }
+
     /**
-    do nothing
+     * do nothing
      */
     @Override
     protected void onPickClicked(View view, String pickerValue) {
     }
+
     /**
      * if new data arrive
      * refresh the adapter
-     * @param profiles  arrayList of profiles
-     * @param error if error
-     * @param t if throwable
+     *
+     * @param profiles arrayList of profiles
+     * @param error    if error
+     * @param t        if throwable
      */
     @Override
     public void onDataArrived(@Nullable ArrayList<Profile> profiles,
@@ -77,8 +83,9 @@ public class WorkersListFragment extends DateListFragment<Profile> implements Se
 
     /**
      * worker is clicked -> show additional data about the worker
+     *
      * @param model the shift request model
-     * @param view the view
+     * @param view  the view
      */
     @Override
     protected void onItemClicked(Profile model, View view) {
@@ -94,11 +101,13 @@ public class WorkersListFragment extends DateListFragment<Profile> implements Se
             b.putString(WorkerFragment.WORKER_ID_KEY, String.valueOf(model.getId()));
             NavHostFragment
                     .findNavController(WorkersListFragment.this)
-                    .navigate(R.id.workerFragment,b);
+                    .navigate(R.id.workerFragment, b);
         }
     }
+
     /**
      * handle  the user submit search query
+     *
      * @param query the search query
      * @return false
      */
@@ -108,8 +117,10 @@ public class WorkersListFragment extends DateListFragment<Profile> implements Se
         adapter.setFilter(query, ((item, s) -> item.toString().contains(s)));
         return false;
     }
+
     /**
      * handle the user shnage the text in the search view
+     *
      * @param newText the new text entered by the user.
      * @return false
      */
