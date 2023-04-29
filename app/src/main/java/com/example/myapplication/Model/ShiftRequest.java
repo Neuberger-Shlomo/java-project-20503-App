@@ -62,6 +62,13 @@ public class ShiftRequest implements IModel {
     public int getDuration() {
         return duration;
     }
+    /**
+     * converts json to Shift
+     *
+     * @param object the json to convert
+     * @return the Shift object
+     * @throws JSONException if there is error with the json
+     */
 
     public static ShiftRequest fromJSON(JSONObject object) throws JSONException {
 
@@ -85,7 +92,6 @@ public class ShiftRequest implements IModel {
         calendar.set(Calendar.WEEK_OF_YEAR, weekNumber);
         calendar.set(Calendar.DAY_OF_WEEK, dayNumber);
 
-        // Get the date from the calendar object
         Date date = calendar.getTime();
         String shiftDate = String.format("%d-%d-%d", date.getDate(), date.getMonth() + 1,
                                          year);

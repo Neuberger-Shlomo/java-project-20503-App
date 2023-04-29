@@ -5,7 +5,15 @@ import com.example.myapplication.Common.Views.Fragments.IModel;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.Objects;
-
+/**
+ *  a scheduled shift (user assign to the shift)
+ *  VERIABLES:
+ *  id =  shift id
+ *  userId = the first name of the user
+ *  startDate = the last name of the user
+ *  endDate = the user email
+ *  done = is the shift fully assigned
+ */
 public class ScheduleJob implements IModel {
     Integer id;
 
@@ -15,7 +23,13 @@ public class ScheduleJob implements IModel {
 
     String endDate;
 
-    Boolean done = false;
+    Boolean done = false; // is the shift fully assigned
+    /**
+     *  convert Date to string "yyyy-mm-dd".
+     *
+     * @param date - the date as input
+     * @return the output string
+     */
 
     private String fromDate(java.sql.Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -28,9 +42,15 @@ public class ScheduleJob implements IModel {
                                          (d <= 9 ? "0" : "") + d);
 
 
-        // yyyy-MM-dd
         return startDate;
     }
+    /**
+     *  convert string "yyyy-mm-dd" to Date.
+     *
+     * @param date - the date as input
+     * @return the output Date
+     */
+
 
     private java.sql.Date toDate(String date) {
         String[] strings = date.split("-");
@@ -96,6 +116,7 @@ public class ScheduleJob implements IModel {
                && endDate.equals(that.endDate);
     }
 
+    //string of the shift details
 
     @Override
     public String toString() {
@@ -107,6 +128,7 @@ public class ScheduleJob implements IModel {
                ", done=" + done +
                '}';
     }
+    //string of the shift details do not include user details
 
     @Override
     public String toPrettyString() {

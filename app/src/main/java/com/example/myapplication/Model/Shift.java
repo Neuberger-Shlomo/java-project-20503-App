@@ -32,7 +32,23 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+/**
+ * Shift class represents a shift filled by the manager.
+ * veriables:
+ * numOfRequiredWorkers
+ * numOfScheduledWorkers
+ * id
+ * startHour
+ * duration
+ * startTime
+ * endTime
+ * startDate
+ * scheduledWorkers
+ * weekNumber=  week number of the year (1-52)
+ * year
+ * dayNumber=  day of the week
+ *
+ */
 public class Shift implements IModel {
 
     private int    numOfRequiredWorkers;
