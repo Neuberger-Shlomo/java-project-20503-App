@@ -1,5 +1,10 @@
 package com.example.myapplication.Entry;
-
+/**
+ * This is the EntryFragment class. It is a fragment that provides a list of navigation items
+ * to the user. The user can click on an item to navigate to another part of the application.
+ * Each item corresponds to a different action or screen in the app, like logging in, signing up,
+ * viewing shifts, etc. The list of items is dynamically adjusted based on the user's logged-in status.
+ */
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +31,7 @@ public class EntryFragment extends Fragment {
     private              FragmentEntryBinding binding;
     private              UserViewModel        userViewModel;
 
-
+    //a list of navigation items that the user can click on.
     ArrayList<NavItem> items   = new ArrayList<NavItem>() {{
         add(new NavItem(
                 "Login",

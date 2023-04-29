@@ -21,58 +21,67 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
+/**
+ * handles date selection and data display.
+ * @param <Model> = type of data to display
+ */
 public abstract class DateListFragment<Model extends IModel> extends Fragment implements ViewModelStoreOwner {
 
     protected FragmentDatePickingBinding binding;
-    protected OneLinerAdapter<Model>     adapter;
+    protected OneLinerAdapter<Model> adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        // inflate the layout
         binding = FragmentDatePickingBinding.inflate(inflater, container, false);
+        // initialize  adapter
         adapter = new OneLinerAdapter<>();
+        // set the adapter's listener
         adapter.setBindViewHolderListener(this::onModelBind);
+        // set the adapter to the recycler view
         binding.rvDatePicker.setAdapter(adapter);
+        // set the recycler view layout manager
         binding.rvDatePicker.setLayoutManager(new LinearLayoutManager(requireContext()));
+        // set the date picker listener to the button
         binding.btnDatePicker.setOnClickListener((v) -> {
             String pickedDate = binding.dpDatePicker.getDayOfMonth() + "-" +
-                                (binding.dpDatePicker.getMonth() + 1) + "-" +
-                                binding.dpDatePicker.getYear();
+                    (binding.dpDatePicker.getMonth() + 1) + "-" +
+                    binding.dpDatePicker.getYear();
             this.onPickClicked(v, pickedDate);
         });
         return binding.getRoot();
-
     }
 
+    // set the search view's on click listener
     public void setOnSearchListener(View.OnClickListener l) {
         if (binding.searchView.getVisibility() != View.VISIBLE)
             binding.searchView.setVisibility(View.VISIBLE);
         binding.searchView.setOnSearchClickListener(l);
-
     }
 
+    // set the search view's query text listener
     public void setOnQueryListener(SearchView.OnQueryTextListener l) {
         if (binding.searchView.getVisibility() != View.VISIBLE)
             binding.searchView.setVisibility(View.VISIBLE);
         binding.searchView.setOnQueryTextListener(l);
-
     }
 
-
     /**
-     * Handles the pick date action
+      handle the pick date action.
      *
-     * @param view of the clicked the button
+     * @param view        View of button clicked
+     * @param pickerValue Selected date
      */
     abstract protected void onPickClicked(View view, String pickerValue);
 
     /**
-     * Handles the binding of a shift to the holder
+     * Binds a model object to the ViewHolder.
      *
-     * @param model    of the current view
-     * @param holder   of the current view
-     * @param position of the shift in the list
+     * @param model    Model object to bind
+     * @param holder   ViewHolder
+     * @param position Position in the list
      */
     protected void onModelBind(Model model, OneLineViewHolder<Model> holder, int position) {
         holder.setText(model.toPrettyString());
@@ -80,37 +89,41 @@ public abstract class DateListFragment<Model extends IModel> extends Fragment im
         holder.setOnClickListener(this::onItemClicked);
     }
 
-    /**
-     * Handles the holder item clicked
-     *
-     * @param model of the calling view holder
-     * @param view  of the caller
-     */
+
+     // handle item clicked
     abstract protected void onItemClicked(Model model, View view);
 
-
     /**
-     * Handles the getData call default implementation
+     * Handle data from server.
+     * if data valid- add data to the adapter.
+     * if error- show error message
      *
-     * @param models received form the server
-     * @param error  error received from the server
-     * @param t      thrown by the Volley or parsing
+     * @param models List of model objects received from the server
+     * @param error  error from the server
+     * @param t      Exception thrown during the process
      */
     public void onDataArrived(@Nullable ArrayList<Model> models, @Nullable Api.ResponseError error,
                               @Nullable Throwable t) {
         StringBuilder builder = new StringBuilder();
+        // if data received
         if (models != null) {
             for (Model shift : models) {
+                // add each model to the adapter
                 adapter.addEntry(shift, false);
             }
             return;
-        } else if (error != null) {
+        }
+        else if (error != null) {
             builder.append(error.getMessage());
-        } else if (t != null) {
+        }
+        else if (t != null) {
             builder.append(t.getMessage());
-        } else {
+        }
+        else {
             builder.append("Unknown Error");
         }
+        // show the error message in Snackbar
         Snackbar.make(requireView(), builder.toString(), BaseTransientBottomBar.LENGTH_SHORT).show();
     }
 }
+
