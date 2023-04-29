@@ -20,25 +20,40 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Objects;
-
+/**
+ * ShiftRequestViewModel - current representation of the user
+ * act as bridge between the user in the db and the controllers that handle user
+ */
 public class UserViewModel extends AndroidViewModel {
 
-
+    // shiftRequestState= arraylist that represents the current state of user
     private final MutableLiveData<User> userState =
             new MutableLiveData<>(new User());
-    private final RequestQueue          queue;
+    //queue of requests to the server
 
+    private final RequestQueue          queue;
+    // to later convert data to json
     final static private Gson gson = new Gson();
 
     public UserViewModel(@NotNull Application application) {
         super(application);
+        //initializes the queue instance variable
         queue = Volley.newRequestQueue(getApplication());
     }
+    /**
 
+     * @return LiveData = that represent the userState
+     */
     public LiveData<User> getUserState() {
         return userState;
     }
-
+    /**
+     * Sends a login request to the server.
+     *
+     * @param username  the user name
+     * @param password  callback function before sending the request
+     * @param preCall   callback function after sending the request
+     */
     public void login(
             @NotNull String username,
             @NotNull String password,
@@ -57,13 +72,22 @@ public class UserViewModel extends AndroidViewModel {
                         })));
 
     }
+    /**
+     * send register request to server.
+     *
+     * @param registerRequest register request we want to send
+     * @param preCall          callback function  before sending request
+     * @param postCall        callback function after sending the request
+     */
 
     public void register(UsersApi.RegisterRequest registerRequest, Api.PreCall preCall,
                          Api.PostCall<Boolean> postCall) {
-
+        // preCall = callback before the request sent
         preCall.onPreCall();
+        //   add user request to the server
         queue.add(UsersApi.registerRequest(registerRequest, preCall, (jsonObject, responseError,
                                                                       throwable) -> {
+            // postCall with exception (if null)
             if (jsonObject != null)
                 this.onRegisterResponse(registerRequest);
             postCall.onPostCall(jsonObject != null, responseError, throwable);
@@ -71,7 +95,11 @@ public class UserViewModel extends AndroidViewModel {
 
     }
 
-
+    /**
+     * Sends a logout request to the server.
+     * @param preCall          callback function  before sending request
+     * @param postCall        callback function after sending the request
+     */
     public void logout(@Nullable Api.PreCall preCall, @NotNull Api.PostCall<Boolean> postCall) {
         if (userState.getValue() == null) {
             postCall.onPostCall(null, null, new Exception("No user"));
@@ -90,7 +118,11 @@ public class UserViewModel extends AndroidViewModel {
                         }));
 
     }
-
+    /**
+     * Sets the user's registration information in the userState.
+     *
+     * @param registerRequest A RegisterRequest object containing the user's registration information
+     */
 
     private void onRegisterResponse(UsersApi.RegisterRequest registerRequest) {
         User user = getUserState().getValue();
@@ -100,7 +132,13 @@ public class UserViewModel extends AndroidViewModel {
         user.setUsername(registerRequest.getUsername());
         userState.setValue(user);
     }
-
+    /**
+     * Sets the userState to a new User object with an authToken of null if the logout request was successful.
+     *
+     * @param result    A boolean value representing whether the logout was successful
+     * @param error     A ResponseError object containing information about the error (if there was one)
+     * @param throwable An exception that was thrown (if there was one)
+     */
     private void onLogoutResponse(boolean result, Api.ResponseError error, Throwable throwable) {
         if (Boolean.TRUE.equals(result) || (error != null && error.getStatus() != 200) || throwable != null) {
             User u =
@@ -110,7 +148,15 @@ public class UserViewModel extends AndroidViewModel {
         }
 
     }
-
+    /**
+     * Sets the userState to a new User object with the login information if the login request was successful.
+     *
+     * @param jsonObject  JSONObject with the user login date
+     * @param error      ResponseError with error data
+     * @param throwable  the exception that was thrown
+     * @throws JSONException exception if json not valid
+     * @throws Exception     exception if login data not valid
+     */
     private void onLoginResponse(JSONObject jsonObject, Api.ResponseError error,
                                  Throwable throwable) throws JSONException, Exception {
         User user = userState.getValue();
