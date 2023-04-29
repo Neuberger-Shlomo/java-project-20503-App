@@ -1,14 +1,12 @@
 package com.example.myapplication.Model;
 
-import androidx.fragment.app.Fragment;
-
 public class ManagerButton {
     String buttonName;
-    int fragment;
+    int    fragment;
 
     public ManagerButton(String buttonName, int fragment) {
         this.buttonName = buttonName;
-        this.fragment = fragment;
+        this.fragment   = fragment;
     }
 
     public String getButtonName() {

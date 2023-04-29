@@ -5,13 +5,11 @@ import static com.example.myapplication.api.UsersApi.responseHandler;
 import android.annotation.SuppressLint;
 
 import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
-import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 
 final public class ScheduleAPI {
-    private static final Gson   gson               = new Gson();
     public static final  String BASE_URL           = String.format("%s/%s", Constants.BASE_URL,
                                                                    "schedules");
     public static final  String GET_USER_SCHEDULES = String.format("%s/%s", BASE_URL, "user" +
@@ -31,6 +29,7 @@ final public class ScheduleAPI {
 
 
     }
+
     @SuppressLint("DefaultLocale")
     static public AuthedJsonArrayObjectRequest getSchedulesByUser(String userId, String token,
                                                                   int week,

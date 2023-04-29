@@ -23,10 +23,6 @@ import java.util.Objects;
 public class EntryFragment extends Fragment {
 
     private static final String               TAG = "EntryFragment";
-    private              FragmentEntryBinding binding;
-    private              UserViewModel        userViewModel;
-
-
     ArrayList<NavItem> items   = new ArrayList<NavItem>() {{
         add(new NavItem(
                 "Login",
@@ -54,6 +50,8 @@ public class EntryFragment extends Fragment {
                         true, false));
     }};
     RouteAdapter       adapter = new RouteAdapter();
+    private              FragmentEntryBinding binding;
+    private              UserViewModel        userViewModel;
 
     @Override
     public View onCreateView(
@@ -80,8 +78,8 @@ public class EntryFragment extends Fragment {
                     }
                 });
 
-        binding.rvButtons.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-
+        binding.rvButtons.setLayoutManager(new StaggeredGridLayoutManager(2,
+                                                                          StaggeredGridLayoutManager.VERTICAL));
 
 
         binding.rvButtons.setAdapter(adapter);
@@ -114,8 +112,6 @@ public class EntryFragment extends Fragment {
         NavHostFragment.findNavController(EntryFragment.this)
                 .navigate(navItem.navTarget);
     }
-
-
 
 
     @Override

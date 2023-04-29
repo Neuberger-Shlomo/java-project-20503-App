@@ -12,22 +12,23 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Shift implements IModel {
 
-    private int    numOfRequiredWorkers;
-    private int    numOfScheduledWorkers;
-    private int    id;
-    private int    startHour;
-    private int    duration;
+    private int numOfRequiredWorkers;
+    private       int numOfScheduledWorkers;
+    private final int id;
+    private       int startHour;
+    private int duration;
 
     private Timestamp endTime;
     private Timestamp startTime;
 
-    private Date startDate;
+    private final Date startDate;
 
-    private ArrayList<Profile> scheduledWorkers;
-    private int                weekNumber, year = 2023, dayNumber;
+    private final ArrayList<Profile> scheduledWorkers;
+    private       int                weekNumber, year = 2023, dayNumber;
     //TODO: implement year getting according to database
 
     public Shift(String shiftDate, int numOfRequiredWorkers, int id,
@@ -41,10 +42,29 @@ public class Shift implements IModel {
         this.scheduledWorkers      = new ArrayList<>(numOfRequiredWorkers);
         this.weekNumber            = weekNumber;
         this.dayNumber             = dayNumber;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.WEEK_OF_YEAR, weekNumber);
+        calendar.set(Calendar.DAY_OF_WEEK, dayNumber);
+        this.startDate = new Date(calendar.getTime().getTime());
     }
 
-    public String getDate() {
-        return getShiftDate();
+    public Shift(String shiftDate, int numOfRequiredWorkers, ArrayList<Profile> workersList,
+                 int id, int startHour, int duration) {
+        this.numOfRequiredWorkers  = numOfRequiredWorkers;
+        this.id                    = id;
+        this.startHour             = startHour;
+        this.duration              = duration;
+        this.numOfScheduledWorkers = 0;
+        this.scheduledWorkers      = new ArrayList<>(numOfRequiredWorkers);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.WEEK_OF_YEAR, weekNumber);
+        calendar.set(Calendar.DAY_OF_WEEK, dayNumber);
+        this.startDate = new Date(calendar.getTime().getTime());
+
+        for (Profile worker : workersList) {
+            setScheduledWorker(worker);
+        }
     }
 
     public static Shift fromJSON(JSONObject object) throws JSONException {
@@ -56,30 +76,17 @@ public class Shift implements IModel {
         return shift;
     }
 
-
-    /*
-     * this second constructor is for testing use only*/
-    public Shift(String shiftDate, int numOfRequiredWorkers, ArrayList<Profile> workersList,
-                 int id, int startHour, int duration) {
-        this.numOfRequiredWorkers  = numOfRequiredWorkers;
-        this.id                    = id;
-        this.startHour             = startHour;
-        this.duration              = duration;
-        this.numOfScheduledWorkers = 0;
-        this.scheduledWorkers      = new ArrayList<>(numOfRequiredWorkers);
-
-        for (Profile worker : workersList) {
-            setScheduledWorker(worker);
-        }
+    public String getDate() {
+        return getShiftDate();
     }
 
     @SuppressLint("DefaultLocale")
     public String getShiftDate() {
-        return  String.format("%d-%d-%d", startDate.getDate(), startDate.getMonth() + 1,
-                              startDate.getYear() + 1900);
+        return String.format("%d-%d-%d", startDate.getDate(), startDate.getMonth() + 1,
+                             startDate.getYear() + 1900);
     }
 
-    public Date getStartDate(){
+    public Date getStartDate() {
         return startDate;
     }
 
@@ -126,12 +133,12 @@ public class Shift implements IModel {
         return startHour;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-
     public void setStartHour(int startHour) {
         this.startHour = startHour;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public void setDuration(int duration) {
@@ -182,18 +189,21 @@ public class Shift implements IModel {
     public Timestamp getStartTime() {
         return startTime;
     }
-    public String getStartTime(boolean shortVersion) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        String formattedTime = sdf.format(startTime.getTime());
-        return shortVersion? formattedTime :getStartTime().toString();
 
-    }
-    public String getEndTime(boolean shortVersion) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        String formattedTime = sdf.format(endTime.getTime());
-        return shortVersion? formattedTime :getEndTime().toString();
-    }
     public void setStartTime(Timestamp startTime) {
         this.startTime = startTime;
+    }
+
+    public String getStartTime(boolean shortVersion) {
+        SimpleDateFormat sdf           = new SimpleDateFormat("HH:mm");
+        String           formattedTime = sdf.format(startTime.getTime());
+        return shortVersion ? formattedTime : getStartTime().toString();
+
+    }
+
+    public String getEndTime(boolean shortVersion) {
+        SimpleDateFormat sdf           = new SimpleDateFormat("HH:mm");
+        String           formattedTime = sdf.format(endTime.getTime());
+        return shortVersion ? formattedTime : getEndTime().toString();
     }
 }

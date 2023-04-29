@@ -1,7 +1,6 @@
 package com.example.myapplication.Model;
 
 import com.example.myapplication.Common.Views.Fragments.IModel;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,17 +35,11 @@ public class ShiftRequest implements IModel {
         this.startHour   = startHour;
         this.duration    = duration;
     }
- public ShiftRequest(int shiftId, int uid) {
-        this.shiftId     = shiftId;;
-        this.uid         = uid;
 
-    }
-    public int getStartHour() {
-        return startHour;
-    }
+    public ShiftRequest(int shiftId, int uid) {
+        this.shiftId = shiftId;
+        this.uid = uid;
 
-    public int getDuration() {
-        return duration;
     }
 
     public static ShiftRequest fromJSON(JSONObject object) throws JSONException {
@@ -82,6 +75,13 @@ public class ShiftRequest implements IModel {
                                 timestamp, startHour, duration);
     }
 
+    public int getStartHour() {
+        return startHour;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
 
     public String getFirstName() {
         return firstName;

@@ -2,11 +2,11 @@ package com.example.myapplication.Model;
 
 public class UserButton {
     String buttonName;
-    int fragment;
+    int    fragment;
 
     public UserButton(String buttonName, int fragment) {
         this.buttonName = buttonName;
-        this.fragment = fragment;
+        this.fragment   = fragment;
     }
 
     public String getButtonName() {

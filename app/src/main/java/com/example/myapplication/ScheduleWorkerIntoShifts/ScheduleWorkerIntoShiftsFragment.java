@@ -30,8 +30,8 @@ public class ScheduleWorkerIntoShiftsFragment extends ScheduleStatusFragment {
     @Override
     protected void onItemClicked(Shift model, View view) {
         Bundle b = new Bundle();
-        b.putInt(WorkerFragment.SHIFT_ID_KEY,model.getId());
+        b.putInt(WorkerFragment.SHIFT_ID_KEY, model.getId());
         NavHostFragment.findNavController(ScheduleWorkerIntoShiftsFragment.this)
-                .navigate(R.id.ProfileListFragment,b);
+                .navigate(R.id.ProfileListFragment, b);
     }
 }

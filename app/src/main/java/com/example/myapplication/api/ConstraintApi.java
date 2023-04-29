@@ -2,15 +2,10 @@ package com.example.myapplication.api;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.myapplication.Model.ConstraintType;
 import com.example.myapplication.Model.Constraints;
 import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
 import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -59,7 +54,7 @@ final public class ConstraintApi {
     }
 
     public static AuthedJsonObjectRequest addConstraints(
-            String uid,String token,
+            String uid, String token,
             @NotNull Constraints constraints,
             Api.PostCall<JSONObject> postCall) {
         JSONObject jsonObj = null;
@@ -69,7 +64,7 @@ final public class ConstraintApi {
             throw new RuntimeException(e);
         }
         return new AuthedJsonObjectRequest(
-                Request.Method.POST, POST_NEW_URL,uid,token, jsonObj,
+                Request.Method.POST, POST_NEW_URL, uid, token, jsonObj,
                 response -> UsersApi.responseHandler(response, null, postCall),
                 error -> UsersApi.responseHandler(null, error, postCall));
     }

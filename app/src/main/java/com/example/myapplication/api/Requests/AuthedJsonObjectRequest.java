@@ -20,7 +20,7 @@ public class AuthedJsonObjectRequest extends JsonObjectRequest {
                                    String token, Response.Listener<JSONObject> listener,
                                    @Nullable Response.ErrorListener errorListener) {
         super(url, listener, errorListener);
-        this.token = token;
+        this.token  = token;
         this.userId = userId;
     }
 
@@ -29,15 +29,15 @@ public class AuthedJsonObjectRequest extends JsonObjectRequest {
                                    Response.Listener<JSONObject> listener,
                                    @Nullable Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
-        this.token = token;
+        this.token  = token;
         this.userId = userId;
     }
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
 
-        Map<String,String>  hashMap = new HashMap<>(super.getHeaders());
-        hashMap.put("Auth",String.format("%s:%s",this.userId,this.token));
+        Map<String, String> hashMap = new HashMap<>(super.getHeaders());
+        hashMap.put("Auth", String.format("%s:%s", this.userId, this.token));
         return hashMap;
     }
 }

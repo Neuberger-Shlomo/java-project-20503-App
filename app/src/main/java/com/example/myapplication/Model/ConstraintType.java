@@ -14,22 +14,22 @@ public class ConstraintType implements IModel {
     private Integer id;
     @Nullable
     private Integer constraintLevel;
-    private String description;
+    private String  description;
 
     public ConstraintType(Integer constraintLevel, String description) {
-        this.id = null;
+        this.id              = null;
         this.constraintLevel = constraintLevel;
-        this.description = description;
+        this.description     = description;
     }
 
     public ConstraintType(int id, int constraintLevel, String description) {
-        this.id = id;
+        this.id              = id;
         this.constraintLevel = constraintLevel;
-        this.description = description;
+        this.description     = description;
     }
 
     public static ConstraintType fromJson(JSONObject object) throws JSONException {
-        return new ConstraintType(object.getInt("id"),object.getInt("constraintLevel"),
+        return new ConstraintType(object.getInt("id"), object.getInt("constraintLevel"),
                                   object.getString("description"));
     }
 

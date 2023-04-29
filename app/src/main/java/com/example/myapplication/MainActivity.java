@@ -21,6 +21,8 @@ import com.example.myapplication.databinding.MainActivityBinding;
 public class MainActivity extends AppCompatActivity implements ViewModelStoreOwner {
 
 
+    NavController navController;
+    UserViewModel userViewModel;
     private AppBarConfiguration appBarConfiguration;
     private MainActivityBinding binding;
 
@@ -29,14 +31,10 @@ public class MainActivity extends AppCompatActivity implements ViewModelStoreOwn
         super.onResume();
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
     }
-
-    NavController navController;
-    UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

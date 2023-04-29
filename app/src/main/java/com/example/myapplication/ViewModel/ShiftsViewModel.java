@@ -28,15 +28,67 @@ import java.util.ArrayList;
 public class ShiftsViewModel extends AndroidViewModel {
 
 
+    final static private Gson gson = new Gson();
     private final MutableLiveData<ArrayList<Shift>> shiftsState =
             new MutableLiveData<ArrayList<Shift>>(new ArrayList<Shift>());
-    private final RequestQueue queue;
-
-    final static private Gson gson = new Gson();
+    private final RequestQueue                      queue;
 
     public ShiftsViewModel(@NotNull Application application) {
         super(application);
         queue = Volley.newRequestQueue(getApplication());
+    }
+
+    private static AuthedJsonArrayObjectRequest getShifts(String userId, String token,
+                                                          @NotNull Api.PreCall preCall,
+                                                          @NotNull Api.PostCall<JSONArray> postCall) {
+        preCall.onPreCall();
+        return new AuthedJsonArrayObjectRequest(Constants.ALL_SHIFTS_URL,
+                                                userId,
+                                                token,
+                                                res -> {
+                                                    try {
+                                                        postCall.onPostCall(res, null, null);
+                                                    } catch (Exception e) {
+                                                        postCall.onPostCall(null, null, e);
+                                                    }
+                                                },
+                                                err -> {
+                                                    if (err.networkResponse != null && err.networkResponse.data != null) {
+                                                        String resString =
+                                                                new String(err.networkResponse.data, StandardCharsets.UTF_8);
+                                                        postCall.onPostCall(null,
+                                                                            gson.fromJson(resString, Api.ResponseError.class), null);
+                                                    } else {
+                                                        postCall.onPostCall(null, null, err);
+                                                    }
+                                                });
+    }
+
+    private static AuthedJsonArrayObjectRequest getProfileFromSchedule(String userId,
+                                                                       String token, int scheduleId,
+                                                                       @NotNull Api.PreCall preCall,
+                                                                       @NotNull Api.PostCall<JSONArray> postCall) {
+        preCall.onPreCall();
+        return new AuthedJsonArrayObjectRequest(Constants.SHIFTS_FROM_SCHEDULE_URL + "?id=" + scheduleId,
+                                                userId,
+                                                token,
+                                                res -> {
+                                                    try {
+                                                        postCall.onPostCall(res, null, null);
+                                                    } catch (Exception e) {
+                                                        postCall.onPostCall(null, null, e);
+                                                    }
+                                                },
+                                                err -> {
+                                                    if (err.networkResponse != null && err.networkResponse.data != null) {
+                                                        String resString =
+                                                                new String(err.networkResponse.data, StandardCharsets.UTF_8);
+                                                        postCall.onPostCall(null,
+                                                                            gson.fromJson(resString, Api.ResponseError.class), null);
+                                                    } else {
+                                                        postCall.onPostCall(null, null, err);
+                                                    }
+                                                });
     }
 
     public LiveData<ArrayList<Shift>> getShiftstate() {
@@ -48,7 +100,6 @@ public class ShiftsViewModel extends AndroidViewModel {
         shiftsState.setValue(shiftsState.getValue());
     }
 
-
     public void addEntry(Shift shift) {
         shiftsState.getValue().add(shift);
         shiftsState.setValue(shiftsState.getValue());
@@ -59,117 +110,66 @@ public class ShiftsViewModel extends AndroidViewModel {
                         @NotNull Api.PostCall<ArrayList<Shift>> postCall) {
 
         queue.add(getShifts(userId, token, () -> {
-                },
-                (jsonArray, responseError, throwable) -> {
-                    try {
-                        if (jsonArray != null) {
-                            ArrayList<Shift> arrayList = new ArrayList<>();
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                // This only work if the the class has the same
-                                // attribute as the DATABASE
-                                arrayList.add(Shift.fromJSON(jsonObject));
+                            },
+                            (jsonArray, responseError, throwable) -> {
+                                try {
+                                    if (jsonArray != null) {
+                                        ArrayList<Shift> arrayList = new ArrayList<>();
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                            // This only work if the the class has the same
+                                            // attribute as the DATABASE
+                                            arrayList.add(Shift.fromJSON(jsonObject));
 
-                            }
-                            shiftsState.setValue(arrayList);
-                            postCall.onPostCall(arrayList, null, null);
-                        } else {
-                            postCall.onPostCall(null, responseError, throwable);
-                        }
-                    } catch (JSONException e) {
-                        postCall.onPostCall(null, null, e);
-                    }
-                }));
+                                        }
+                                        shiftsState.setValue(arrayList);
+                                        postCall.onPostCall(arrayList, null, null);
+                                    } else {
+                                        postCall.onPostCall(null, responseError, throwable);
+                                    }
+                                } catch (JSONException e) {
+                                    postCall.onPostCall(null, null, e);
+                                }
+                            }));
     }
-
-
-    private static AuthedJsonArrayObjectRequest getShifts(String userId, String token,
-                                                          @NotNull Api.PreCall preCall,
-                                                          @NotNull Api.PostCall<JSONArray> postCall) {
-        preCall.onPreCall();
-        return new AuthedJsonArrayObjectRequest(Constants.ALL_SHIFTS_URL,
-                userId,
-                token,
-                res -> {
-                    try {
-                        postCall.onPostCall(res, null, null);
-                    } catch (Exception e) {
-                        postCall.onPostCall(null, null, e);
-                    }
-                },
-                err -> {
-                    if (err.networkResponse != null && err.networkResponse.data != null) {
-                        String resString =
-                                new String(err.networkResponse.data, StandardCharsets.UTF_8);
-                        postCall.onPostCall(null,
-                                gson.fromJson(resString, Api.ResponseError.class), null);
-                    } else {
-                        postCall.onPostCall(null, null, err);
-                    }
-                });
-    }
-
 
     public void getProfileFromSchedule(String userId,
                                        String token, int scheduleId,
                                        @NotNull Api.PostCall<ArrayList<Profile>> postCall) {
 
         queue.add(getProfileFromSchedule(userId, token, scheduleId, () -> {
-                },
-                (jsonArray, responseError, throwable) -> {
-                    try {
-                        if (jsonArray != null) {
-                            ArrayList<Profile> arrayList = new ArrayList<>();
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                // This only work if the the class has the same
-                                // attribute as the DATABASE
-                                arrayList.add(Profile.fromJSON(jsonObject));
+                                         },
+                                         (jsonArray, responseError, throwable) -> {
+                                             try {
+                                                 if (jsonArray != null) {
+                                                     ArrayList<Profile> arrayList =
+                                                             new ArrayList<>();
+                                                     for (int i = 0; i < jsonArray.length(); i++) {
+                                                         JSONObject jsonObject =
+                                                                 jsonArray.getJSONObject(i);
+                                                         // This only work if the the class has
+                                                         // the same
+                                                         // attribute as the DATABASE
+                                                         arrayList.add(Profile.fromJSON(jsonObject));
 
-                            }
-                            postCall.onPostCall(arrayList, null, null);
-                        } else {
-                            postCall.onPostCall(null, responseError, throwable);
-                        }
-                    } catch (JSONException e) {
-                        postCall.onPostCall(null, null, e);
-                    }
-                }));
+                                                     }
+                                                     postCall.onPostCall(arrayList, null, null);
+                                                 } else {
+                                                     postCall.onPostCall(null, responseError,
+                                                                         throwable);
+                                                 }
+                                             } catch (JSONException e) {
+                                                 postCall.onPostCall(null, null, e);
+                                             }
+                                         }));
     }
 
-    private static AuthedJsonArrayObjectRequest getProfileFromSchedule(String userId, String token, int scheduleId,
-                                                                       @NotNull Api.PreCall preCall,
-                                                                       @NotNull Api.PostCall<JSONArray> postCall) {
-        preCall.onPreCall();
-        return new AuthedJsonArrayObjectRequest(Constants.SHIFTS_FROM_SCHEDULE_URL + "?id=" + scheduleId,
-                userId,
-                token,
-                res -> {
-                    try {
-                        postCall.onPostCall(res, null, null);
-                    } catch (Exception e) {
-                        postCall.onPostCall(null, null, e);
-                    }
-                },
-                err -> {
-                    if (err.networkResponse != null && err.networkResponse.data != null) {
-                        String resString =
-                                new String(err.networkResponse.data, StandardCharsets.UTF_8);
-                        postCall.onPostCall(null,
-                                gson.fromJson(resString, Api.ResponseError.class), null);
-                    } else {
-                        postCall.onPostCall(null, null, err);
-                    }
-                });
-    }
-
-
-    public void addShift(Shift shift,String userId,String token, Api.PreCall preCall,
+    public void addShift(Shift shift, String userId, String token, Api.PreCall preCall,
                          Api.PostCall<Boolean> postCall) {
 
         preCall.onPreCall();
-        queue.add(addShiftRequest(shift,userId,token, preCall, (jsonObject, responseError,
-                                                             throwable) -> {
+        queue.add(addShiftRequest(shift, userId, token, preCall, (jsonObject, responseError,
+                                                                  throwable) -> {
             if (responseError != null || throwable != null) {
                 postCall.onPostCall(null, responseError, throwable);
                 return;
@@ -188,10 +188,10 @@ public class ShiftsViewModel extends AndroidViewModel {
 
 
     private AuthedJsonObjectRequest addShiftRequest(Shift shift,
-                                              String userid,
-                                              String token,
-                                              Api.PreCall preCall,
-                                              Api.PostCall<JSONObject> postCall) {
+                                                    String userid,
+                                                    String token,
+                                                    Api.PreCall preCall,
+                                                    Api.PostCall<JSONObject> postCall) {
         preCall.onPreCall();
 
         JSONObject jsonObj;
@@ -202,8 +202,7 @@ public class ShiftsViewModel extends AndroidViewModel {
             return null;
         }
 
-        return new AuthedJsonObjectRequest(Request.Method.POST,userid,token,
-                                           Constants.ADD_SHIFT_URL,
+        return new AuthedJsonObjectRequest(Request.Method.POST, Constants.ADD_SHIFT_URL, userid, token,
                                            jsonObj
                 , res -> {
             try {

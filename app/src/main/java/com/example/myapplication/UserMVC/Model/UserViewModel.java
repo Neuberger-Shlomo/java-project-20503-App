@@ -10,8 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.Model.Profile;
-import com.example.myapplication.api.Api;
 import com.example.myapplication.Model.RoleLevel;
+import com.example.myapplication.api.Api;
 import com.example.myapplication.api.UsersApi;
 import com.google.gson.Gson;
 
@@ -24,11 +24,10 @@ import java.util.Objects;
 public class UserViewModel extends AndroidViewModel {
 
 
+    final static private Gson gson = new Gson();
     private final MutableLiveData<User> userState =
             new MutableLiveData<>(new User());
     private final RequestQueue          queue;
-
-    final static private Gson gson = new Gson();
 
     public UserViewModel(@NotNull Application application) {
         super(application);
@@ -112,7 +111,7 @@ public class UserViewModel extends AndroidViewModel {
     }
 
     private void onLoginResponse(JSONObject jsonObject, Api.ResponseError error,
-                                 Throwable throwable) throws JSONException, Exception {
+                                 Throwable throwable) throws Exception {
         User user = userState.getValue();
         if (user == null) {
             throw new Exception("No user data");
