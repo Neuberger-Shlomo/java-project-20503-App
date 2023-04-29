@@ -14,15 +14,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
 import com.example.myapplication.api.Api;
 import com.example.myapplication.api.Constants;
 import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
+import com.example.myapplication.api.Requests.AuthedJsonObjectRequest;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -163,7 +161,10 @@ public class ShiftsViewModel extends AndroidViewModel {
                             ArrayList<Profile> arrayList = new ArrayList<>();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                // This only work if the the class has the same
+                                // attribute as the DATABASE
                                 arrayList.add(Profile.fromJSON(jsonObject));
+
                             }
                     // callback with the ArrayList
                             postCall.onPostCall(arrayList, null, null);
@@ -221,11 +222,12 @@ public class ShiftsViewModel extends AndroidViewModel {
      * @param preCall  callback before request sent
      * @param postCall callback after server response
      */
-    public void addShift(Shift shift, Api.PreCall preCall,
+    public void addShift(Shift shift,String userId,String token, Api.PreCall preCall,
                          Api.PostCall<Boolean> postCall) {
 
         preCall.onPreCall();
-        queue.add(addShiftRequest(shift, preCall, (jsonObject, responseError, throwable) -> {
+        queue.add(addShiftRequest(shift,userId,token, preCall, (jsonObject, responseError,
+                                                             throwable) -> {
             if (responseError != null || throwable != null) {
             // callback with responseError and throwable
                 postCall.onPostCall(null, responseError, throwable);
@@ -233,7 +235,6 @@ public class ShiftsViewModel extends AndroidViewModel {
             }
             ArrayList<Shift> s = getShiftstate().getValue();
             if (s == null) {
-            // callback with Exception
                 postCall.onPostCall(null, null, new Exception("No user error"));
                 return;
             }
@@ -243,6 +244,7 @@ public class ShiftsViewModel extends AndroidViewModel {
             // callback with success status
             postCall.onPostCall(true, null, null);
         }));
+
     }
 
     /**
@@ -253,7 +255,9 @@ public class ShiftsViewModel extends AndroidViewModel {
      * @param postCall callback after server response
      * @return JsonObjectRequest to be added to the request queue
      */
-    private JsonObjectRequest addShiftRequest(Shift shift,
+    private AuthedJsonObjectRequest addShiftRequest(Shift shift,
+                                              String userid,
+                                              String token,
                                               Api.PreCall preCall,
                                               Api.PostCall<JSONObject> postCall) {
         preCall.onPreCall();
@@ -267,9 +271,12 @@ public class ShiftsViewModel extends AndroidViewModel {
             postCall.onPostCall(null, null, e);
             return null;
         }
-
         // create and return the JsonObjectRequest
-        return new JsonObjectRequest(Request.Method.POST, Constants.ADD_SHIFT_URL, jsonObj, res -> {
+
+        return new AuthedJsonObjectRequest(Request.Method.POST,userid,token,
+                                           Constants.ADD_SHIFT_URL,
+                                           jsonObj
+                , res -> {
             try {
                 postCall.onPostCall(res, null, null);
             } catch (Exception e) {

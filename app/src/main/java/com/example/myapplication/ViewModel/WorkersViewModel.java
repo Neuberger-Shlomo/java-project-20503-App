@@ -119,25 +119,25 @@ public class WorkersViewModel extends AndroidViewModel {
         preCall.onPreCall();
         //ArrayObjectRequest to fetch profiles
         return new AuthedJsonArrayObjectRequest(Constants.ALL_PROFILES_URL,
-                userId,
-                token,
-                res -> {
-                    try {
-                        postCall.onPostCall(res, null, null);
-                    } catch (Exception e) {
-                        postCall.onPostCall(null, null, e);
-                    }
-                },
-                err -> {
-                    if (err.networkResponse != null && err.networkResponse.data != null) {
-                        String resString =
-                                new String(err.networkResponse.data, StandardCharsets.UTF_8);
-                        postCall.onPostCall(null,
-                                gson.fromJson(resString, Api.ResponseError.class), null);
-                    } else {
-                        postCall.onPostCall(null, null, err);
-                    }
-                });
+                                                userId,
+                                                token,
+                                                res -> {
+                                                    try {
+                                                        postCall.onPostCall(res, null, null);
+                                                    } catch (Exception e) {
+                                                        postCall.onPostCall(null, null, e);
+                                                    }
+                                                },
+                                                err -> {
+                                                    if (err.networkResponse != null && err.networkResponse.data != null) {
+                                                        String resString =
+                                                                new String(err.networkResponse.data, StandardCharsets.UTF_8);
+                                                        postCall.onPostCall(null,
+                                                                            gson.fromJson(resString, Api.ResponseError.class), null);
+                                                    } else {
+                                                        postCall.onPostCall(null, null, err);
+                                                    }
+                                                });
     }
 
     /**
@@ -154,16 +154,16 @@ public class WorkersViewModel extends AndroidViewModel {
 
         // Add request to queue
         queue.add(getfreeWorkers(userId, token, shiftId, () -> {
-                },
-                (jsonArray, responseError, throwable) -> {
-                    try {
-                        if (jsonArray != null) {
-                            ArrayList<Profile> arrayList = new ArrayList<>();
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                // This only work if the the class has the same
-                                // attribute as the DATABASE
-                                arrayList.add(Profile.fromJSON(jsonObject));
+                                 },
+                                 (jsonArray, responseError, throwable) -> {
+                                     try {
+                                         if (jsonArray != null) {
+                                             ArrayList<Profile> arrayList = new ArrayList<>();
+                                             for (int i = 0; i < jsonArray.length(); i++) {
+                                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                                 // This only work if the the class has the same
+                                                 // attribute as the DATABASE
+                                                 arrayList.add(Profile.fromJSON(jsonObject));
 
                             }
                             // Update worker state
@@ -216,7 +216,6 @@ public class WorkersViewModel extends AndroidViewModel {
                     }
                 });
     }
-
     /**
      * Add a worker to a shift
      * /**
@@ -227,15 +226,14 @@ public class WorkersViewModel extends AndroidViewModel {
      * @param preCall  Callback before request is sent
      * @param postCall Callback after server response
      */
-    public void addWorkerToShift(int pId, int sId, Api.PreCall preCall,
+    public void addWorkerToShift(int pId, int sId, String userId,
+                                 String token, Api.PreCall preCall,
                                  Api.PostCall<Boolean> postCall) {
 
         // Call the preCall callback before making the request
         preCall.onPreCall();
-        // Add request to queue
-        queue.add(addWorkerRequest(pId, sId, preCall, (result, responseError,
+        queue.add(addWorkerRequest(pId, sId,userId,token, preCall, (result, responseError,
                                                        throwable) -> {
-            // Handle error scenarios
             if (responseError != null || throwable != null) {
                 postCall.onPostCall(null, responseError, throwable);
                 return;
@@ -244,7 +242,6 @@ public class WorkersViewModel extends AndroidViewModel {
             postCall.onPostCall(result, null, null);
         }));
     }
-
     /**
      * Request to add worker to a shift
      *
@@ -254,9 +251,12 @@ public class WorkersViewModel extends AndroidViewModel {
      * @param postCall Callback after server response
      * @return JsonObjectRequest representing the request
      */
-    private JsonObjectRequest addWorkerRequest(int pId, int sId,
-                                               Api.PreCall preCall,
-                                               Api.PostCall<Boolean> postCall) {
+
+    private AuthedJsonObjectRequest addWorkerRequest(int pId, int sId,
+                                                     String userId,
+                                                     String token,
+                                                     Api.PreCall preCall,
+                                                     Api.PostCall<Boolean> postCall) {
         preCall.onPreCall();
 
         // Construct JSON Object to send with the request
@@ -270,8 +270,9 @@ public class WorkersViewModel extends AndroidViewModel {
             return null;
         }
 
-        // Create the request
-        return new JsonObjectRequest(Request.Method.POST, Constants.ADD_WORKER_TO_SHIFT_URL, jsonObj, res -> {
+        return new AuthedJsonObjectRequest(Request.Method.POST, userId,
+                                           token, Constants.ADD_WORKER_TO_SHIFT_URL, jsonObj,
+                                           res -> {
             try {
                 // Callback with result
                 postCall.onPostCall(res.getBoolean("result"), null, null);
@@ -291,7 +292,7 @@ public class WorkersViewModel extends AndroidViewModel {
         });
     }
 
-    public void resetShift(String uid, String token,int sId, Api.PreCall preCall,
+    public void resetShift(String uid, String token, int sId, Api.PreCall preCall,
                            Api.PostCall<Boolean> postCall) {
 
         preCall.onPreCall();
@@ -313,14 +314,15 @@ public class WorkersViewModel extends AndroidViewModel {
 
         JSONObject jsonObj = new JSONObject();
         try {
-            jsonObj.put("sId",sId);
+            jsonObj.put("sId", sId);
         } catch (JSONException e) {
             postCall.onPostCall(null, null, e);
             return null;
         }
 
-        return new AuthedJsonObjectRequest(Request.Method.DELETE, Constants.DELETE_SHIFT_SCHEDULE_URL+ "/" + sId,uid,
-                token, jsonObj, res -> {
+        return new AuthedJsonObjectRequest(Request.Method.DELETE,
+                                           Constants.DELETE_SHIFT_SCHEDULE_URL + "/" + sId, uid,
+                                           token, jsonObj, res -> {
             try {
                 postCall.onPostCall(res.getBoolean("result"), null, null);
             } catch (Exception e) {
@@ -336,50 +338,51 @@ public class WorkersViewModel extends AndroidViewModel {
         });
     }
 
-//    public void resetShift(String uid, String token,int sId, Api.PreCall preCall,
-//                                 Api.PostCall<Boolean> postCall) {
-//
-//        preCall.onPreCall();
-//        queue.add(resetShiftRequest(uid, token, sId, preCall, (result, responseError,
-//                                                      throwable) -> {
-//            if (responseError != null || throwable != null) {
-//                postCall.onPostCall(null, responseError, throwable);
-//                return;
-//            }
-//            postCall.onPostCall(result, null, null);
-//        }));
-//    }
-//
-//
-//    private JsonObjectRequest resetShiftRequest(String uid, String token, int sId,
-//                                               Api.PreCall preCall,
-//                                               Api.PostCall<Boolean> postCall) {
-//        preCall.onPreCall();
-//
-//        JSONObject jsonObj = new JSONObject();
-//        try {
-//
-//            jsonObj.put("sId",sId);
-//        } catch (JSONException e) {
-//            postCall.onPostCall(null, null, e);
-//            return null;
-//        }
-//
-//        return new AuthedJsonObjectRequest(Request.Method.DELETE, Constants.DELETE_SHIFT_SCHEDULE_URL+ "/" + sId,uid,
-//                token, jsonObj, res -> {
-//            try {
-//                postCall.onPostCall(res.getBoolean("result"), null, null);
-//            } catch (Exception e) {
-//                postCall.onPostCall(null, null, e);
-//            }
-//        }, err -> {
-//            if (err.networkResponse != null && err.networkResponse.data != null) {
-//                String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
-//                postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class), null);
-//            } else {
-//                postCall.onPostCall(null, null, err);
-//            }
-//        });
-//    }
+    //    public void resetShift(String uid, String token,int sId, Api.PreCall preCall,
+    //                                 Api.PostCall<Boolean> postCall) {
+    //
+    //        preCall.onPreCall();
+    //        queue.add(resetShiftRequest(uid, token, sId, preCall, (result, responseError,
+    //                                                      throwable) -> {
+    //            if (responseError != null || throwable != null) {
+    //                postCall.onPostCall(null, responseError, throwable);
+    //                return;
+    //            }
+    //            postCall.onPostCall(result, null, null);
+    //        }));
+    //    }
+    //
+    //
+    //    private JsonObjectRequest resetShiftRequest(String uid, String token, int sId,
+    //                                               Api.PreCall preCall,
+    //                                               Api.PostCall<Boolean> postCall) {
+    //        preCall.onPreCall();
+    //
+    //        JSONObject jsonObj = new JSONObject();
+    //        try {
+    //
+    //            jsonObj.put("sId",sId);
+    //        } catch (JSONException e) {
+    //            postCall.onPostCall(null, null, e);
+    //            return null;
+    //        }
+    //
+    //        return new AuthedJsonObjectRequest(Request.Method.DELETE, Constants
+    //        .DELETE_SHIFT_SCHEDULE_URL+ "/" + sId,uid,
+    //                token, jsonObj, res -> {
+    //            try {
+    //                postCall.onPostCall(res.getBoolean("result"), null, null);
+    //            } catch (Exception e) {
+    //                postCall.onPostCall(null, null, e);
+    //            }
+    //        }, err -> {
+    //            if (err.networkResponse != null && err.networkResponse.data != null) {
+    //                String resString = new String(err.networkResponse.data, StandardCharsets.UTF_8);
+    //                postCall.onPostCall(null, gson.fromJson(resString, Api.ResponseError.class), null);
+    //            } else {
+    //                postCall.onPostCall(null, null, err);
+    //            }
+    //        });
+    //    }
 
 }
