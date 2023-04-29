@@ -1,5 +1,10 @@
 
 package com.example.myapplication;
+/**
+ this fregment responsible for two jobs:
+ show shifts to user, and allow user to request them.
+
+ */
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,10 +31,10 @@ import java.util.ArrayList;
 public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift> {
 
     // communicate with the server . import shifts
-    private ShiftsViewModel       shiftViewModel;
+    private ShiftsViewModel shiftViewModel;
     private ShiftRequestViewModel shiftRequestViewModel;
 
-    //  communicate with the server, show which user is logged in
+    //communicate with the server, show which user is logged in
     private UserViewModel userViewModel;
 
 
@@ -37,14 +42,14 @@ public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift>
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
-                            ) {
+    ) {
 
         super.onCreateView(inflater, container, savedInstanceState);
 
-        shiftViewModel        = new ViewModelProvider(requireActivity()).get(ShiftsViewModel.class);
+        shiftViewModel = new ViewModelProvider(requireActivity()).get(ShiftsViewModel.class);
         shiftRequestViewModel =
                 new ViewModelProvider(requireActivity()).get(ShiftRequestViewModel.class);
-        userViewModel         = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         adapter.setBindViewHolderListener(this::onShiftBind);
         shiftViewModel.getData(
                 userViewModel.getUserState().getValue().getId(),
@@ -61,8 +66,7 @@ public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift>
     }
 
     /**
-     * Handles the pick date action
-     *
+     *  pick date action
      * @param view of the clicked the button
      */
     @Override
@@ -70,14 +74,14 @@ public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift>
 
         //insert the date from pickdate to the string pickedDate
         String pickedDate = binding.dpDatePicker.getDayOfMonth() + "-" +
-                            (binding.dpDatePicker.getMonth() + 1) + "-" +
-                            binding.dpDatePicker.getYear();
+                (binding.dpDatePicker.getMonth() + 1) + "-" +
+                binding.dpDatePicker.getYear();
         //show only shifts equal to the picked date
         adapter.setFilter(pickedDate, (item, s) -> !item.getDate().equals(s));
     }
 
     /**
-     * Handles the binding of a shift to the holder
+     * bind shift to holder
      *
      * @param shift    of the current view
      * @param holder   of the current view
@@ -88,15 +92,15 @@ public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift>
     void onShiftBind(Shift shift, OneLineViewHolder<Shift> holder, int position) {
         holder.setItem(shift);
         holder.setText("Shift Date: " + shift.getDate()
-                       + "\nNumber Of Required Workers: " + shift.getNumOfRequiredWorkers()
-                       + "\nNumber Of Scheduled Workers: " + shift.getNumOfScheduledWorkers()
-                       + "\nat " + shift.getStartTime(true)
-                       + "- " + shift.getEndTime(true));
+                + "\nNumber Of Required Workers: " + shift.getNumOfRequiredWorkers()
+                + "\nNumber Of Scheduled Workers: " + shift.getNumOfScheduledWorkers()
+                + "\nat " + shift.getStartTime(true)
+                + "- " + shift.getEndTime(true));
         holder.setOnClickListener(this::onItemClicked);
     }
 
     /**
-     * Handles the holder item clicked
+     * handle the holder item clicked
      *
      * @param shift of the calling view holder
      * @param view  of the caller
@@ -106,13 +110,15 @@ public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift>
     protected void onItemClicked(Shift shift, View view) {
         if (userViewModel.getUserState().getValue() == null)
             return;
-        String suid    = userViewModel.getUserState().getValue().getId();
-        int    uid     = Integer.parseInt(suid);
-        String token   = userViewModel.getUserState().getValue().getAuthToken();
-        int    shiftId = shift.getId();
+        String suid = userViewModel.getUserState().getValue().getId();
+        int uid = Integer.parseInt(suid);
+        String token = userViewModel.getUserState().getValue().getAuthToken();
+        int shiftId = shift.getId();
 
         shiftRequestViewModel.addShiftRequest(new ShiftRequest(shiftId, uid), suid, token, () -> {
         }, (valid, responseError, throwable) -> {
+            //if sucsessful request show masssage and go back to the previous screen
+
             if (Boolean.TRUE.equals(valid))
                 new AlertDialog.Builder(requireContext()).setTitle("Submit success").setOnDismissListener(
                         (dialog -> NavHostFragment
@@ -121,14 +127,14 @@ public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift>
 
             else if (throwable != null || responseError != null) {
                 Snackbar.make(requireView(), responseError != null ? responseError.getMessage() :
-                                      "Unknown error",
-                              Snackbar.LENGTH_LONG).show();
+                                "Unknown error",
+                        Snackbar.LENGTH_LONG).show();
             }
         });
     }
 
     /**
-     * Handles the getProfile call
+     * handle the getProfile call
      *
      * @param profiles      received form the server
      * @param responseError error received from the server
@@ -139,12 +145,14 @@ public class AvailableShiftsUserRequestsFragment extends DateListFragment<Shift>
                                    Throwable throwable) {
         if (profiles == null)
             return;
+        //create a string of all the workers in the shift
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < profiles.size(); i++) {
             Profile p = profiles.get(i);
             stringBuilder.append("").append(i + 1).append(". ").append(p.toPrettyString()).append(
                     "\n");
         }
+        //show the workers in the shift (if no workers, show "no employs")
         String msg = stringBuilder.toString();
         new AlertDialog.Builder(requireContext())
                 .setTitle("Workers in Shift:")

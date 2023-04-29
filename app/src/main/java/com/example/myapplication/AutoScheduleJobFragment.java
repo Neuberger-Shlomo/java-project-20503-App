@@ -31,7 +31,10 @@ import org.json.JSONException;
 
 import java.sql.Date;
 import java.util.Calendar;
+/**
 
+ this fragment is for scheduling jobs automatically
+ */
 
 public class AutoScheduleJobFragment extends Fragment {
 
@@ -42,7 +45,7 @@ public class AutoScheduleJobFragment extends Fragment {
             .dateRangePicker()
             .build();
     private Date start, end;
-
+    //adapter for the recycler view that show the jobs scheduled
     OneLinerAdapter<ScheduleJob> adapter = new OneLinerAdapter<>();
     String                       howTo   = "This scheduler system will auto organize employees to" +
                                            " shifts\n" +
@@ -69,6 +72,7 @@ public class AutoScheduleJobFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: view is created");
         binding = FragmentAutoScheduleBinding.inflate(inflater, container, false);
+        // Set up click listeners and adapters
 
         materialDatePicker.addOnPositiveButtonClickListener(this::onDateChose);
         binding.btnSelectDates.setOnClickListener(
@@ -81,15 +85,23 @@ public class AutoScheduleJobFragment extends Fragment {
         binding.btnGetJobs.setOnClickListener(this::onGetRequest);
         return binding.getRoot();
     }
-
+    /**
+     * callback function for button get jobs
+     * ( get all jobs within the selected date range_
+     *
+     * @param view the view that we bind to button
+     */
     private void onGetRequest(View view) {
         Log.d(TAG, "onGetRequest: get all jobs");
         User user = userViewModel.getUserState().getValue();
+        // request to get all jobs, handling responses and errors
+
         queue.add(JobApi.getAllJobs(
                 user.getId(),
                 user.getAuthToken(), null,
                 ((jsonArray, responseError, throwable) -> {
                     if (jsonArray != null) {
+                        // if valid response parse the string and add each job to the adapter
                         JsonParser.parseString(jsonArray.toString())
                                 .getAsJsonArray()
                                 .forEach(e -> adapter.addEntry(new Gson().fromJson(e.toString(),
@@ -105,6 +117,7 @@ public class AutoScheduleJobFragment extends Fragment {
                             Log.e(TAG, "onGetRequest: Server returned with "+responseError);
                         }
                     } else {
+                        // if no response and no error, show a "No information" message
                         Snackbar.make(requireView(), "No information",
                                       Snackbar.LENGTH_LONG).show();
                     }
@@ -112,10 +125,16 @@ public class AutoScheduleJobFragment extends Fragment {
 
 
     }
-
+    /**
+     * callback function for button get jobs
+     * ( get all jobs within the selected date range_
+     *
+     * @param view the view that we bind to button
+     */
     private void onStartClicked(View view) {
         Log.d(TAG, "onStartClicked");
         User user = userViewModel.getUserState().getValue();
+        // request to start the job
         queue.add(
                 JobApi.requestSchedule(
                         user.getId(),
@@ -129,6 +148,7 @@ public class AutoScheduleJobFragment extends Fragment {
                         },
                         (object, responseError, throwable) -> {
                             try {
+                                //if valid response, show the job id
                                 new MaterialAlertDialogBuilder(requireActivity())
                                         .setTitle("Job created")
                                         .setMessage("Job id is" + (object != null ?
@@ -138,7 +158,11 @@ public class AutoScheduleJobFragment extends Fragment {
                             }}));
     }
 
-
+    /**
+     * callback for the date range picker.
+     *
+     * @param longLongPair the selected date range
+     */
     private void onDateChose(Pair<Long, Long> longLongPair) {
 
         start = new Date(longLongPair.first);
