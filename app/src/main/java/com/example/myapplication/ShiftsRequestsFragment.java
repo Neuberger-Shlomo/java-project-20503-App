@@ -13,14 +13,23 @@ import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Model.ShiftRequest;
 import com.example.myapplication.ViewModel.ShiftRequestViewModel;
 import com.example.myapplication.UserMVC.Model.UserViewModel;
+/**
 
+disply list of of shifts requests
+ */
 
 public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
 
     private ShiftRequestViewModel shiftRequestViewModel;
     private UserViewModel         userViewModel;
 
-
+    /**
+     inflate the view  and set the listeners
+     * @param inflater
+     * @param container             the parent view
+     * @param savedInstanceState saved previous state. so we can restore it.
+     * @return the view for the fregment
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
@@ -39,6 +48,12 @@ public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
         return view;
     }
 
+    /**
+     * filter shifts via the adapter (to show only shifts for the selected date)
+     * @param view        the view clicked
+     * @param pickerValue the selected date
+     */
+
     @Override
     protected void onPickClicked(View view, String pickerValue) {
         String pickedDate =
@@ -51,6 +66,11 @@ public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
                         .toString();
         adapter.setFilter(pickedDate, ((item, s) -> !item.getShiftDate().equals(s)));
     }
+    /**
+     * shift request is clicked -> show data about the request
+     * @param model the shift request model
+     * @param view the view
+     */
 
     @Override
     protected void onItemClicked(ShiftRequest model, View view) {

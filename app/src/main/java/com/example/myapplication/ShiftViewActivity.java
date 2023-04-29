@@ -1,5 +1,18 @@
-
-
+/**
+ *
+ *
+ *
+ *
+ *
+ * old class  not relevent
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
     package com.example.myapplication;
 
     import android.graphics.Color;
@@ -63,6 +76,13 @@
 
             return Availableshifts;
         }
+        /**
+         inflate the view  and set the listeners
+         * @param inflater
+         * @param container             the parent view
+         * @param savedInstanceState saved previous state. so we can restore it.
+         * @return the view for the fregment
+         */
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

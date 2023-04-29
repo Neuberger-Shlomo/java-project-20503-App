@@ -33,7 +33,7 @@ final public class DateUtils {
 
     /**
      * convert date string to date in sql
-     * <p>
+     *
      * --> INPUT - YEAR-MONTH-DAY   <--
      *
      * @param date date in string format
@@ -55,7 +55,7 @@ final public class DateUtils {
 
     /**
      * convert date string to date in sql
-     * <p>
+     *
      * --> INPUT - DAY-MONTH-YEAR  <--
      *
      * @param date date in string format
