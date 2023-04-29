@@ -1,9 +1,7 @@
 package com.example.myapplication.Entry;
 /**
- * This is the EntryFragment class. It is a fragment that provides a list of navigation items
- * to the user. The user can click on an item to navigate to another part of the application.
- * Each item corresponds to a different action or screen in the app, like logging in, signing up,
- * viewing shifts, etc. The list of items is dynamically adjusted based on the user's logged-in status.
+ *fragment that provides a list of navigation items to the user
+ * (by click on an item the user will move to the desierd screen)
  */
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,12 +24,12 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class EntryFragment extends Fragment {
-
-    private static final String               TAG = "EntryFragment";
+    //identify we are in the entry fragment
+    private static final String   TAG = "EntryFragment";
     private              FragmentEntryBinding binding;
     private              UserViewModel        userViewModel;
 
-    //a list of navigation items that the user can click on.
+    // list of navigation options the user can choose by clicking on them
     ArrayList<NavItem> items   = new ArrayList<NavItem>() {{
         add(new NavItem(
                 "Login",
@@ -58,8 +56,9 @@ public class EntryFragment extends Fragment {
                         R.id.constraintSubmissionActivity,
                         true, false));
     }};
+    //  adapter for RecyclerView ( to present the navigation options)
     RouteAdapter       adapter = new RouteAdapter();
-
+    //create the view hierarchy
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -71,38 +70,51 @@ public class EntryFragment extends Fragment {
         return binding.getRoot();
     }
 
-
+    //initilize the view, set event listeners and adapters
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //        binding.btnMan.setVisibility(View.GONE);
+        // Observe changes in the user login state and updates the UI accordingly
         userViewModel.getUserState().observe(
                 getViewLifecycleOwner(),
                 (user) -> {
                     ((MainActivity) requireActivity()).updateMenu();
                     filterEntries();
+                    // If the user is logged in, set the first name to the user profile name
+
                     if (user.getAuthToken() != null && !user.getAuthToken().isEmpty()) {
                         binding.txFirstName.setText(user.getProfile().getFirstName());
                     }
                 });
-
+        //set the recycler view layout manager
         binding.rvButtons.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
 
-
+        //set the recycler view adapter
         binding.rvButtons.setAdapter(adapter);
         items.forEach(adapter::addEntry);
         adapter.setBindViewHolderListener(this::onNavItemCrated);
         filterEntries();
     }
 
-
+    /**
+     * update the filter used by the adapter to display navigation items
+     * (depend if the user is logged in or not)
+     */
     public void filterEntries() {
         adapter.setFilter(
                 Objects.requireNonNull(userViewModel.getUserState().getValue()).isLoggedIn(),
                 (item, loggedIn) -> (!loggedIn && item.isLoggedInOnly()) || (loggedIn && item.isLoggedOutOnly()));
     }
 
-
+    /**
+     * callback method
+     * (we call it when a navigation item is created
+     * and want bound him to its ViewHolder)
+     *
+     * @param navItem the navigation item we want to bind to the ViewHolder
+     * @param holder  the ViewHolder
+     * @param i       The index of the navigation item (in the adapter)
+     */
     private void onNavItemCrated(NavItem navItem,
                                  OneLineViewHolder<NavItem> holder,
                                  int i) {
@@ -114,7 +126,12 @@ public class EntryFragment extends Fragment {
         }
 
     }
-
+    /**
+     * callback method when navigation item is clicked
+     *
+     * @param navItem  navigation item we clicked on
+     * @param view    The view that was clicked
+     */
     private void onItemClicked(NavItem navItem, View view) {
         NavHostFragment.findNavController(EntryFragment.this)
                 .navigate(navItem.navTarget);

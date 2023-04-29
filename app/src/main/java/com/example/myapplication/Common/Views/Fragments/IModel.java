@@ -1,7 +1,7 @@
 package com.example.myapplication.Common.Views.Fragments;
 
 /**
- * interface to make sure we have to redefined toString in classes when we decide to,
+ * interface to make sure we have to redefined toString in classes when we decide we to,
  * and not implement when we choose not to
  * <p>
  * The presence of the method is enforced
