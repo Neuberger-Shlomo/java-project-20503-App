@@ -16,9 +16,19 @@ import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.ViewModel.WorkersConstrainsViewModel;
 
 import java.util.Date;
+/**
 
+the fragment display constraints of workers.
+ - display more details about the constraint when clicked on a constraint
+ */
 public class WorkersConstrainsFragment extends DateListFragment<Constraints> {
-
+    /**
+     inflate the view  and set the listeners
+     * @param inflater
+     * @param container             the parent view
+     * @param savedInstanceState saved previous state. so we can restore it.
+     * @return the view for the fregment
+     */
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -32,9 +42,10 @@ public class WorkersConstrainsFragment extends DateListFragment<Constraints> {
                 new ViewModelProvider(this).get(WorkersConstrainsViewModel.class);
         UserViewModel userViewModel =
                 new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-
+        // if no  user is login return the root view
         if (userViewModel.getUserState().getValue() == null)
             return view;
+        // get  constraints data for the current logged in user
 
         workersConstrainsViewModel.getData(
                 userViewModel.getUserState().getValue().getId(),
@@ -43,12 +54,24 @@ public class WorkersConstrainsFragment extends DateListFragment<Constraints> {
 
         return view;
     }
-
+    /**
+     * filter shifts via the adapter (to show only shifts for the selected date)
+     * @param view        the view clicked
+     * @param pickerValue the selected date
+     */
     @Override
     protected void onPickClicked(View view, String pickerValue) {
         Date date = DateUtils.toDateRegularFormat(pickerValue);
         adapter.setFilter(date, (item, s) -> DateUtils.toDate(item.getEndDate()).compareTo(s) == -1);
     }
+    /**
+     *-bind the modael data to view
+     * -show the first and last names of workers
+     *
+     * @param model the constraint model represent the data.
+     * @param holder  OneLineViewHolder that display data.
+     * @param position the position of the item in the list.
+     */
 
     @Override
     protected void onModelBind(Constraints model, OneLineViewHolder<Constraints> holder, int position) {
@@ -58,6 +81,11 @@ public class WorkersConstrainsFragment extends DateListFragment<Constraints> {
     }
 
 
+    /**
+     *constraint is clicked -> show data about the constraint
+     * @param model the constraint model
+     * @param view the view
+     */
     @Override
     protected void onItemClicked(Constraints model, View view) {
         new AlertDialog.Builder(requireContext())
