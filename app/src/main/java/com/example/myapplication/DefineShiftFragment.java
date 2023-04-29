@@ -23,7 +23,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
+/**
 
+ DefineShiftFragment:
+ this fragment manager define a new shift. (and add it to the available shifts)
+ */
 public class DefineShiftFragment extends Fragment {
 
     private static final String                     TAG = "DefineShiftFragment";
@@ -31,7 +35,13 @@ public class DefineShiftFragment extends Fragment {
 
     ShiftsViewModel shiftViewModel;
     private UserViewModel userViewModel;
-
+    /**
+    inflate the view  and set the listeners
+     * @param inflater
+     * @param container             the parent view
+     * @param savedInstanceState saved previous state. so we can restore it.
+     * @return the View for the fregment
+     */
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -41,7 +51,7 @@ public class DefineShiftFragment extends Fragment {
 
         shiftViewModel = new ViewModelProvider(requireActivity()).get(ShiftsViewModel.class);
         userViewModel  = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-
+        // get shifts from the server
         shiftViewModel.getData(
                 userViewModel.getUserState().getValue().getId(),
                 userViewModel.getUserState().getValue().getAuthToken(),
@@ -58,7 +68,11 @@ public class DefineShiftFragment extends Fragment {
 
         return binding.getRoot();
     }
-
+    /**
+     * handle event: manager click on define Shift button
+     *
+     * @param view The view where we clicked the button
+     */
     private void onDefineShiftClicked(View view) {
         String pickedDate = binding.dpDefineShift.getDayOfMonth() + "-" +
                             (binding.dpDefineShift.getMonth() + 1) + "-" +
@@ -66,8 +80,11 @@ public class DefineShiftFragment extends Fragment {
         int              pickedDay        = binding.dpDefineShift.getDayOfMonth();
         int              pickedMonth      = binding.dpDefineShift.getMonth() + 1;
         int              pickedYear       = binding.dpDefineShift.getYear();
+        //field "insert number of employees required"
         Editable         defineShiftText  = binding.tfDefineShift.getText();
+        //field "insert shift duration"
         Editable         defineShift3Text = binding.tfDefineShift3.getText();
+        //gets the current state of shifts data from the ViewModel and put it in an ArrayList
         ArrayList<Shift> shifts           = shiftViewModel.getShiftstate().getValue();
         if (defineShiftText == null)
             // TODO: Alert the user about the error
@@ -88,6 +105,7 @@ public class DefineShiftFragment extends Fragment {
             Snackbar.make(view, "Please Enter The Shift Duration!", Snackbar.LENGTH_LONG)
                     .setAction("Ok", null).show();
         }
+        //after all the fields are filled:
 
         if (!defineShift3Text.toString().matches("") &&
             !defineShiftText.toString().matches("")) {
@@ -116,15 +134,16 @@ public class DefineShiftFragment extends Fragment {
             int numOfScheduledWorkers = 0;
 
             int starTestedHour = hour, endTestedHour = hour + duration;
+            //check if the shifts overlapping each other
             for (Shift s : shifts) {
                 boolean isSameDate = Objects.equals(s.getShiftDate(), pickedDate);
                 boolean isHourOverLap =
-                        // is to be created shift inside other
+                        // if shift start hour is inside an existing shifts time range =overlap
                         s.getStartHour() <= starTestedHour && starTestedHour <= s.getStartHour() + s.getDuration()
                         ||
                         s.getStartHour() <= endTestedHour && endTestedHour <= s.getStartHour() + s.getDuration()
                         ||
-                        // is the shift in side the to be created
+                        //  if shifts time range is inside the time range of the new shift =overlap
                         starTestedHour <= s.getStartHour() && s.getStartHour() <= endTestedHour
                         ||
                         starTestedHour <= s.getStartHour() + s.getDuration() && s.getStartHour() + s.getDuration() <= endTestedHour;
@@ -137,7 +156,7 @@ public class DefineShiftFragment extends Fragment {
                             .setAction("Ok", null).show();
                 }
             }
-
+            // check if the shift is in the past
             if (pickedDay == c.get(Calendar.DAY_OF_MONTH)
                 && pickedMonth == c.get(Calendar.MONTH)
                 && pickedYear == c.get(Calendar.YEAR)
