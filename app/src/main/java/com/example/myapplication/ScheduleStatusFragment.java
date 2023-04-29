@@ -11,15 +11,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.Shift;
-import com.example.myapplication.ViewModel.ShiftsViewModel;
 import com.example.myapplication.UserMVC.Model.UserViewModel;
+import com.example.myapplication.ViewModel.ShiftsViewModel;
 import com.example.myapplication.api.Api;
 
 import java.util.ArrayList;
 
 public class ScheduleStatusFragment extends DateListFragment<Shift> {
-    private ShiftsViewModel            shiftViewModel;
-    private UserViewModel              userViewModel;
+    private ShiftsViewModel shiftViewModel;
+    private UserViewModel   userViewModel;
 
     @Override
     public View onCreateView(
@@ -85,7 +85,6 @@ public class ScheduleStatusFragment extends DateListFragment<Shift> {
                 .setPositiveButton("Ok", null)
                 .create().show();
     }
-
 
 
 }

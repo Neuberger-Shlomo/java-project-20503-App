@@ -45,21 +45,16 @@ import java.util.Objects;
 
 public class ConstraintSubmissionFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
-    private FragmentConstraintSubmissionBinding binding;
-    private Date                                start, end;
-
-    private ConstraintType selectedConstraintType;
-
     private final MaterialDatePicker<Pair<Long, Long>> materialDatePicker =
             MaterialDatePicker.Builder.dateRangePicker().build();
-
-    private       RequestQueue                 queue;
     private final List<ConstraintType>         constraintTypes = new ArrayList<>();
-    private       ArrayAdapter<ConstraintType> constraintTypeAdapter;
-
-    private User user;
     OneLinerAdapter<Constraints> userRecyclerAdapter = new OneLinerAdapter<>();
-
+    private FragmentConstraintSubmissionBinding binding;
+    private Date                                start, end;
+    private ConstraintType selectedConstraintType;
+    private       RequestQueue                 queue;
+    private       ArrayAdapter<ConstraintType> constraintTypeAdapter;
+    private User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -216,7 +211,7 @@ public class ConstraintSubmissionFragment extends Fragment implements AdapterVie
         binding.tvDates.setText("");
         binding.selfDescription.setText("");
         userRecyclerAdapter.clearList();
-        onDateChose(new Pair<>(start.getTime(),end.getTime()));
+        onDateChose(new Pair<>(start.getTime(), end.getTime()));
         start = null;
         end   = null;
     }

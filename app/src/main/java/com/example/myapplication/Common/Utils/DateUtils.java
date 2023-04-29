@@ -45,10 +45,10 @@ final public class DateUtils {
         return new Date(calendar.getTime().getTime());
     }
 
-    static public Pair<String,String> stringFromDialog(Pair<Long, Long> longLongPair) {
+    static public Pair<String, String> stringFromDialog(Pair<Long, Long> longLongPair) {
 
-        Date start = new Date(longLongPair.first);
-        Date end   = new Date(longLongPair.second);
+        Date     start    = new Date(longLongPair.first);
+        Date     end      = new Date(longLongPair.second);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(start.getTime()));
 
@@ -61,12 +61,12 @@ final public class DateUtils {
         calendar.setTime(new Date(end.getTime()));
         String endDate = String.format("%s/%s/%s",
                                        calendar.get(Calendar.DAY_OF_MONTH),
-                                       calendar.get(Calendar.MONTH)+1,
+                                       calendar.get(Calendar.MONTH) + 1,
                                        calendar.get(Calendar.YEAR)
                                       );
 
 
-        return new Pair<>(startDate,endDate);
+        return new Pair<>(startDate, endDate);
 
     }
 }

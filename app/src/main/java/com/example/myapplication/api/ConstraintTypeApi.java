@@ -9,10 +9,10 @@ public class ConstraintTypeApi {
                                                            "constraint-types");
     public final static String GET_ALL_URL = String.format("%s/%s", BASE_URL, "");
 
-    public static AuthedJsonArrayObjectRequest getConstraintsTypes(String user,String token,
-                                                       Api.PostCall<JSONArray> postCall) {
+    public static AuthedJsonArrayObjectRequest getConstraintsTypes(String user, String token,
+                                                                   Api.PostCall<JSONArray> postCall) {
         return new AuthedJsonArrayObjectRequest(
-                GET_ALL_URL,user,token,
+                GET_ALL_URL, user, token,
                 response -> UsersApi.responseHandler(response, null, postCall),
                 error -> UsersApi.responseHandler(null, error, postCall));
     }

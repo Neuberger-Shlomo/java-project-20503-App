@@ -112,7 +112,7 @@ public class ScheduleJob implements IModel {
     public String toPrettyString() {
         return "id: " + id + "\n" +
                "start date: " + getStartDate() + "\n" +
-               "end date: " + getEndDate()+ "\n"+
-               "done: "+ getDone();
+               "end date: " + getEndDate() + "\n" +
+               "done: " + getDone();
     }
 }

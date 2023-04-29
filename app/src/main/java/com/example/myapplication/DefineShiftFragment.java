@@ -27,9 +27,8 @@ import java.util.Objects;
 public class DefineShiftFragment extends Fragment {
 
     private static final String                     TAG = "DefineShiftFragment";
-    private              FragmentDefineShiftBinding binding;
-
     ShiftsViewModel shiftViewModel;
+    private              FragmentDefineShiftBinding binding;
     private UserViewModel userViewModel;
 
     @Override
@@ -110,7 +109,8 @@ public class DefineShiftFragment extends Fragment {
                 //TODO: Don't crash the APP here
                 throw new RuntimeException(e);
             }
-            if(date == null) return;
+            if (date == null)
+                return;
             c.setTime(date);
             int weekNumber            = c.get(Calendar.WEEK_OF_YEAR);
             int dayNumber             = c.get(Calendar.DAY_OF_WEEK);

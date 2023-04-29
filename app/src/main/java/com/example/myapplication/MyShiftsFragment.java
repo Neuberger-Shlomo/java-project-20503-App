@@ -37,13 +37,11 @@ import java.util.Calendar;
 
 public class MyShiftsFragment extends Fragment {
 
-    private FragemntMyShiftsBinding binding;
     OneLinerAdapter<Shift> adapter   = new OneLinerAdapter<>();
     EventDecorator         decorator = new EventDecorator();
     RequestQueue           queue;
-
-
     User user = new User();
+    private FragemntMyShiftsBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,6 +104,7 @@ public class MyShiftsFragment extends Fragment {
 
 
     }
+
     private void onDailyShiftArrived(JSONArray jsonArray, Api.ResponseError responseError,
                                      Throwable throwable) {
         if (jsonArray != null) {
@@ -126,7 +125,6 @@ public class MyShiftsFragment extends Fragment {
         binding.progressBar.setVisibility(View.GONE);
 
     }
-
 
 
     private void onMonthlyShiftArrived(JSONArray jsonArray, Api.ResponseError responseError,

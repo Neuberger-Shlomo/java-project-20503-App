@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AuthedJsonArrayObjectRequest extends JsonArrayRequest {
-    private String token;
-    private String userId;
+    private final String token;
+    private final String userId;
 
     public AuthedJsonArrayObjectRequest(String url, String userId,
                                         String token, Response.Listener<JSONArray> listener,

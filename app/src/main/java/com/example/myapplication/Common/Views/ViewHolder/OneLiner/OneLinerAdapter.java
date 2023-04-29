@@ -21,8 +21,8 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
 
     private RecyclerView recyclerView;
 
-    private interfaces.OnBindViewHolderListener<T, OneLineViewHolder<T>> bindListener = null;
-    private interfaces.OnItemClickListener<T> onItemClickListener = null;
+    private interfaces.OnBindViewHolderListener<T, OneLineViewHolder<T>> bindListener        = null;
+    private interfaces.OnItemClickListener<T>                            onItemClickListener = null;
 
     public OneLinerAdapter() {
         rawItems    = new ArrayList<>();
@@ -65,7 +65,8 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
             else
                 holder.setText(holder.getItem().toString());
         }
-        if(onItemClickListener != null) holder.setOnClickListener(onItemClickListener);
+        if (onItemClickListener != null)
+            holder.setOnClickListener(onItemClickListener);
     }
 
     @Override
@@ -103,7 +104,7 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
         int itemIndex = getItems().indexOf(item);
         if (itemIndex != -1) {
             updateEntry(item, itemIndex);
-        }else {
+        } else {
             getItems().add(item);
             rawItems.add(item);
             if (update)
@@ -124,7 +125,8 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
 
         if (rawIndex != position && visibleIndex != position)
             return;
-        if(visibleList.get(visibleIndex).equals(entry)) return;
+        if (visibleList.get(visibleIndex).equals(entry))
+            return;
         if (rawIndex == visibleIndex && visibleIndex == -1) {
             addEntry(entry);
             return;
@@ -156,7 +158,7 @@ public class OneLinerAdapter<T> extends Adapter<OneLineViewHolder<T>> {
     }
 
 
-    public void setOnItemClickListener(interfaces.OnItemClickListener<T> l){
+    public void setOnItemClickListener(interfaces.OnItemClickListener<T> l) {
         this.onItemClickListener = l;
     }
 

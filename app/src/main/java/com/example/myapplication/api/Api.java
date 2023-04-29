@@ -2,14 +2,19 @@ package com.example.myapplication.api;
 
 import androidx.annotation.Nullable;
 
-import com.android.volley.VolleyError;
-import com.google.gson.Gson;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.nio.charset.StandardCharsets;
-
 public class Api {
+
+    public interface PreCall {
+        void onPreCall();
+    }
+
+
+    public interface PostCall<T> {
+        void onPostCall(@Nullable T t, @Nullable ResponseError responseError,
+                        @Nullable Throwable throwable);
+
+
+    }
 
     public static class ResponseError {
         String  timestamp;
@@ -69,18 +74,6 @@ public class Api {
         public void setPath(String path) {
             this.path = path;
         }
-    }
-
-
-    public interface PreCall {
-        void onPreCall();
-    }
-
-    public interface PostCall<T> {
-        void onPostCall(@Nullable T t, @Nullable ResponseError responseError,
-                        @Nullable Throwable throwable);
-
-
     }
 
 
