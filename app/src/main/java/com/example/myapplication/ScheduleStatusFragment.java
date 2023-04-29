@@ -16,11 +16,21 @@ import com.example.myapplication.UserMVC.Model.UserViewModel;
 import com.example.myapplication.api.Api;
 
 import java.util.ArrayList;
+/**
 
+this fragment that displays the user shifts schedule
+  user can click on a shift and see the list of workers in that shift
+ */
 public class ScheduleStatusFragment extends DateListFragment<Shift> {
     private ShiftsViewModel            shiftViewModel;
     private UserViewModel              userViewModel;
-
+    /**
+     inflate the view  and set the listeners
+     * @param inflater
+     * @param container             the parent view
+     * @param savedInstanceState saved previous state. so we can restore it.
+     * @return the view for the fregment
+     */
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -31,6 +41,7 @@ public class ScheduleStatusFragment extends DateListFragment<Shift> {
 
         shiftViewModel = new ViewModelProvider(requireActivity()).get(ShiftsViewModel.class);
         userViewModel  = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        // if no no user state return the root view
 
         if (userViewModel.getUserState().getValue() == null)
             return binding.getRoot();
@@ -42,12 +53,20 @@ public class ScheduleStatusFragment extends DateListFragment<Shift> {
 
         return root;
     }
-
+    /**
+     * filter shifts via the adapter (to show shifts only shifts for the selected date)
+     * @param view        the view clicked
+     * @param pickerValue the selected date
+     */
     @Override
     protected void onPickClicked(View view, String pickerValue) {
         adapter.setFilter(pickerValue, (item, s) -> !item.getDate().equals(s));
     }
-
+    /**
+     *get list of workers in this shift and show them in dialog
+     * @param model the selected Shift
+     ** @param view        the view clicked
+     */
     @Override
     protected void onItemClicked(Shift model, View view) {
         if (userViewModel.getUserState().getValue() == null)
@@ -59,12 +78,12 @@ public class ScheduleStatusFragment extends DateListFragment<Shift> {
 
     }
 
+
     /**
-     * Handles the getProfile call
-     *
-     * @param profiles      received form the server
-     * @param responseError error received from the server
-     * @param throwable     thrown by the Volley or parsing
+     * show the list of workers in a dialog.
+     * @param profiles       list of workers in the shift
+     * @param responseError if error
+     * @param throwable     if exception
      */
     private void onPostProfileCall(ArrayList<Profile> profiles,
                                    Api.ResponseError responseError,
