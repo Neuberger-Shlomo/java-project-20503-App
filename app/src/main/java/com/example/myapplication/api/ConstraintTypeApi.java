@@ -5,8 +5,8 @@ import com.example.myapplication.api.Requests.AuthedJsonArrayObjectRequest;
 import org.json.JSONArray;
 
 /**
- * this class handle the api calls to manage user constraintsTypes
- * include call to get all constraintTypes
+ * ConstraintTypeApi handle the api calls to manage  constraintsTypes
+ * include call to get all constraintTypes from the server.
  */
 public class ConstraintTypeApi {
 

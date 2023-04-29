@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 
 /**
- *  JobApi handle API requests related to sceduling shifts.
+ *  ScheduleAPI handle requests related to sceduling shifts.
  */
 final public class ScheduleAPI {
     private static final Gson gson = new Gson();
