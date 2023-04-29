@@ -47,14 +47,16 @@ public class WorkersConstrainsFragment extends DateListFragment<Constraints> {
     @Override
     protected void onPickClicked(View view, String pickerValue) {
         Date date = DateUtils.toDateRegularFormat(pickerValue);
-        adapter.setFilter(date, (item, s) -> DateUtils.toDate(item.getEndDate()).compareTo(s) == -1);
+        adapter.setFilter(date,
+                          (item, s) -> DateUtils.toDate(item.getEndDate()).compareTo(s) == -1);
     }
 
     @Override
-    protected void onModelBind(Constraints model, OneLineViewHolder<Constraints> holder, int position) {
+    protected void onModelBind(Constraints model, OneLineViewHolder<Constraints> holder,
+                               int position) {
         super.onModelBind(model, holder, position);
-        holder.setText("First Name: " + model.getFirstName()+
-                        "\nLast Name: "+ model.getLastName());
+        holder.setText("First Name: " + model.getFirstName() +
+                       "\nLast Name: " + model.getLastName());
     }
 
 

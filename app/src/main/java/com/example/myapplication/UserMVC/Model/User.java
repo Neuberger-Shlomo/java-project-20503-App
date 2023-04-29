@@ -43,7 +43,7 @@ public class User {
     }
 
     public static User fromJSON(JSONObject object) throws JSONException {
-        User  user = new User();
+        User user = new User();
         user.setId(object.getString("id"));
         user.setLevel(RoleLevel.values()[object.getJSONObject("role").getInt("roleLevel")]);
         user.setUsername(object.getString("username"));
@@ -104,10 +104,11 @@ public class User {
         return getAuthToken() != null && !getAuthToken().isEmpty();
     }
 
-    public boolean isAdmin(){
+    public boolean isAdmin() {
         return level.ordinal() > RoleLevel.BASIC.ordinal();
     }
-    public boolean isSuperAdmin(){
+
+    public boolean isSuperAdmin() {
         return level.ordinal() > RoleLevel.MANAGER.ordinal();
     }
 

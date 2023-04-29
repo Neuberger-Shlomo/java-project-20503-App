@@ -8,11 +8,10 @@ import android.view.ViewGroup;
 
 import androidx.lifecycle.ViewModelProvider;
 
-
 import com.example.myapplication.Common.Views.Fragments.DateListFragment;
 import com.example.myapplication.Model.ShiftRequest;
-import com.example.myapplication.ViewModel.ShiftRequestViewModel;
 import com.example.myapplication.UserMVC.Model.UserViewModel;
+import com.example.myapplication.ViewModel.ShiftRequestViewModel;
 
 
 public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
@@ -42,13 +41,11 @@ public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
     @Override
     protected void onPickClicked(View view, String pickerValue) {
         String pickedDate =
-                new StringBuilder()
-                        .append(binding.dpDatePicker.getDayOfMonth())
-                        .append("-")
-                        .append(binding.dpDatePicker.getMonth() + 1)
-                        .append("-")
-                        .append(binding.dpDatePicker.getYear())
-                        .toString();
+                binding.dpDatePicker.getDayOfMonth() +
+                "-" +
+                (binding.dpDatePicker.getMonth() + 1) +
+                "-" +
+                binding.dpDatePicker.getYear();
         adapter.setFilter(pickedDate, ((item, s) -> !item.getShiftDate().equals(s)));
     }
 
@@ -65,7 +62,6 @@ public class ShiftsRequestsFragment extends DateListFragment<ShiftRequest> {
                 .setPositiveButton("Ok", null)
                 .create().show();
     }
-
 
 
 }

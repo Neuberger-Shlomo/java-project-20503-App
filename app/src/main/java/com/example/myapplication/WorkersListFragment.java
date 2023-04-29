@@ -72,7 +72,7 @@ public class WorkersListFragment extends DateListFragment<Profile> implements Se
             b.putString(WorkerFragment.WORKER_ID_KEY, String.valueOf(model.getId()));
             NavHostFragment
                     .findNavController(WorkersListFragment.this)
-                    .navigate(R.id.workerFragment,b);
+                    .navigate(R.id.workerFragment, b);
         }
     }
 

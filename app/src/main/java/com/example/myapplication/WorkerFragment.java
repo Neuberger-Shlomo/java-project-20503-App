@@ -35,15 +35,13 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 public class WorkerFragment extends Fragment implements ViewModelStoreOwner {
-    private             FragmentWorkerViewBinding binding;
     final public static String                    WORKER_ID_KEY = "WORKER_ID_KEY";
-
-    private String employeeID;
-
     User         user;
     Profile      profile;
     ProfileModel profileModel;
     RequestQueue queue;
+    private             FragmentWorkerViewBinding binding;
+    private String employeeID;
 
     @Nullable
     @Override

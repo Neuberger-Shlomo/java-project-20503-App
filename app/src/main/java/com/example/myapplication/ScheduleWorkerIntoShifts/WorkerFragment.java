@@ -22,9 +22,9 @@ import java.util.ArrayList;
 
 public class WorkerFragment extends DateListFragment<Profile> {
     public final static String SHIFT_ID_KEY = "shiftIdKey";
-    private             int    shiftId      = -1;
     UserViewModel    userViewModel;
     WorkersViewModel workersViewModel;
+    private             int    shiftId      = -1;
 
     @Nullable
     @Override
