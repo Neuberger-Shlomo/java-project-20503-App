@@ -24,10 +24,8 @@ import java.nio.charset.StandardCharsets;
 final public class UsersApi {
 
     private static final Gson gson = new Gson(); // Gson object for JSON manipulation
-    // Setting up the base URL
     public final static String BASE_URL = String.format("%s/%s", Constants.BASE_URL,
             "users");
-    // Defining the required URLs for each API endpoint
     public final static String GET_BY_ID_URL = String.format("%s/%s", BASE_URL, "users-id");
     public final static String PROMOTE_BY_ID_URL = String.format("%s/%s", BASE_URL, "add-admin");
     public final static String DEMOTE_BY_ID_URL = String.format("%s/%s", BASE_URL, "remove" +
