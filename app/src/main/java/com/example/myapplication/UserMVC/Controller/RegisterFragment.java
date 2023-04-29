@@ -20,18 +20,29 @@ import com.example.myapplication.api.UsersApi;
 import com.example.myapplication.databinding.FragmentRegisterBinding;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-
+/**
+enable new user to register
+ fields: first name, last name, email, username,  password.
+ functions: validate profile,register, handle response.
+ */
 
 public class RegisterFragment extends Fragment {
     private FragmentRegisterBinding binding;
 
     private UserViewModel userViewModel;
-
+    //initialize view
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
+    /**
+     * inflate the view and set up the componenets
+     *
+     * @param inflater layout inflater
+     * @param container parent view
+     * @param savedInstanceState saved state for previous screen
+     * @return the inflated View
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,7 +63,12 @@ public class RegisterFragment extends Fragment {
         binding.btnRegister.setOnClickListener(this::onRegisterClicked);
         return binding.getRoot();
     }
-
+    /**
+     *validate the profile fields
+     * field empty= set EditText to red.
+     *
+     * @return true if valid profile
+     */
     boolean isValidProfile() {
         String firstName   = binding.etFirstName.getText().toString();
         String lastName    = binding.etLastName.getText().toString();
@@ -82,6 +98,10 @@ public class RegisterFragment extends Fragment {
         }
         return true;
     }
+    /**
+     handle register button click
+     * @param view the View we click on
+     */
 
     private void onRegisterClicked(View view) {
 
@@ -98,7 +118,15 @@ public class RegisterFragment extends Fragment {
 
 
     }
-
+    /**
+     * after reciving response from server
+     * successful registration = go to previous fragment.
+     * else= show error
+     *
+     * @param valid          true if the response is valid; false otherwise
+     * @param responseError  the error message returned from the server
+     * @param throwable      the throwable message returned from the server
+     */
     private void onRegisterResponse(Boolean valid, Api.ResponseError responseError,
                                     Throwable throwable) {
         String msg = "Unknown Error";
@@ -118,10 +146,17 @@ public class RegisterFragment extends Fragment {
                           BaseTransientBottomBar.LENGTH_SHORT).show();
         }
     }
-
+    /**
+     *  replace views
+     * hide the first view and show the second view second view
+     *
+     * @param v1 the view we hide
+     * @param v2 the view we show
+     */
     void replace(View v1, View v2) {
         v2.setScaleY(0f);
         v2.setVisibility(View.GONE);
+        //animate the transition
         int shortAnimationDuration = getResources().getInteger(
                 android.R.integer.config_longAnimTime);
 
