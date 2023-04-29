@@ -3,12 +3,12 @@
 /**
  * represents constraints of the user -  WHICH SHIFT THE USER CAN NOT WORK
  * veriables:
- * <p>
+ * id = the id of the constraint
  * isPermanent = true if the constraint is permanent
  * startDate = start date of the constraint
  * profile = the profile of the user, writing the constraint
  * endDate = end date of the constraint
- * constType = type of the constraint (SICK, VACATION, ETC..)
+ * constType = type of the constraint (sick, vecation...)
  * weekNumber = the week number when the constraint start
  * userid = the id of the user, writing the constraint
  * data = the date of the constraint

@@ -51,7 +51,7 @@ public class ShiftsViewModel extends AndroidViewModel {
         queue = Volley.newRequestQueue(getApplication());
     }
 
-    // Get the LiveData object representing the state of shifts
+    // get the LiveData object representing the state of shifts
     public LiveData<ArrayList<Shift>> getShiftstate() {
         return shiftsState;
     }
@@ -70,8 +70,9 @@ public class ShiftsViewModel extends AndroidViewModel {
 
     /**
      * get the shifts from server
-     * @param userId  the user id
-     * @param token  token of the user
+     *
+     * @param userId   the user id
+     * @param token    token of the user
      * @param postCall for after the server response
      */
     public void getData(String userId,
@@ -91,7 +92,7 @@ public class ShiftsViewModel extends AndroidViewModel {
                                 arrayList.add(Shift.fromJSON(jsonObject));
                             }
 
-                            // Set shiftsState to ArrayList (of Shifts)
+                            // set shiftsState to ArrayList (of Shifts)
                             shiftsState.setValue(arrayList);
                             // callback with the ArrayList
                             postCall.onPostCall(arrayList, null, null);
@@ -107,12 +108,13 @@ public class ShiftsViewModel extends AndroidViewModel {
     }
 
     /**
-     *  get shifts from the server
-     * @param userId  ID of the user
-     * @param token   token of the user
-     * @param preCall callback before the request sent
-     @param postCall callback after the server response
-     @return the request as AuthedJsonArrayObjectRequest
+     * get shifts from the server
+     *
+     * @param userId   ID of the user
+     * @param token    token of the user
+     * @param preCall  callback before the request sent
+     * @param postCall callback after the server response
+     * @return the request as AuthedJsonArrayObjectRequest
      */
     private static AuthedJsonArrayObjectRequest getShifts(String userId, String token,
                                                           @NotNull Api.PreCall preCall,
@@ -141,16 +143,12 @@ public class ShiftsViewModel extends AndroidViewModel {
     }
 
     /**
-
-     Get profiles from schedule
-
-     @param userId user id
-
-     @param token user token
-
-     @param scheduleId schedule id
-
-     @param postCall callback after server response
+     * Get profiles from schedule
+     *
+     * @param userId     user id
+     * @param token      user token
+     * @param scheduleId schedule id
+     * @param postCall   callback after server response
      */
     public void getProfileFromSchedule(String userId,
                                        String token, int scheduleId,
@@ -161,40 +159,34 @@ public class ShiftsViewModel extends AndroidViewModel {
                 (jsonArray, responseError, throwable) -> {
                     try {
                         if (jsonArray != null) {
-// convert from JSONArray to ArrayList of Profiles
+                    // convert from JSONArray to ArrayList of Profiles
                             ArrayList<Profile> arrayList = new ArrayList<>();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 arrayList.add(Profile.fromJSON(jsonObject));
                             }
-// callback with the ArrayList
+                    // callback with the ArrayList
                             postCall.onPostCall(arrayList, null, null);
                         } else {
-// callback with responseError and throwable
+                    // callback with responseError and throwable
                             postCall.onPostCall(null, responseError, throwable);
                         }
                     } catch (JSONException e) {
-// callback with the JSONException
+                    // callback with the JSONException
                         postCall.onPostCall(null, null, e);
                     }
                 }));
     }
 
     /**
-
-     Get profiles from schedule
-
-     @param userId user id
-
-     @param token user token
-
-     @param scheduleId schedule id
-     @param preCall callback before the request sent
-
-     @param postCall callback after server response
-
-
-     @return request as json array object
+     * Get profiles from schedule
+     *
+     * @param userId     user id
+     * @param token      user token
+     * @param scheduleId schedule id
+     * @param preCall    callback before the request sent
+     * @param postCall   callback after server response
+     * @return request as json array object
      */
     private static AuthedJsonArrayObjectRequest getProfileFromSchedule(String userId, String token, int scheduleId,
                                                                        @NotNull Api.PreCall preCall,
@@ -223,14 +215,11 @@ public class ShiftsViewModel extends AndroidViewModel {
     }
 
     /**
-
-     Add a shift to the server
-
-     @param shift shift to be added
-
-     @param preCall callback before request sent
-
-     @param postCall callback after server response
+     * Add a shift to the server
+     *
+     * @param shift    shift to be added
+     * @param preCall  callback before request sent
+     * @param postCall callback after server response
      */
     public void addShift(Shift shift, Api.PreCall preCall,
                          Api.PostCall<Boolean> postCall) {
@@ -238,28 +227,29 @@ public class ShiftsViewModel extends AndroidViewModel {
         preCall.onPreCall();
         queue.add(addShiftRequest(shift, preCall, (jsonObject, responseError, throwable) -> {
             if (responseError != null || throwable != null) {
-// callback with responseError and throwable
+            // callback with responseError and throwable
                 postCall.onPostCall(null, responseError, throwable);
                 return;
             }
             ArrayList<Shift> s = getShiftstate().getValue();
             if (s == null) {
-// callback with Exception
+            // callback with Exception
                 postCall.onPostCall(null, null, new Exception("No user error"));
                 return;
             }
-// add shift to the local state
+            // add shift to the local state
             s.add(shift);
             shiftsState.setValue(s);
-// callback with success status
+            // callback with success status
             postCall.onPostCall(true, null, null);
         }));
     }
 
     /**
      * Create a request to add a shift
-     * @param shift shift to be added
-     * @param preCall callback before request sent
+     *
+     * @param shift    shift to be added
+     * @param preCall  callback before request sent
      * @param postCall callback after server response
      * @return JsonObjectRequest to be added to the request queue
      */

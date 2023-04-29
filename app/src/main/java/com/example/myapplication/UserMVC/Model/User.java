@@ -1,4 +1,4 @@
-package com.example.myapplication.User.Model;
+package com.example.myapplication.UserMVC.Model;
 
 
 import androidx.annotation.Nullable;
@@ -7,6 +7,9 @@ import com.example.myapplication.Model.Profile;
 import com.example.myapplication.Model.RoleLevel;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  represents a basic user  login and permissions data - that is required for user login
 
@@ -19,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  RoleLevel = the user permission level (basic or manager)
 
  */
-public class BasicUser {
+public class User {
     private String    username;
     private String    id;
     private String    password;

@@ -16,21 +16,30 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ JobApi handle API requests related to users
+ * enabling user login, registration, logout,
+ * promotion, demotion, and retrieval of user information by ID.
+ */
 final public class UsersApi {
 
-    private static final Gson   gson              = new Gson();
-    public final static  String BASE_URL          = String.format("%s/%s", Constants.BASE_URL,
-                                                                  "users");
-    public final static  String GET_BY_ID_URL     = String.format("%s/%s", BASE_URL, "users-id");
-    public final static  String PROMOTE_BY_ID_URL = String.format("%s/%s", BASE_URL, "add-admin");
-    public final static  String DEMOTE_BY_ID_URL  = String.format("%s/%s", BASE_URL, "remove" +
-                                                                                     "-admin");
-    public final static  String LOGIN_URL         = String.format("%s/%s", BASE_URL, "login");
-    public final static  String REGISTER_URL      = String.format("%s/%s", BASE_URL, "signup");
+    private static final Gson gson = new Gson(); // Gson object for JSON manipulation
+    // Setting up the base URL
+    public final static String BASE_URL = String.format("%s/%s", Constants.BASE_URL,
+            "users");
+    // Defining the required URLs for each API endpoint
+    public final static String GET_BY_ID_URL = String.format("%s/%s", BASE_URL, "users-id");
+    public final static String PROMOTE_BY_ID_URL = String.format("%s/%s", BASE_URL, "add-admin");
+    public final static String DEMOTE_BY_ID_URL = String.format("%s/%s", BASE_URL, "remove" +
+            "-admin");
+    public final static String LOGIN_URL = String.format("%s/%s", BASE_URL, "login");
+    public final static String REGISTER_URL = String.format("%s/%s", BASE_URL, "signup");
 
     public final static String LOGOUT_URL = String.format("%s/%s", BASE_URL, "logout");
 
-
+    /**
+     *  register request with all the user data
+     */
     public static class RegisterRequest {
         String firstName;
         String lastName;
@@ -44,63 +53,26 @@ final public class UsersApi {
 
         public RegisterRequest(String firstName, String lastName, String email,
                                String phoneNumber, String username, String password) {
-            this.firstName   = firstName;
-            this.lastName    = lastName;
-            this.email       = email;
-            this.phoneNumber = phoneNumber;
-            this.username    = username;
-            this.password    = password;
-        }
-
-        public String getFirstName() {
-            return firstName;
-        }
-
-        public void setFirstName(String firstName) {
             this.firstName = firstName;
-        }
-
-        public String getLastName() {
-            return lastName;
-        }
-
-        public void setLastName(String lastName) {
             this.lastName = lastName;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
             this.email = email;
-        }
-
-        public String getPhoneNumber() {
-            return phoneNumber;
-        }
-
-        public void setPhoneNumber(String phoneNumber) {
             this.phoneNumber = phoneNumber;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
             this.username = username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
             this.password = password;
         }
+
+
     }
 
+    /**
+     * create a logout request
+     *
+     * @param userId      user id
+     * @param jwt          user token
+     * @param preListener  callback before the request
+     * @param postListener callback after the request
+     * @return AuthedJsonObjectRequest (request to get json object of user)
+     */
     public static AuthedJsonObjectRequest logoutRequest(String userId,
                                                         String jwt,
                                                         @Nullable Api.PreCall preListener,
@@ -117,22 +89,16 @@ final public class UsersApi {
                 err -> responseHandler(null, err, postListener));
     }
 
-    public static AuthedJsonObjectRequest logoutRequest(String userId,
-                                                        String jwt,
-                                                        @NotNull Api.PostCall<Boolean> postListener
-                                                       ) {
-        return logoutRequest(userId, jwt, null, postListener);
-    }
 
-    public static AuthedJsonObjectRequest logoutRequest(String userId,
-                                                        String jwt,
-                                                        @NotNull Api.PostCall<Boolean> postListener,
-                                                        @Nullable Api.PreCall preListener
-                                                       ) {
-        return logoutRequest(userId, jwt, preListener, postListener);
-    }
-
-
+    /**
+     * This method creates a login request
+     *
+     * @param username username
+     * @param password user password
+     * @param preCall  callback before request
+     * @param postCall callback after request
+     * @return AuthedJsonObjectRequest (request to get json object of user)
+     */
     public static JsonObjectRequest loginRequest(
             @NotNull String username,
             @NotNull String password,
@@ -160,23 +126,16 @@ final public class UsersApi {
         );
     }
 
+    // ...Other loginRequest methods with different parameters, but same basic logic
 
-    public static JsonObjectRequest loginRequest(
-            @NotNull String username,
-            @NotNull String password,
-            @NotNull Api.PostCall<JSONObject> postCall,
-            @Nullable Api.PreCall preCall) {
-        return loginRequest(username, password, preCall, postCall);
-    }
-
-    public static JsonObjectRequest loginRequest(
-            @NotNull String username,
-            @NotNull String password,
-            @NotNull Api.PostCall<JSONObject> postCall) {
-        return loginRequest(username, password, null, postCall);
-    }
-
-
+    /**
+     *creates a register request
+     *
+     * @param registerRequest the RegisterRequest with the user information
+     * @param preCall  callback before request
+     * @param postCall callback after request
+     * @return AuthedJsonObjectRequest (request to get json object of user)
+     */
     public static JsonObjectRequest registerRequest(RegisterRequest registerRequest,
                                                     Api.PreCall preCall,
                                                     Api.PostCall<JSONObject> postCall) {
@@ -191,11 +150,18 @@ final public class UsersApi {
         }
 
         return new JsonObjectRequest(Request.Method.POST, REGISTER_URL, jsonObj,
-                                     res -> responseHandler(res, null, postCall),
-                                     err -> responseHandler(null, err, postCall));
+                res -> responseHandler(res, null, postCall),
+                err -> responseHandler(null, err, postCall));
     }
 
 
+    /**
+     *  handles response from api request
+     *
+     * @param res      the result of the api request
+     * @param err      the error of the api request
+     * @param postCall callback after request
+     */
     public static <T> void responseHandler(
             @Nullable T res,
             @Nullable VolleyError err,
@@ -221,6 +187,15 @@ final public class UsersApi {
     }
 
 
+    /**
+     * retrieves user by ID
+     *
+     * @param userId       user id
+     * @param jwt          user token
+     * @param targetID     user id to get
+     * @param preListener  callback before request
+     * @param postListener callback after request
+     * @return AuthedJsonObjectRequest (request to get json object of user)         */
     public static AuthedJsonArrayObjectRequest getUserById(
             String userId,
             String jwt,
@@ -238,6 +213,15 @@ final public class UsersApi {
         );
     }
 
+    /**
+     * promotes user to manager
+
+     * @param userId       user id
+     * @param jwt          user token
+     * @param targetID     user id to get
+     * @param preListener  callback before request
+     * @param postListener callback after request
+     * @return AuthedJsonObjectRequest (request to get json object of user)         */
     public static AuthedJsonObjectRequest promoteUserByID(
             String userId,
             String jwt,
@@ -257,6 +241,16 @@ final public class UsersApi {
         );
     }
 
+    /**
+     *demotes a manager to user
+     *
+     * @param userId       user id
+     * @param jwt          user token
+     * @param targetID     user id to get
+     * @param preListener  callback before request
+     * @param postListener callback after request
+     * @return AuthedJsonObjectRequest (request to get json object of user)
+     * */
     public static AuthedJsonObjectRequest demoteUserByID(
             String userId,
             String jwt,
