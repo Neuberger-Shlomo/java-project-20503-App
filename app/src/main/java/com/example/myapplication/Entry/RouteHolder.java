@@ -15,6 +15,9 @@ import com.example.myapplication.Common.Views.ViewHolder.OneLiner.interfaces;
 import com.example.myapplication.R;
 import com.google.android.material.button.MaterialButton;
 
+/**
+ * define view holder for the nevigation item
+ */
 public class RouteHolder extends OneLineViewHolder<NavItem> {
 
     private TextView              textView;
@@ -22,6 +25,7 @@ public class RouteHolder extends OneLineViewHolder<NavItem> {
     private CardView              card;
     private NavItem item;
 
+    //we use it later
     int[] colors = {
             Color.parseColor("#4DD0E1"),// cyan 300
             Color.parseColor("#4FC3F7"),// light blue 300
@@ -37,6 +41,7 @@ public class RouteHolder extends OneLineViewHolder<NavItem> {
         textView = itemView.findViewById(R.id.date);
         textView1 = itemView.findViewById(R.id.date2);
         card     = itemView.findViewById(R.id.card);
+        // set the background color in random from the colors array  ((int[] colors))
 
         card.setCardBackgroundColor(colors[(int) Math.floor(Math.random() * colors.length)]);
     }
