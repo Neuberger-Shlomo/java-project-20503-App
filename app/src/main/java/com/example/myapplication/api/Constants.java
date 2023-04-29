@@ -20,7 +20,7 @@ final public class Constants {
     public final static String GET_ALL_PROFILES = PROFILE_ROUTE + "/";
 
     public final static String GET_ALL_CONSTRAINTS = CONSTRAINTS_ROUTE + "/";
-    public final static String GET_ALL_SHIFT_REQUESTS = SHIFT_REQUESTS_ROUTE + "/";
+    public final static String GET_ALL_SHIFT_REQUESTS = SHIFT_REQUESTS_ROUTE + "/admin";
     public final static String ADD_SHIFT_REQUESTS = SHIFT_REQUESTS_ROUTE + "/";
 
     public static final String GET_SHIFTS_FROM_SCHEDULE = SCHEDULE_ROUTE + "/shifts_from_schedule";

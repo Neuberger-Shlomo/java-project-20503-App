@@ -81,9 +81,7 @@ public class Shift implements IModel {
     }
 
 
-    /*
-     * this second constructor is for testing use only*/
-
+    
 
     @SuppressLint("DefaultLocale")
     public String getShiftDate() {

@@ -163,7 +163,6 @@ public class DefineShiftFragment extends Fragment {
                                               Snackbar.LENGTH_LONG)
                                         .setAction("Ok", null).show();
                         });
-
             }
 
         }

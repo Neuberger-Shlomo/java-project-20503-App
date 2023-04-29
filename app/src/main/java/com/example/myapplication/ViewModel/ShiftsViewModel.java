@@ -202,9 +202,7 @@ public class ShiftsViewModel extends AndroidViewModel {
             return null;
         }
 
-        return new AuthedJsonObjectRequest(Request.Method.POST,
-                                           Constants.ADD_SHIFT_URL,
-                                           userid,token,
+        return new AuthedJsonObjectRequest(Request.Method.POST,Constants.ADD_SHIFT_URL,userid,token,
                                            jsonObj
                 , res -> {
             try {
